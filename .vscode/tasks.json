@@ -1,0 +1,54 @@
+{
+// Документацию по формату tasks.json см.
+    // по адресу https://go.microsoft.com/fwlink/?LinkId=733558
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "UpdateAll",
+            "type": "npm",
+            "script": "UpdateAll",
+            "problemMatcher": []
+        },
+        {
+            "label": "InstallAll",
+            "type": "npm",
+            "script": "InstallAll",
+            "problemMatcher": []
+        },
+        {
+            "label": "StartServer",
+            "type": "npm",
+            "script": "start",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "build-prod",
+            "type": "npm",
+            "script": "build-prod",
+            "problemMatcher": []
+        },
+        {
+            "label": "TeamInstall",
+            "type": "npm",
+            "script": "TeamInstall",
+            "problemMatcher": []
+        },
+        {
+            "label": "Fix",
+            "type": "npm",
+            "script": "Fix",
+            "problemMatcher": []
+        },
+        {
+            "label": "Rebuild_SASS",
+            "type": "npm",
+            "script": "Rebuild_SASS",
+            "problemMatcher": []
+        }
+    ]
+}
