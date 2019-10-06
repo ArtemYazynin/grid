@@ -1,4 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { GridMetaData } from '../../models/grid-meta-data.model';
 
 @Component({
   selector: 'app-grid',
@@ -7,8 +9,10 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridComponent implements OnInit {
+  @Input() $gridMetaData: BehaviorSubject<GridMetaData>;
   displayedColumns: string[] = ['code', 'name', 'formula', 'weight', 'symbol'];
   dataSource = ELEMENT_DATA;
+  
   constructor() { }
 
   ngOnInit() {

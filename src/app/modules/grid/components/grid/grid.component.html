@@ -1,5 +1,5 @@
-<div class="example-container">
-  <mat-table [dataSource]="dataSource">
+<div class="example-container" *ngIf="$gridMetaData | async as gridMetaData">
+  <mat-table [dataSource]="gridMetaData.dataSource | async">
     <ng-container matColumnDef="code" sticky >
       <mat-header-cell *matHeaderCellDef> Код показателя </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.code}} </mat-cell>
