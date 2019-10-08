@@ -58,10 +58,10 @@ export class Row {
  */
 export class IndicatorRow extends Row {
     constructor(id: number, systemname: string, friendlyname: string,
-        public code: number,
-        public formula: string,
-        public weight: number,
-        public symbol: string) {
+                public code: number,
+                public formula: string,
+                public weight: number,
+                public symbol: string) {
         super(id, systemname, friendlyname);
     }
 }

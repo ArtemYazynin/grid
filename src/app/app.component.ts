@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { GridMetaData, Row, IndicatorRow, ColumnMetaData, ColumnSettings } from './modules/grid/models/grid-meta-data.model';
 
@@ -10,7 +10,9 @@ import { GridMetaData, Row, IndicatorRow, ColumnMetaData, ColumnSettings } from 
 })
 export class AppComponent implements OnInit {
   $gridMetaData: BehaviorSubject<GridMetaData>;
+  constructor(private cdr: ChangeDetectorRef) {
 
+  }
   ngOnInit(): void {
     this.$gridMetaData = this.$buildGridMetaData();
   }
