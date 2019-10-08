@@ -61,10 +61,7 @@ export class AppComponent implements OnInit {
   private getColumnMetaData(): ColumnMetaData {
     const result = new ColumnMetaData();
     result.activity = this.getActivityColumnMetaData();
-    result.id = new ColumnSettings(false, false, 'id', 'Идентификатор', 100);
-    result.systemname = new ColumnSettings(false, false, 'systemname', 'Системное наименование', 100);
-    result.friendlyname = new ColumnSettings(true, true, 'friendlyname', 'Наименование', 100);
-    result.code = new ColumnSettings(true, true, 'code', 'Код', 100);
+    result.code = new ColumnSettings(false, false, 'code', 'Код', 100);
     result.formula = new ColumnSettings(false, true, 'formula', 'Формула', 100);
     result.weight = new ColumnSettings(false, true, 'weight', 'Вес', 100);
     result.symbol = new ColumnSettings(false, true, 'symbol', 'Символ', 100);
@@ -82,7 +79,7 @@ export class AppComponent implements OnInit {
       .map(x => x.$width.value).reduce((prev, curr) => {
         return prev + curr;
       }, 0);
-    const activity = new ColumnSettings(true, true, 'activity', 'Мероприятие', width);
+    const activity = new ColumnSettings(true, true, 'activity_band', 'Мероприятие', width);
     activity.$children.next(children);
     return activity;
   }

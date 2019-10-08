@@ -28,51 +28,30 @@ export class CssInjectorService {
 
   private getColumnCssClasses(columnMetaData: ColumnMetaData): string {
     let innerHtml = '';
-    let maxHeight = 0;
-    let minHeight = 0;
     for (const key in columnMetaData) {
       if (columnMetaData.hasOwnProperty(key)) {
         const columnSettings = columnMetaData[key];
-        // const width = columnSettings.$width.value;
-        const width = (() => {
-          if (columnSettings.$children.value.length > 0) {
-            const res = this.CalculateWidth(columnSettings.$children.value);
-            return res;
-          } else {
-            return columnSettings.$width.value;
-          }
-        })();
-        minHeight = columnSettings.$height.value < minHeight
-          ? columnSettings.$height.value
-          : minHeight;
-        maxHeight = maxHeight < columnSettings.$height.value
-          ? columnSettings.$height.value
-          : maxHeight;
-        const columns = `.mat-column-${key}{
-          min-width: ${width}px;
-          max-width: ${width}px;
-          min-height: ${columnSettings.$height.value}px;
-          max-height: ${columnSettings.$height.value}px;
-        }`;
-        innerHtml += columns;
+        innerHtml += this.fillCssClasses('', key, columnSettings);
       }
     }
-    const rows = `.mat-header-row{
-      max-height: ${maxHeight}px;
-      min-height: ${minHeight}px;
-    }`;
-    innerHtml += rows;
     return innerHtml;
   }
 
-  private CalculateWidth(children: ColumnSettings[]): number {
-    let result = 0;
-    children.filter(x => x.$isVisible.value).forEach(columnSetting => {
-      if (columnSetting.$children.value.length > 0) {
-        result += this.CalculateWidth(columnSetting.$children.value);
-      }
-      result += columnSetting.$width.value;
-    });
-    return result;
+  private fillCssClasses(innerHtml: string, key: string, columnSetting: ColumnSettings) {
+    if (!key || !columnSetting) { return; }
+    if (columnSetting.$children.value.length === 0) {
+      const classes = `.mat-column-${key}{
+        min-width: ${columnSetting.$width.value}px;
+        max-width: ${columnSetting.$width.value}px;
+      }`;
+      innerHtml += classes;
+    } else {
+      const visibleChildren = columnSetting.$children.value.filter(x=>x.$isVisible.value);
+      visibleChildren.forEach(child => {
+        const res = this.fillCssClasses('', child.systemname, child);
+        innerHtml += res;
+      });
+    }
+    return innerHtml;
   }
 }

@@ -1,37 +1,35 @@
 <div class="example-container" *ngIf="$gridMetaData | async as gridMetaData">
-  <table mat-table [dataSource]="$dataSource | async">
+  <mat-table [dataSource]="$dataSource | async">
     <ng-container *ngIf="gridMetaData.$columnMetaData | async as columnMetaData">
       <ng-container *ngFor="let levelPair of bandsMap | keyvalue">
         <ng-container *ngFor="let pair of levelPair.value | keyvalue">
           <ng-container matColumnDef="{{pair.key}}" [sticky]="pair.value.$isSticky | async"
             *ngIf="pair.value.$width | async as width">
-            <th mat-header-cell *matHeaderCellDef>
-              <!-- <div fxFill>
+            <mat-header-cell *matHeaderCellDef>
+              <div fxFill>
                   {{pair.value.friendlyname}}
-              </div> -->
-              {{pair.value.friendlyname}}
-            </th>
+              </div>
+            </mat-header-cell>
           </ng-container>
         </ng-container>
       </ng-container>
       <ng-container *ngFor="let pair of columnsMap | keyvalue">
         <ng-container matColumnDef="{{pair.key}}" [sticky]="pair.value.$isSticky | async"
           *ngIf="pair.value.$width | async as width">
-          <th mat-header-cell *matHeaderCellDef >
-           <!-- <div fxFill>
+          <mat-header-cell *matHeaderCellDef >
+           <div fxFill>
               <span>{{pair.value.friendlyname}}</span>
-           </div> -->
-           {{pair.value.friendlyname}}
-          </th>
-          <td mat-cell  *matCellDef="let el"> {{el[pair.key]}} </td>
+           </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let el"> {{el[pair.key]}} </mat-cell>
         </ng-container>
       </ng-container>
     </ng-container>
     <ng-container *ngIf="gridMetaData.$displayedColumns | async as displayedColumns">
-      <tr mat-header-row *matHeaderRowDef="['activity_band']; sticky: true"></tr>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <mat-header-row *matHeaderRowDef="['activity']; sticky: true"></mat-header-row>
+      <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </ng-container>
-  </table>
+  </mat-table>
 </div>
 
