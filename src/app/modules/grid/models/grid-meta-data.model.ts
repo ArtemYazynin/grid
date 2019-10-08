@@ -1,11 +1,9 @@
 import { BehaviorSubject } from 'rxjs';
 
 export class GridMetaData {
-    $dataSource: BehaviorSubject<Row[]>;
-    $columnMetaData: BehaviorSubject<ColumnMetaData>;
+    $columnMetaData: BehaviorSubject<ColumnMetaData> = new BehaviorSubject<ColumnMetaData>(undefined);
     $displayedColumns: BehaviorSubject<string[]>;
-    constructor(dataSource: Row[], columnMetaData: ColumnMetaData) {
-        this.$dataSource = new BehaviorSubject<Row[]>(dataSource);
+    constructor(public id: string, columnMetaData: ColumnMetaData) {
         this.$columnMetaData = new BehaviorSubject<ColumnMetaData>(columnMetaData);
         this.initDisplayedColumns(columnMetaData);
     }
@@ -19,7 +17,7 @@ export class GridMetaData {
         const result = [];
         if (!columnMetaData) { return result; }
         for (const key in columnMetaData) {
-            if (columnMetaData.hasOwnProperty(key)) {
+            if (columnMetaData.hasOwnProperty(key) && columnMetaData[key].$isVisible.value) {
                 result.push(key);
             }
         }
@@ -36,7 +34,7 @@ export class ColumnSettings {
     $isVisible: BehaviorSubject<boolean>;
     $width: BehaviorSubject<number>;
     constructor(sticky: boolean, isVisible: boolean, public friendlyname: string,
-                width: number) {
+        width: number) {
         this.$isSticky = new BehaviorSubject<boolean>(sticky);
         this.$isVisible = new BehaviorSubject<boolean>(isVisible);
         this.$width = new BehaviorSubject<number>(width);
@@ -58,10 +56,10 @@ export class Row {
  */
 export class IndicatorRow extends Row {
     constructor(id: number, systemname: string, friendlyname: string,
-                public code: number,
-                public formula: string,
-                public weight: number,
-                public symbol: string) {
+        public code: number,
+        public formula: string,
+        public weight: number,
+        public symbol: string) {
         super(id, systemname, friendlyname);
     }
 }

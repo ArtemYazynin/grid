@@ -9,18 +9,37 @@ import { GridMetaData, Row, IndicatorRow, ColumnMetaData, ColumnSettings } from 
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
+  $dataSource: BehaviorSubject<Row[]>;
   $gridMetaData: BehaviorSubject<GridMetaData>;
+
   constructor(private cdr: ChangeDetectorRef) {
 
   }
   ngOnInit(): void {
-    this.$gridMetaData = this.$buildGridMetaData();
+    this.prepareGrid();
+    // setInterval(() => {
+    //   const metaData = this.buildGridMetaData();
+    //   this.$gridMetaData.next(metaData);
+    // }, 7000);
   }
-  private $buildGridMetaData() {
+  private prepareGrid() {
+    this.preprareDataSource();
+    this.prepareMetaData();
+  }
+
+  private preprareDataSource() {
     const rows = this.getRows();
-    const $metaData = this.getColumnMetaData(rows);
-    const gridMetaData = new GridMetaData(rows, $metaData);
-    return new BehaviorSubject<GridMetaData>(gridMetaData);
+    this.$dataSource = new BehaviorSubject<Row[]>(rows);
+  }
+
+  private prepareMetaData() {
+    this.$gridMetaData = new BehaviorSubject<GridMetaData>(this.buildGridMetaData());
+  }
+
+  private buildGridMetaData() {
+    const metaData = this.getColumnMetaData();
+    const gridMetaData = new GridMetaData('base', metaData);
+    return gridMetaData;
   }
 
   private getRows() {
@@ -39,12 +58,12 @@ export class AppComponent implements OnInit {
     return rows;
   }
 
-  private getColumnMetaData(rows: Row[]): ColumnMetaData {
+  private getColumnMetaData(): ColumnMetaData {
     const result = new ColumnMetaData();
-    result.id = new ColumnSettings(true, true, 'ID', 100);
-    result.systemname = new ColumnSettings(true, true, 'systemname', 100);
-    result.friendlyname = new ColumnSettings(false, true, 'friendlyname', 100);
-    result.code = new ColumnSettings(false, true, 'code', 100);
+    result.id = new ColumnSettings(false, false, 'Идентификатор', 100);
+    result.systemname = new ColumnSettings(false, false, 'Системное наименование', 100);
+    result.friendlyname = new ColumnSettings(true, true, 'Наименование', 100);
+    result.code = new ColumnSettings(true, true, 'code', 100);
     result.formula = new ColumnSettings(false, true, 'formula', 100);
     result.weight = new ColumnSettings(false, true, 'weight', 100);
     result.symbol = new ColumnSettings(false, true, 'symbol', 100);
