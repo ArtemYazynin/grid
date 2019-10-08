@@ -60,13 +60,31 @@ export class AppComponent implements OnInit {
 
   private getColumnMetaData(): ColumnMetaData {
     const result = new ColumnMetaData();
-    result.id = new ColumnSettings(false, false, 'Идентификатор', 100);
-    result.systemname = new ColumnSettings(false, false, 'Системное наименование', 100);
-    result.friendlyname = new ColumnSettings(true, true, 'Наименование', 100);
-    result.code = new ColumnSettings(true, true, 'code', 100);
-    result.formula = new ColumnSettings(false, true, 'formula', 100);
-    result.weight = new ColumnSettings(false, true, 'weight', 100);
-    result.symbol = new ColumnSettings(false, true, 'symbol', 100);
+    result.activity = this.getActivityColumnMetaData();
+    result.id = new ColumnSettings(false, false, 'id', 'Идентификатор', 100);
+    result.systemname = new ColumnSettings(false, false, 'systemname', 'Системное наименование', 100);
+    result.friendlyname = new ColumnSettings(true, true, 'friendlyname', 'Наименование', 100);
+    result.code = new ColumnSettings(true, true, 'code', 'Код', 100);
+    result.formula = new ColumnSettings(false, true, 'formula', 'Формула', 100);
+    result.weight = new ColumnSettings(false, true, 'weight', 'Вес', 100);
+    result.symbol = new ColumnSettings(false, true, 'symbol', 'Символ', 100);
     return result;
   }
+
+  private getActivityColumnMetaData() {
+    const children = [
+      new ColumnSettings(false, false, 'id', 'Идентификатор', 100),
+      new ColumnSettings(true, true, 'systemname', 'Системное наименование', 100),
+      new ColumnSettings(true, true, 'friendlyname', 'Наименование', 100)
+    ];
+    const width = children
+      .filter(x => x.$isVisible.value)
+      .map(x => x.$width.value).reduce((prev, curr) => {
+        return prev + curr;
+      }, 0);
+    const activity = new ColumnSettings(true, true, 'activity', 'Мероприятие', width);
+    activity.$children.next(children);
+    return activity;
+  }
 }
+

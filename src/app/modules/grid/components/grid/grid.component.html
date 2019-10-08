@@ -1,16 +1,35 @@
 <div class="example-container" *ngIf="$gridMetaData | async as gridMetaData">
   <mat-table [dataSource]="$dataSource | async">
     <ng-container *ngIf="gridMetaData.$columnMetaData | async as columnMetaData">
-      <ng-container *ngFor="let kvp of columnMetaData | keyvalue">
-        <ng-container matColumnDef="{{kvp.key}}" [sticky]="kvp.value.$isSticky | async"
-          *ngIf="kvp.value.$width | async as width">
-          <mat-header-cell *matHeaderCellDef> {{kvp.value.friendlyname}} </mat-header-cell>
-          <mat-cell *matCellDef="let el"> {{el[kvp.key]}} </mat-cell>
-          <!-- [ngStyle]="{'min-width': '100px', 'max-width': '100px'}" -->
+
+      <ng-container *ngFor="let levelPair of bandsMap | keyvalue">
+        <ng-container *ngFor="let pair of levelPair.value | keyvalue">
+          <ng-container matColumnDef="{{pair.key}}" [sticky]="pair.value.$isSticky | async"
+            *ngIf="pair.value.$width | async as width">
+            <mat-header-cell *matHeaderCellDef>
+              <div fxFill>
+                  {{pair.value.friendlyname}}
+              </div>
+            </mat-header-cell>
+          </ng-container>
+        </ng-container>
+
+      </ng-container>
+
+      <ng-container *ngFor="let pair of columnsMap | keyvalue">
+        <ng-container matColumnDef="{{pair.key}}" [sticky]="pair.value.$isSticky | async"
+          *ngIf="pair.value.$width | async as width">
+          <mat-header-cell *matHeaderCellDef >
+           <div fxFill>
+              <span>{{pair.value.friendlyname}}</span>
+           </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let el"> {{el[pair.key]}} </mat-cell>
         </ng-container>
       </ng-container>
     </ng-container>
     <ng-container *ngIf="gridMetaData.$displayedColumns | async as displayedColumns">
+      <mat-header-row *matHeaderRowDef="['activity']; sticky: true"></mat-header-row>
       <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </ng-container>
