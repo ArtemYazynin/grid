@@ -1,37 +1,45 @@
 <div class="example-container" *ngIf="$gridMetaData | async as gridMetaData">
   <table mat-table [dataSource]="$dataSource | async">
-    <ng-container *ngIf="gridMetaData.$columnMetaData | async as columnMetaData">
-      <ng-container *ngFor="let levelPair of bandsMap | keyvalue">
+    <ng-container *ngIf="gridMetaData.$bands | async as bands">
+      <ng-container *ngFor="let levelPair of bands | keyvalue">
         <ng-container *ngFor="let pair of levelPair.value | keyvalue">
           <ng-container matColumnDef="{{pair.key}}" [sticky]="pair.value.$isSticky | async"
             *ngIf="pair.value.$width | async as width">
-            <th mat-header-cell *matHeaderCellDef>
-              <!-- <div fxFill>
+            <th mat-header-cell *matHeaderCellDef [id]="levelPair.key"
+              [attr.colspan]="pair.value.$colspan | async"
+              [attr.rowspan]="pair.value.$rowspan | async">
+              <div>
                   {{pair.value.friendlyname}}
-              </div> -->
-              {{pair.value.friendlyname}}
+              </div>
             </th>
           </ng-container>
         </ng-container>
       </ng-container>
-      <ng-container *ngFor="let pair of columnsMap | keyvalue">
-        <ng-container matColumnDef="{{pair.key}}" [sticky]="pair.value.$isSticky | async"
-          *ngIf="pair.value.$width | async as width">
-          <th mat-header-cell *matHeaderCellDef >
-           <!-- <div fxFill>
-              <span>{{pair.value.friendlyname}}</span>
-           </div> -->
-           {{pair.value.friendlyname}}
-          </th>
-          <td mat-cell  *matCellDef="let el"> {{el[pair.key]}} </td>
+      <ng-container *ngIf="gridMetaData.$displayedBands | async as displayedBands">
+        <ng-container *ngFor="let pair of displayedBands | keyvalue">
+          <tr mat-header-row *matHeaderRowDef="pair.value; sticky: true"></tr>
         </ng-container>
+
       </ng-container>
     </ng-container>
-    <ng-container *ngIf="gridMetaData.$displayedColumns | async as displayedColumns">
-      <tr mat-header-row *matHeaderRowDef="['activity_band']; sticky: true"></tr>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <ng-container *ngIf="gridMetaData.$columns | async as columns">
+      <ng-container *ngFor="let pair of columns | keyvalue">
+        <ng-container matColumnDef="{{pair.key}}" [sticky]="pair.value.$isSticky | async">
+          <th mat-header-cell *matHeaderCellDef 
+          [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'">
+            <div>
+                {{pair.value.friendlyname}}
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let el"> {{el[pair.key]}} </td>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="gridMetaData.$displayedColumns | async as displayedColumns">
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </ng-container>
     </ng-container>
+
+
   </table>
 </div>
-

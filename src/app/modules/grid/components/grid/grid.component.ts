@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject, zip } from 'rxjs';
 import { flatMap, takeUntil, skipWhile } from 'rxjs/operators';
 import { GridMetaData, ColumnMetaData, Row, ColumnSettings, BandsMap } from '../../models/grid-meta-data.model';
 import { CssInjectorService } from '../../services/css-injector.service';
@@ -16,15 +16,6 @@ export class GridComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
   private id: string;
-  private _bandsMap = new Map<number, Map<string, ColumnSettings>>();
-  private _columnsMap = new Map<string, ColumnSettings>();
-  get bandsMap() {
-    return this._bandsMap;
-  }
-
-  get columnsMap() {
-    return this._columnsMap;
-  }
 
   constructor(private cssInjectorService: CssInjectorService) { }
 
@@ -32,42 +23,11 @@ export class GridComponent implements OnInit, OnDestroy {
     this.$gridMetaData
       .pipe(flatMap(gridMeataData => {
         this.id = gridMeataData.id;
-        return gridMeataData.$columnMetaData;
+        return zip(gridMeataData.$columns, gridMeataData.$bands);
       }), takeUntil(this.ngUnsubscribe))
-      .subscribe(columnMetaData => {
-        for (const key in columnMetaData) {
-          if (columnMetaData.hasOwnProperty(key)) {
-            const columnSetting = columnMetaData[key];
-            if (columnSetting.$children.value.length > 0) {
-              if (!this._bandsMap.has(0)) {
-                const value = new Map<string, ColumnSettings>();
-                value.set(columnSetting.systemname, columnSetting);
-                this._bandsMap.set(0, value);
-              } else {
-                const map = this._bandsMap.get(0);
-                map.set(columnSetting.systemname, columnSetting);
-                this._bandsMap.set(0, map);
-              }
-
-              this.recursivellyFillBandsMap(key, 1, columnSetting.$children.value);
-            } else {
-              this._columnsMap.set(key, columnSetting);
-            }
-          }
-        }
-        this.cssInjectorService.generateDynamicCssClasses(this.id, columnMetaData);
+      .subscribe((columnAndBands) => {
+        this.cssInjectorService.generateDynamicCssClasses(this.id, columnAndBands[0], columnAndBands[1]);
       });
-  }
-
-  private recursivellyFillBandsMap(systemName, level: number, columnSettings: ColumnSettings[]) {
-    columnSettings.filter(x => x.$isVisible.value).forEach(columnSetting => {
-      if (columnSetting.$children.value.length > 0) {
-        this._bandsMap[level] = columnSettings;
-        this.recursivellyFillBandsMap(systemName, level + 1, columnSetting.$children.value);
-      } else {
-        this._columnsMap.set(columnSetting.systemname, columnSetting);
-      }
-    });
   }
 
   ngOnDestroy(): void {

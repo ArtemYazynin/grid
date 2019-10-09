@@ -2,52 +2,52 @@
 import { BehaviorSubject } from 'rxjs';
 
 export class GridMetaData {
-    $columnMetaData: BehaviorSubject<ColumnMetaData> = new BehaviorSubject<ColumnMetaData>(undefined);
     $displayedColumns: BehaviorSubject<string[]>;
-    $displayedBands: BehaviorSubject<string[]>;
-    constructor(public id: string, columnMetaData: ColumnMetaData) {
-        this.$columnMetaData = new BehaviorSubject<ColumnMetaData>(columnMetaData);
-        this.initDisplayedColumns(columnMetaData);
+    $displayedBands: BehaviorSubject<Map<number, string[]>>;
+    $columns: BehaviorSubject<Map<string, ColumnSettings>>;
+    $bands: BehaviorSubject<Map<number, Map<string, ColumnSettings>>>;
+    constructor(public id: string, columns: Map<string, ColumnSettings>,
+        bands: Map<number, Map<string, ColumnSettings>>) {
+        this.$columns = new BehaviorSubject<Map<string, ColumnSettings>>(columns);
+        this.$bands = new BehaviorSubject<Map<number, Map<string, ColumnSettings>>>(bands);
+        this.setDisplayedColumns(columns);
+        this.setDisplayedBands(bands);
     }
 
-    private initDisplayedColumns(columnMetaData: ColumnMetaData) {
-        const displayedColumns = this.getVisibleColumns(columnMetaData);
+    private setDisplayedColumns(columnsMap: Map<string, ColumnSettings>) {
+        if (!columnsMap) { return; }
+        const displayedColumns = this.getDisplayedColumns(columnsMap);
         this.$displayedColumns = new BehaviorSubject<string[]>(displayedColumns);
     }
 
-    private getVisibleColumns(columnMetaData: ColumnMetaData): string[] {
-        let result: string[] = [];
-        if (!columnMetaData) { return result; }
-        for (const key in columnMetaData) {
-            if (columnMetaData.hasOwnProperty(key)) {
-                const hasChildren = columnMetaData[key].$children.value.length > 0;
-                const isVisible = columnMetaData[key].$isVisible.value;
-                if (isVisible && !hasChildren) {
-                    result.push(key);
-                } else {
-                    const temp = this.recursivelly(columnMetaData[key].$children.value);
-                    result = result.concat(temp);
-                }
-
-            }
-
-        }
-        return result;
+    private getDisplayedColumns(columnsMap: Map<string, ColumnSettings>) {
+        if (!columnsMap) { return; }
+        const displayedColumns = [];
+        columnsMap.forEach(columnSetting => {
+            // if (columnSetting.$isVisible.value) {
+            displayedColumns.push(columnSetting.systemname);
+            // }
+        });
+        return displayedColumns;
     }
 
-    private recursivelly(columnSettings: ColumnSettings[]): string[] {
-        let result: string[] = [];
-        columnSettings.forEach(element => {
-            const hasChildren = element.$children.value.length > 0;
-            const isVisible = element.$isVisible.value;
-            if (isVisible && !hasChildren) {
-                result.push(element.systemname);
-            } else {
-                const res = this.recursivelly(element.$children.value);
-                result = result.concat(res);
-            }
+    private setDisplayedBands(bandsMap: Map<number, Map<string, ColumnSettings>>) {
+        if (!bandsMap) { return; }
+        const displayedBandsMap = new Map<number, string[]>();
+        bandsMap.forEach((map, level) => {
+            map.forEach(columnSetting => {
+                // if (columnSetting.$isVisible.value) {
+                if (displayedBandsMap.has(level)) {
+                    const names = displayedBandsMap.get(level);
+                    names.push(columnSetting.systemname);
+                    displayedBandsMap.set(level, names);
+                } else {
+                    displayedBandsMap.set(level, [columnSetting.systemname]);
+                }
+                // }
+            });
         });
-        return result;
+        this.$displayedBands = new BehaviorSubject<Map<number, string[]>>(displayedBandsMap);
     }
 }
 export class BandsMap {
@@ -63,13 +63,16 @@ export class ColumnSettings {
     $isVisible: BehaviorSubject<boolean>;
     $width: BehaviorSubject<number>;
     $height: BehaviorSubject<number>;
-    $children = new BehaviorSubject<ColumnSettings[]>([]);
+    $colspan: BehaviorSubject<number>;
+    $rowspan: BehaviorSubject<number>;
     constructor(sticky: boolean, isVisible: boolean, public systemname: string, public friendlyname: string,
-        width: number, height: number = 40) {
+        width: number, height: number = 40, colspan = 1, rowspan = 1) {
         this.$isSticky = new BehaviorSubject<boolean>(sticky);
         this.$isVisible = new BehaviorSubject<boolean>(isVisible);
         this.$width = new BehaviorSubject<number>(width);
         this.$height = new BehaviorSubject<number>(height);
+        this.$colspan = new BehaviorSubject<number>(colspan);
+        this.$rowspan = new BehaviorSubject<number>(rowspan);
     }
 }
 
@@ -86,12 +89,34 @@ export class Row {
 /**
  * строка показателя
  */
-export class IndicatorRow extends Row {
+export class IndicatorRowOnlyColumns extends Row {
     constructor(id: number, systemname: string, friendlyname: string,
         public code: number,
-        public formula: string,
-        public weight: number,
-        public symbol: string) {
+        public planBeginDt: string,
+        public factBeginDt: string,
+        public planEndDt: string,
+        public factEndDt: string,
+        public dzo: string) {
+        super(id, systemname, friendlyname);
+    }
+}
+
+export class Indicator extends Row {
+    constructor(id: number, systemname: string, friendlyname: string,
+        public dzo: string,
+        public type6_plan: number,
+        public type6_fact: number,
+        public type6_val: number,
+        public type6_persent: number,
+        public type7_plan: number,
+        public type7_fact: number,
+        public type7_val: number,
+        public type7_persent: number,
+        public type8_plan: number,
+        public type8_fact: number,
+        public type8_val: number,
+        public type8_persent: number) {
+
         super(id, systemname, friendlyname);
     }
 }
