@@ -1,3 +1,4 @@
+
 import { BehaviorSubject } from 'rxjs';
 
 export class GridMetaData {
@@ -15,14 +16,37 @@ export class GridMetaData {
     }
 
     private getVisibleColumns(columnMetaData: ColumnMetaData): string[] {
-        const result = [];
+        let result: string[] = [];
         if (!columnMetaData) { return result; }
         for (const key in columnMetaData) {
-            if (columnMetaData.hasOwnProperty(key) && columnMetaData[key].$isVisible.value
-                && columnMetaData[key].$children.value.length === 0) {
-                result.push(key);
+            if (columnMetaData.hasOwnProperty(key)) {
+                const hasChildren = columnMetaData[key].$children.value.length > 0;
+                const isVisible = columnMetaData[key].$isVisible.value;
+                if (isVisible && !hasChildren) {
+                    result.push(key);
+                } else {
+                    const temp = this.recursivelly(columnMetaData[key].$children.value);
+                    result = result.concat(temp);
+                }
+
             }
+
         }
+        return result;
+    }
+
+    private recursivelly(columnSettings: ColumnSettings[]): string[] {
+        let result: string[] = [];
+        columnSettings.forEach(element => {
+            const hasChildren = element.$children.value.length > 0;
+            const isVisible = element.$isVisible.value;
+            if (isVisible && !hasChildren) {
+                result.push(element.systemname);
+            } else {
+                const res = this.recursivelly(element.$children.value);
+                result = result.concat(res);
+            }
+        });
         return result;
     }
 }
