@@ -5,19 +5,17 @@ import { Injectable } from '@angular/core';
 export class CssInjectorService {
   constructor() { }
 
-  generateDynamicCssClasses(gridId: string, columnsMap: Map<string, ColumnSettings>,
-    bandsMap: Map<number, Map<string, ColumnSettings>>): void {
-    const style = this.getStyleElement(gridId, columnsMap, bandsMap);
+  generateDynamicCssClasses(gridId: string, columnsMap: Map<number, Map<string, ColumnSettings>>): void {
+    const style = this.getStyleElement(gridId, columnsMap);
     document.getElementsByTagName('head')[0].appendChild(style);
   }
 
-  private getStyleElement(gridId: string, columnsMap: Map<string, ColumnSettings>,
-    bandsMap: Map<number, Map<string, ColumnSettings>>): HTMLStyleElement {
+  private getStyleElement(gridId: string, columnsMap: Map<number, Map<string, ColumnSettings>>): HTMLStyleElement {
     const style = this.createOrGetStyleElement(gridId);
     style.id = gridId;
     // tslint:disable-next-line: deprecation
     style.type = 'text/css';
-    style.innerHTML = this.getCssClasses(columnsMap, bandsMap);
+    style.innerHTML = this.getCssClasses(columnsMap);
     return style;
   }
 
@@ -27,32 +25,13 @@ export class CssInjectorService {
       || document.createElement(styleTag);
   }
 
-  private getCssClasses(columnsMap: Map<string, ColumnSettings>,
-    bandsMap: Map<number, Map<string, ColumnSettings>>): string {
+  private getCssClasses(columnsMap: Map<number, Map<string, ColumnSettings>>): string {
     let innerHtml = '';
     innerHtml += this.getColumnsCssClasses(columnsMap);
-    innerHtml += this.getBandsCssClasses(bandsMap);
     return innerHtml;
   }
 
-  private getColumnsCssClasses(columnsMap: Map<string, ColumnSettings>): string {
-    let innerHtml = '';
-    columnsMap.forEach(columnSetting => {
-      if (columnSetting.$isVisible.value) {
-        const classes = `.mat-column-${columnSetting.systemname}{
-            min-width: ${columnSetting.$width.value}px;
-            max-width: ${columnSetting.$width.value}px;
-            width: ${columnSetting.$width.value}px;
-            background-color: #898997;
-            border-right: 1px solid rgb(103, 103, 121)
-          }`;
-        innerHtml += classes;
-      }
-    });
-    return innerHtml;
-  }
-
-  private getBandsCssClasses(bandsMap: Map<number, Map<string, ColumnSettings>>): string {
+  private getColumnsCssClasses(bandsMap: Map<number, Map<string, ColumnSettings>>): string {
     let innerHtml = '';
     bandsMap.forEach((map, level) => {
       map.forEach(columnSetting => {
@@ -67,12 +46,14 @@ export class CssInjectorService {
               max-width: ${columnSetting.$width.value}px;
               width: ${columnSetting.$width.value}px;
               background-color: ${backgroundColor};
-              border-right: 1px solid ${borderRightColor}
+              border-right: 1px solid ${borderRightColor};
+              box-sizing: border-box
             }`;
           } else {
             classes += `.mat-column-${columnSetting.systemname}{
               background-color: ${backgroundColor};
-              border-right: 1px solid ${borderRightColor}
+              border-right: 1px solid ${borderRightColor};
+              box-sizing: border-box
             }`;
           }
           innerHtml += classes;

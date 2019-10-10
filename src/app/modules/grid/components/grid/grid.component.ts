@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { BehaviorSubject, Subject, zip } from 'rxjs';
 import { flatMap, takeUntil, skipWhile } from 'rxjs/operators';
-import { GridMetaData, ColumnMetaData, Row, ColumnSettings, BandsMap } from '../../models/grid-meta-data.model';
+import { GridMetaData, Row } from '../../models/grid-meta-data.model';
 import { CssInjectorService } from '../../services/css-injector.service';
 
 @Component({
@@ -23,10 +23,10 @@ export class GridComponent implements OnInit, OnDestroy {
     this.$gridMetaData
       .pipe(flatMap(gridMeataData => {
         this.id = gridMeataData.id;
-        return zip(gridMeataData.$columns, gridMeataData.$bands);
+        return gridMeataData.$columnsMap;
       }), takeUntil(this.ngUnsubscribe))
-      .subscribe((columnAndBands) => {
-        this.cssInjectorService.generateDynamicCssClasses(this.id, columnAndBands[0], columnAndBands[1]);
+      .subscribe(columnsMap => {
+        this.cssInjectorService.generateDynamicCssClasses(this.id, columnsMap);
       });
   }
 
