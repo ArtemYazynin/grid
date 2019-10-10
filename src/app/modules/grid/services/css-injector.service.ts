@@ -1,16 +1,16 @@
-import { ColumnSettings } from './../models/grid-meta-data.model';
+import { ColumnConfig } from './../models/grid-meta-data.model';
 import { Injectable } from '@angular/core';
 
 @Injectable()
 export class CssInjectorService {
   constructor() { }
 
-  generateDynamicCssClasses(gridId: string, columnsMap: Map<number, Map<string, ColumnSettings>>): void {
+  generateDynamicCssClasses(gridId: string, columnsMap: Map<number, Map<string, ColumnConfig>>): void {
     const style = this.getStyleElement(gridId, columnsMap);
     document.getElementsByTagName('head')[0].appendChild(style);
   }
 
-  private getStyleElement(gridId: string, columnsMap: Map<number, Map<string, ColumnSettings>>): HTMLStyleElement {
+  private getStyleElement(gridId: string, columnsMap: Map<number, Map<string, ColumnConfig>>): HTMLStyleElement {
     const style = this.createOrGetStyleElement(gridId);
     style.id = gridId;
     // tslint:disable-next-line: deprecation
@@ -25,32 +25,32 @@ export class CssInjectorService {
       || document.createElement(styleTag);
   }
 
-  private getCssClasses(columnsMap: Map<number, Map<string, ColumnSettings>>): string {
+  private getCssClasses(columnsMap: Map<number, Map<string, ColumnConfig>>): string {
     let innerHtml = '';
     innerHtml += this.getColumnsCssClasses(columnsMap);
     return innerHtml;
   }
 
-  private getColumnsCssClasses(bandsMap: Map<number, Map<string, ColumnSettings>>): string {
+  private getColumnsCssClasses(bandsMap: Map<number, Map<string, ColumnConfig>>): string {
     let innerHtml = '';
     bandsMap.forEach((map, level) => {
-      map.forEach(columnSetting => {
+      map.forEach(columnConfig => {
         const backgroundColor = this.getBandBackgoundColor(level);
         const borderRightColor = this.getBandBorderRightColor(level);
-        if (columnSetting.$isVisible.value) {
+        if (columnConfig.$isVisible.value) {
           let classes = '';
-          const oneCellBand = columnSetting.$colspan.value === 1;
+          const oneCellBand = columnConfig.$colspan.value === 1;
           if (oneCellBand) {
-            classes += `.mat-column-${columnSetting.systemname}{
-              min-width: ${columnSetting.$width.value}px;
-              max-width: ${columnSetting.$width.value}px;
-              width: ${columnSetting.$width.value}px;
+            classes += `.mat-column-${columnConfig.systemname}{
+              min-width: ${columnConfig.$width.value}px;
+              max-width: ${columnConfig.$width.value}px;
+              width: ${columnConfig.$width.value}px;
               background-color: ${backgroundColor};
               border-right: 1px solid ${borderRightColor};
               box-sizing: border-box
             }`;
           } else {
-            classes += `.mat-column-${columnSetting.systemname}{
+            classes += `.mat-column-${columnConfig.systemname}{
               background-color: ${backgroundColor};
               border-right: 1px solid ${borderRightColor};
               box-sizing: border-box

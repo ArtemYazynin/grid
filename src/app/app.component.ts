@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { GridMetaData, Row, IndicatorRowOnlyColumns, ColumnSettings, Indicator } from './modules/grid/models/grid-meta-data.model';
+import { GridMetaData, Row, ColumnConfig, Indicator } from './modules/grid/models/grid-meta-data.model';
 
 @Component({
   selector: 'app-root',
@@ -33,44 +33,44 @@ export class AppComponent implements OnInit {
   }
   private buildGridMetaDataWithBands() {
     const bands = (() => {
-      const result = new Map<number, Map<string, ColumnSettings>>();
+      const result = new Map<number, Map<string, ColumnConfig>>();
       const bandLevel2 = (() => {
-        const res = new Map<string, ColumnSettings>();
-        res.set('type6_val', new ColumnSettings('type6_val', [], false, true, 'type6_val', 'м3/ч', 50, undefined, undefined, undefined, 5));
-        res.set('type6_persent', new ColumnSettings('type6_persent', [], false, true, 'type6_persent', '%', 50, undefined, undefined, undefined, 6));
+        const res = new Map<string, ColumnConfig>();
+        res.set('type6_val', new ColumnConfig('type6_val', [], false, true, 'type6_val', 'м3/ч', 50, undefined, undefined, undefined, 5));
+        res.set('type6_persent', new ColumnConfig('type6_persent', [], false, true, 'type6_persent', '%', 50, undefined, undefined, undefined, 6));
 
-        res.set('type7_val', new ColumnSettings('type7_val', [], false, true, 'type7_val', 'м3/ч', 50, undefined, undefined, undefined, 9));
-        res.set('type7_persent', new ColumnSettings('type7_persent', [], false, true, 'type7_persent', '%', 50, undefined, undefined, undefined, 10));
+        res.set('type7_val', new ColumnConfig('type7_val', [], false, true, 'type7_val', 'м3/ч', 50, undefined, undefined, undefined, 9));
+        res.set('type7_persent', new ColumnConfig('type7_persent', [], false, true, 'type7_persent', '%', 50, undefined, undefined, undefined, 10));
 
-        res.set('type8_val', new ColumnSettings('type8_val', [], false, true, 'type8_val', 'м3/ч', 50, undefined, undefined, undefined, 13));
-        res.set('type8_persent', new ColumnSettings('type8_persent', [], false, true, 'type8_persent', '%', 50, undefined, undefined, undefined, 14));
+        res.set('type8_val', new ColumnConfig('type8_val', [], false, true, 'type8_val', 'м3/ч', 50, undefined, undefined, undefined, 13));
+        res.set('type8_persent', new ColumnConfig('type8_persent', [], false, true, 'type8_persent', '%', 50, undefined, undefined, undefined, 14));
         return res;
       })();
 
       const bandLevel1 = (() => {
-        const res = new Map<string, ColumnSettings>();
-        res.set('friendlyname', new ColumnSettings('friendlyname', [], true, true, 'friendlyname', 'Наименование', 100, undefined, undefined, 2, 1));
-        res.set('dzo', new ColumnSettings('dzo', [], true, true, 'dzo', 'ДЗО', 100, undefined, undefined, 2, 2));
+        const res = new Map<string, ColumnConfig>();
+        res.set('friendlyname', new ColumnConfig('friendlyname', [], true, true, 'friendlyname', 'Наименование', 100, undefined, undefined, 2, 1));
+        res.set('dzo', new ColumnConfig('dzo', [], true, true, 'dzo', 'ДЗО', 100, undefined, undefined, 2, 2));
         (() => {
-          res.set('type6_plan', new ColumnSettings('type6_plan', [], false, true, 'type6_plan', 'План', 100, undefined, undefined, 2, 3));
-          res.set('type6_fact', new ColumnSettings('type6_fact', [], false, true, 'type6_fact', 'Факт', 100, undefined, undefined, 2, 4));
-          res.set('type6_deviation_band', new ColumnSettings(undefined, [
+          res.set('type6_plan', new ColumnConfig('type6_plan', [], false, true, 'type6_plan', 'План', 100, undefined, undefined, 2, 3));
+          res.set('type6_fact', new ColumnConfig('type6_fact', [], false, true, 'type6_fact', 'Факт', 100, undefined, undefined, 2, 4));
+          res.set('type6_deviation_band', new ColumnConfig(undefined, [
             bandLevel2.get('type6_val'),
             bandLevel2.get('type6_persent'),
           ], false, true, 'type6_deviation_band', 'Отклонение', 200, undefined, 2));
         })();
         (() => {
-          res.set('type7_plan', new ColumnSettings('type7_plan', [], false, true, 'type7_plan', 'План', 100, undefined, undefined, 2, 7));
-          res.set('type7_fact', new ColumnSettings('type7_fact', [], false, true, 'type7_fact', 'Факт', 100, undefined, undefined, 2, 8));
-          res.set('type7_deviation_band', new ColumnSettings(undefined, [
+          res.set('type7_plan', new ColumnConfig('type7_plan', [], false, true, 'type7_plan', 'План', 100, undefined, undefined, 2, 7));
+          res.set('type7_fact', new ColumnConfig('type7_fact', [], false, true, 'type7_fact', 'Факт', 100, undefined, undefined, 2, 8));
+          res.set('type7_deviation_band', new ColumnConfig(undefined, [
             bandLevel2.get('type7_val'),
             bandLevel2.get('type7_persent')
           ], false, true, 'type7_deviation_band', 'Отклонение', 200, undefined, 2));
         })();
         (() => {
-          res.set('type8_plan', new ColumnSettings('type8_plan', [], false, true, 'type8_plan', 'План', 100, undefined, undefined, 2, 11));
-          res.set('type8_fact', new ColumnSettings('type8_fact', [], false, true, 'type8_fact', 'Факт', 100, undefined, undefined, 2, 12));
-          res.set('type8_deviation_band', new ColumnSettings(undefined, [
+          res.set('type8_plan', new ColumnConfig('type8_plan', [], false, true, 'type8_plan', 'План', 100, undefined, undefined, 2, 11));
+          res.set('type8_fact', new ColumnConfig('type8_fact', [], false, true, 'type8_fact', 'Факт', 100, undefined, undefined, 2, 12));
+          res.set('type8_deviation_band', new ColumnConfig(undefined, [
             bandLevel2.get('type8_val'),
             bandLevel2.get('type8_persent')
           ], false, true, 'type8_deviation_band', 'Отклонение', 200, undefined, 2));
@@ -78,26 +78,26 @@ export class AppComponent implements OnInit {
         return res;
       })();
       const bandLevel0 = (() => {
-        const res = new Map<string, ColumnSettings>();
-        res.set('activity', new ColumnSettings(undefined, [bandLevel1.get('friendlyname'), bandLevel1.get('dzo')],
+        const res = new Map<string, ColumnConfig>();
+        res.set('activity', new ColumnConfig(undefined, [bandLevel1.get('friendlyname'), bandLevel1.get('dzo')],
           true, true, 'activity', 'Мероприятие', 200, undefined, 2));
-        res.set('type6', new ColumnSettings(undefined, [
+        res.set('type6', new ColumnConfig(undefined, [
           bandLevel1.get('type6_plan'),
           bandLevel1.get('type6_fact'),
           bandLevel1.get('type6_deviation_band')
         ], false, true, 'type6', 'Типовой 6', 500, undefined, 4));
-        res.set('type7', new ColumnSettings(undefined, [
+        res.set('type7', new ColumnConfig(undefined, [
           bandLevel1.get('type7_plan'),
           bandLevel1.get('type7_fact'),
           bandLevel1.get('type7_deviation_band')
         ], false, true, 'type7', 'Типовой 7', 500, undefined, 4));
-        res.set('type8', new ColumnSettings(undefined, [
+        res.set('type8', new ColumnConfig(undefined, [
           bandLevel1.get('type8_plan'),
           bandLevel1.get('type8_fact'),
           bandLevel1.get('type8_deviation_band')
         ], false, true, 'type8', 'Типовой 8', 500, undefined, 4));
-        res.set('summary', new ColumnSettings('summary', [], false, true, 'summary', 'Сводка 8', 100, undefined, 1, 3, 15, true));
-        res.set('hidden', new ColumnSettings('hidden', [], false, false, 'hidden', 'Скрытая колонка на 3 строки', 100, undefined, 1, 3, 16));
+        res.set('summary', new ColumnConfig('summary', [], false, true, 'summary', 'Сводка 8', 100, undefined, 1, 3, 15, true));
+        res.set('hidden', new ColumnConfig('hidden', [], false, false, 'hidden', 'Скрытая колонка на 3 строки', 100, undefined, 1, 3, 16));
         return res;
       })();
       result.set(0, bandLevel0);

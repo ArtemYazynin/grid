@@ -3,56 +3,56 @@ import { BehaviorSubject } from 'rxjs';
 
 export class GridMetaData {
     $displayedColumnsMap: BehaviorSubject<Map<number, string[]>>;
-    $columnsMap: BehaviorSubject<Map<number, Map<string, ColumnSettings>>>;
+    $columnsMap: BehaviorSubject<Map<number, Map<string, ColumnConfig>>>;
     $displayedColumns: BehaviorSubject<string[]>;
 
-    constructor(public id: string, columnsMap: Map<number, Map<string, ColumnSettings>>) {
-        this.$columnsMap = new BehaviorSubject<Map<number, Map<string, ColumnSettings>>>(columnsMap);
+    constructor(public id: string, columnsMap: Map<number, Map<string, ColumnConfig>>) {
+        this.$columnsMap = new BehaviorSubject<Map<number, Map<string, ColumnConfig>>>(columnsMap);
         this.setDisplayedColumns(columnsMap);
     }
 
-    private setDisplayedColumns(columnsMap: Map<number, Map<string, ColumnSettings>>) {
+    private setDisplayedColumns(columnsMap: Map<number, Map<string, ColumnConfig>>) {
         if (!columnsMap) { return; }
         this.$displayedColumns = this.$getDisplayedColumns(columnsMap);
         this.$displayedColumnsMap = this.$getDisplayedColumnsMap(columnsMap);
     }
 
-    private $getDisplayedColumns(columnsMap: Map<number, Map<string, ColumnSettings>>) {
+    private $getDisplayedColumns(columnsMap: Map<number, Map<string, ColumnConfig>>) {
         const sortingColumns = this.getSortingColumns(columnsMap);
         const sortedColumns = this.sortAscByOrder(sortingColumns);
         const result = sortedColumns.map(x => x.dataField);
         return new BehaviorSubject<string[]>(result);
     }
 
-    private getSortingColumns(columnsMap: Map<number, Map<string, ColumnSettings>>) {
-        const result: ColumnSettings[] = [];
+    private getSortingColumns(columnsMap: Map<number, Map<string, ColumnConfig>>) {
+        const result: ColumnConfig[] = [];
         columnsMap.forEach((map) => {
-            map.forEach(columnSetting => {
-                if (columnSetting.$isVisible.value && columnSetting.dataField) {
-                    result.push(columnSetting);
+            map.forEach(columnConfig => {
+                if (columnConfig.$isVisible.value && columnConfig.dataField) {
+                    result.push(columnConfig);
                 }
             });
         });
         return result;
     }
 
-    private sortAscByOrder(orderingColumns: ColumnSettings[]) {
+    private sortAscByOrder(orderingColumns: ColumnConfig[]) {
         const sortedColumns = orderingColumns.sort((next, curr) => {
             return next.$order.value - curr.$order.value;
         });
         return sortedColumns;
     }
 
-    private $getDisplayedColumnsMap(columnsMap: Map<number, Map<string, ColumnSettings>>) {
+    private $getDisplayedColumnsMap(columnsMap: Map<number, Map<string, ColumnConfig>>) {
         const resultMap = new Map<number, string[]>();
         columnsMap.forEach((map, level) => {
-            map.forEach(columnSetting => {
+            map.forEach(columnConfig => {
                 if (resultMap.has(level)) {
                     const names = resultMap.get(level);
-                    names.push(columnSetting.systemname);
+                    names.push(columnConfig.systemname);
                     resultMap.set(level, names);
                 } else {
-                    resultMap.set(level, [columnSetting.systemname]);
+                    resultMap.set(level, [columnConfig.systemname]);
                 }
             });
         });
@@ -60,7 +60,7 @@ export class GridMetaData {
     }
 }
 
-export class ColumnSettings {
+export class ColumnConfig {
     $isSticky: BehaviorSubject<boolean>;
     $isStickyEnd: BehaviorSubject<boolean>;
     $isVisible: BehaviorSubject<boolean>;
@@ -68,12 +68,12 @@ export class ColumnSettings {
     $height: BehaviorSubject<number>;
     $colspan: BehaviorSubject<number>;
     $rowspan: BehaviorSubject<number>;
-    $children: BehaviorSubject<ColumnSettings[]>;
+    $children: BehaviorSubject<ColumnConfig[]>;
     $order: BehaviorSubject<number>;
-    constructor(public dataField: string, children: ColumnSettings[], sticky: boolean, isVisible: boolean,
+    constructor(public dataField: string, children: ColumnConfig[], sticky: boolean, isVisible: boolean,
         public systemname: string, public friendlyname: string,
         width: number, height: number = 40, colspan = 1, rowspan = 1, order: number = 999, isStickyEnd: boolean = false) {
-        this.$children = new BehaviorSubject<ColumnSettings[]>(children);
+        this.$children = new BehaviorSubject<ColumnConfig[]>(children);
         this.$isSticky = new BehaviorSubject<boolean>(sticky);
         this.$isVisible = new BehaviorSubject<boolean>(isVisible);
         this.$width = new BehaviorSubject<number>(width);
@@ -92,21 +92,6 @@ export class ColumnSettings {
 export class Row {
     constructor(public id: number, public systemname: string, public friendlyname: string) {
 
-    }
-}
-
-/**
- * строка показателя
- */
-export class IndicatorRowOnlyColumns extends Row {
-    constructor(id: number, systemname: string, friendlyname: string,
-        public code: number,
-        public planBeginDt: string,
-        public factBeginDt: string,
-        public planEndDt: string,
-        public factEndDt: string,
-        public dzo: string) {
-        super(id, systemname, friendlyname);
     }
 }
 
