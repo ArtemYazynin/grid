@@ -18,22 +18,22 @@ export class GridMetaDataGeneratorService {
 
   getRowsWithBands() {
     const rows: Row[] = [
-      new Indicator(1, 'tip1', 'Меро1', 'Ваз ТЭЦ',
+      new Indicator(1, 'tip1', 'Меро1', new Date(1990, 5, 11), 'Ваз ТЭЦ',
         1.1, 1.11, 1.111, 1.1111,
         1.1, 1.11, 1.111, 1.1111,
         1.1, 1.11, 1.111, 1.1111,
         'summary1'),
-      new Indicator(2, 'tip2', 'Меро2', 'Самара ТЭЦ',
+      new Indicator(2, 'tip2', 'Меро2', new Date(1995, 9, 5), 'Самара ТЭЦ',
         2.2, 2.22, 2.222, 2.2222,
         2.2, 2.22, 2.222, 2.2222,
         2.2, 2.22, 2.222, 2.2222,
         'summary2'),
-      new Indicator(3, 'tip3', 'Меро3', 'волгоград ТЭЦ',
+      new Indicator(3, 'tip3', 'Меро3', new Date(2010, 5, 10), 'волгоград ТЭЦ',
         3.3, 3.3, 3.333, 3.3333,
         3.3, 3.3, 3.333, 3.3333,
         3.3, 3.3, 3.333, 3.3333,
         'summary3'),
-      new Indicator(4, 'tip4', 'Меро4', 'Сочи ТЭЦ',
+      new Indicator(4, 'tip4', 'Меро4', new Date(), 'Сочи ТЭЦ',
         4.4, 4.44, 4.444, 4.4444,
         4.4, 4.44, 4.444, 4.4444,
         4.4, 4.44, 4.444, 4.4444,
@@ -66,8 +66,12 @@ export class GridMetaDataGeneratorService {
 
       const bandLevel1 = (() => {
         const res = new Map<string, ColumnConfig>();
-        res.set('friendlyname', new ColumnConfig('friendlyname', [], true, true, 'friendlyname', 'Наименование', 100, undefined, undefined, 2, 1));
-        res.set('dzo', new ColumnConfig('dzo', [], true, true, 'dzo', 'ДЗО', 100, undefined, undefined, 2, 2));
+        res.set('created', new ColumnConfig('created', [], true, true, 'created', 'Дата создания', 100,
+          undefined, undefined, 2, 1, false, CellValueType.DateTime, true));
+        res.set('friendlyname', new ColumnConfig('friendlyname', [], true, true, 'friendlyname', 'Наименование', 100,
+          undefined, undefined, 2, 1, false, CellValueType.String, true));
+        res.set('dzo', new ColumnConfig('dzo', [], true, true, 'dzo', 'ДЗО', 100,
+          undefined, undefined, 2, 2, false, CellValueType.String, true));
         (() => {
           res.set('type6_plan', new ColumnConfig('type6_plan', [], false, true, 'type6_plan', 'План', 100, undefined, undefined, 2, 3));
           res.set('type6_fact', new ColumnConfig('type6_fact', [], false, true, 'type6_fact', 'Факт', 100, undefined, undefined, 2, 4));
@@ -96,8 +100,8 @@ export class GridMetaDataGeneratorService {
       })();
       const bandLevel0 = (() => {
         const res = new Map<string, ColumnConfig>();
-        res.set('activity', new ColumnConfig(undefined, [bandLevel1.get('friendlyname'), bandLevel1.get('dzo')],
-          true, true, 'activity', 'Мероприятие', 200, undefined, 2));
+        res.set('activity', new ColumnConfig(undefined, [bandLevel1.get('friendlyname'), bandLevel1.get('dzo'), bandLevel1.get('created')],
+          true, true, 'activity', 'Мероприятие', 200, undefined, 3));
         res.set('type6', new ColumnConfig(undefined, [
           bandLevel1.get('type6_plan'),
           bandLevel1.get('type6_fact'),

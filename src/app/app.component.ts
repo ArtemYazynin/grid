@@ -4,7 +4,6 @@ import { BehaviorSubject } from 'rxjs';
 import { GridMetaData } from './modules/grid/models/grid-meta-data.model';
 import { Row } from './modules/grid/models/row.model';
 import { GridMetaDataGeneratorService } from './modules/grid/services/grid-meta-data-generator/grid-meta-data-generator.service';
-import { ColumnConfig } from './modules/grid/models/column-config.model';
 
 @Component({
   selector: 'app-root',
@@ -40,7 +39,7 @@ export class AppComponent implements OnInit {
 
   private getUpdateCellHandler() {
     return (cell: Cell) => {
-      console.log('getUpdateCellHandler');
+      console.log(`getUpdateCellHandler: ${cell.value}`);
     };
   }
 }

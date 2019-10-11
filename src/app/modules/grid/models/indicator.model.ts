@@ -3,6 +3,7 @@ import { Row } from './row.model';
 
 export class Indicator extends Row {
     constructor(id: number, systemname: string, friendlyname: string,
+        public created: Date,
         public dzo: string,
         public type6_plan: number,
         public type6_fact: number,

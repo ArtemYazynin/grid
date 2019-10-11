@@ -36,6 +36,7 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
 
     result[CellValueType.String] = 'StringCellComponent';
     result[CellValueType.Boolean] = 'BooleanCellComponent';
+    result[CellValueType.DateTime] = 'DateCellComponent';
     return result;
   })();
 
