@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
-import { BehaviorSubject, Subject, zip } from 'rxjs';
-import { flatMap, takeUntil, skipWhile } from 'rxjs/operators';
-import { GridMetaData, Row } from '../../models/grid-meta-data.model';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { flatMap, takeUntil } from 'rxjs/operators';
+import { GridMetaData } from '../../models/grid-meta-data.model';
 import { CssInjectorService } from '../../services/css-injector.service';
+import { Row } from '../../models/row.model';
 
 @Component({
   selector: 'app-grid',

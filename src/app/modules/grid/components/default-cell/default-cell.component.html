@@ -1,0 +1,10 @@
+<ng-container *ngIf="$component | async;else editableContent">
+  <ng-template #component>
+  </ng-template>
+</ng-container>
+
+<ng-template #editableContent>
+  <div (click)="changeTemplate()">
+    {{row[pair.key]}}
+  </div>
+</ng-template>

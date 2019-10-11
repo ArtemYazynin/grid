@@ -1,5 +1,5 @@
-import { ColumnConfig } from './../models/grid-meta-data.model';
 import { Injectable } from '@angular/core';
+import { ColumnConfig } from '../models/column-config.model';
 
 @Injectable()
 export class CssInjectorService {

@@ -15,14 +15,18 @@
                     {{pair.value.friendlyname}}
                 </div>
               </th>
-            <td mat-cell *matCellDef="let el"> {{el[pair.key]}} </td>
+            <td mat-cell *matCellDef="let el">
+              <ng-container *ngIf="pair.value.editable;else editableContent">
+                  <app-default-cell fxFill [row]="el" [pair]="pair" (updateCell)="gridMetaData.updateCell($event)"></app-default-cell>
+              </ng-container>
+              <ng-template #editableContent> {{el[pair.key]}}</ng-template>
+            </td>
           </ng-container>
         </ng-container>
       </ng-container>
       <ng-container *ngIf="gridMetaData.$displayedColumnsMap | async as displayedColumnsMap">
         <ng-container *ngFor="let pair of displayedColumnsMap | keyvalue">
           <tr mat-header-row *matHeaderRowDef="pair.value; sticky: true"></tr>
-          
         </ng-container>
         <tr mat-row *matRowDef="let row; columns: gridMetaData.$displayedColumns | async;"></tr>
       </ng-container>
