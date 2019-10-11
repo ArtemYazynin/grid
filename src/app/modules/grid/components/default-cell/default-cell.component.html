@@ -4,7 +4,7 @@
 </ng-container>
 
 <ng-template #editableContent>
-  <div (click)="changeTemplate()">
+  <div fxFlex (click)="changeTemplate()">
     {{row[pair.key ] | cell}}
   </div>
 </ng-template>

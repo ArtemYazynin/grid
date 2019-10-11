@@ -47,13 +47,14 @@ export class CssInjectorService {
               width: ${columnConfig.$width.value}px;
               background-color: ${backgroundColor};
               border-right: 1px solid ${borderRightColor};
-              box-sizing: border-box
+              box-sizing: border-box;
+              
             }`;
           } else {
             classes += `.mat-column-${columnConfig.systemname}{
               background-color: ${backgroundColor};
               border-right: 1px solid ${borderRightColor};
-              box-sizing: border-box
+              box-sizing: border-box;
             }`;
           }
           innerHtml += classes;

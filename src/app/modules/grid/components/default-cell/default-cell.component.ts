@@ -1,6 +1,6 @@
 import {
   ChangeDetectionStrategy, Component, ComponentFactoryResolver, ComponentRef,
-  Input, OnDestroy, OnInit, Type, ViewContainerRef, Output, EventEmitter
+  Input, OnDestroy, OnInit, Type, ViewContainerRef, Output, EventEmitter, HostBinding
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CellValueType } from '../../models/cell-value-type.enum';
