@@ -1,5 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, HostBinding, Inject } from '@angular/core';
 import { CellBase } from '../cell-base';
 import { DatePipe } from '@angular/common';
 
@@ -11,12 +11,12 @@ import { DatePipe } from '@angular/common';
 })
 export class DateCellComponent extends CellBase implements OnInit {
   $dateValue: BehaviorSubject<string>;
-  constructor(private datePipe: DatePipe) {
+  constructor(private datePipe: DatePipe, @Inject('dateFormat') private DATE_FORMAT) {
     super();
   }
 
   ngOnInit(): void {
-    this.$dateValue = new BehaviorSubject<string>(this.datePipe.transform(this.value,'dd.MM.yyyy'));
+    this.$dateValue = new BehaviorSubject<string>(this.datePipe.transform(this.value, this.DATE_FORMAT));
   }
 
   updateDate(e) {

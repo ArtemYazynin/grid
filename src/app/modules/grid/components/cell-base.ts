@@ -1,8 +1,9 @@
-import { ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { ViewChild, ElementRef, AfterViewInit, OnDestroy, HostBinding } from '@angular/core';
 import { Subject, fromEvent } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 export class CellBase implements AfterViewInit, OnDestroy {
+    @HostBinding('attr.class') _class = 'component-flex';
     /**
      * Ссылка на контрол значения
      *
@@ -41,10 +42,12 @@ export class CellBase implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit(): void {
-        this.vc.nativeElement.select();
-        this.vc.nativeElement.focus();
-        this.subsribeKeyUp();
-        this.subscribeBlur();
+        setTimeout(() => {
+            this.vc.nativeElement.select();
+            this.vc.nativeElement.focus();
+            this.subsribeKeyUp();
+            this.subscribeBlur();   
+        });
     }
 
     private subsribeKeyUp() {
@@ -56,6 +59,7 @@ export class CellBase implements AfterViewInit, OnDestroy {
                         console.log('esacape');
                         this.cancelEdit(e);
                         break;
+                    case 'Enter':
                     case 'NumpadEnter':
                         console.log('NumpadEnter');
                         this.save(e, this.value);

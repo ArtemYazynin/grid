@@ -1,6 +1,6 @@
 import {
   ChangeDetectionStrategy, Component, ComponentFactoryResolver, ComponentRef,
-  Input, OnDestroy, OnInit, Type, ViewContainerRef, Output, EventEmitter, HostBinding
+  Input, OnDestroy, OnInit, Type, ViewContainerRef, Output, EventEmitter, HostBinding, ViewChild
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CellValueType } from '../../models/cell-value-type.enum';
@@ -19,6 +19,7 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
   @Input() row: Row;
   @Input() pair: { key: string, value: ColumnConfig };
   @Output() updateCell = new EventEmitter<Cell>();
+  @ViewChild("editComponent", { read: ViewContainerRef }) vcRef;
 
   private $component = new BehaviorSubject<ComponentRef<CellBase>>(undefined);
   private cellTemplateMap = (() => {
@@ -40,7 +41,7 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
     return result;
   })();
 
-  constructor(private resolver: ComponentFactoryResolver, private vcRef: ViewContainerRef) { }
+  constructor(private resolver: ComponentFactoryResolver) { }
 
   ngOnInit() {
   }
@@ -51,6 +52,7 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
   }
 
   changeTemplate() {
+    (this.vcRef as ViewContainerRef).clear();
     const isValidModel = !!this.pair && !!this.pair.value && !!this.pair.value.editable
       && !!this.pair.value.cellValueType;
     if (!isValidModel || this.$component.value) {

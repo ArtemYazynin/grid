@@ -1,4 +1,4 @@
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, InjectionToken } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,6 +13,8 @@ import { FormsModule } from '@angular/forms';
 import { StringCellComponent } from './components/string-cell/string-cell.component';
 import { DateCellComponent } from './components/date-cell/date-cell.component';
 import { CellPipe } from './pipes/cell/cell.pipe';
+import { BooleanCellComponent } from './components/boolean-cell/boolean-cell.component';
+import { YesNoPipe } from './pipes/yes-no/yes-no.pipe';
 
 @NgModule({
   declarations: [
@@ -21,8 +23,17 @@ import { CellPipe } from './pipes/cell/cell.pipe';
     NumberCellComponent,
     StringCellComponent,
     DateCellComponent,
-    CellPipe],
-  entryComponents: [DefaultCellComponent, NumberCellComponent, StringCellComponent, DateCellComponent],
+    CellPipe,
+    BooleanCellComponent,
+    YesNoPipe
+  ],
+  entryComponents: [
+    DefaultCellComponent, 
+    NumberCellComponent, 
+    StringCellComponent, 
+    DateCellComponent, 
+    BooleanCellComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -35,7 +46,10 @@ import { CellPipe } from './pipes/cell/cell.pipe';
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'en-US' },
+    { provide: 'dateFormat', useValue: 'dd.MM.yyyy'},
+
     DatePipe,
+    YesNoPipe,
     CssInjectorService,
     GridMetaDataGeneratorService
   ]

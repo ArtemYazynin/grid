@@ -18,7 +18,8 @@ export class Indicator extends Row {
         public type8_val: number,
         public type8_persent: number,
         public summary: string,
-        public hidden: string = 'hiddenValue') {
+        public hidden: string = 'hiddenValue',
+        public isDeleted: boolean = false) {
 
         super(id, systemname, friendlyname);
     }

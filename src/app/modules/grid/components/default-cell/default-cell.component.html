@@ -1,10 +1,6 @@
-<ng-container *ngIf="$component | async;else editableContent">
-  <ng-template #component>
-  </ng-template>
-</ng-container>
-
-<ng-template #editableContent>
-  <div fxFlex (click)="changeTemplate()">
-    {{row[pair.key ] | cell}}
-  </div>
+<ng-template #editComponent>
 </ng-template>
+
+<div  fxFlex fxLayout="row" fxLayoutAlign="center center" (click)="changeTemplate()" *ngIf="!($component | async)">
+  {{row[pair.key ] | cell}}
+</div>
