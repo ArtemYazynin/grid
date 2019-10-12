@@ -14,7 +14,7 @@ export class ColumnConfig {
     constructor(public dataField: string, children: ColumnConfig[], sticky: boolean, isVisible: boolean,
         public systemname: string, public friendlyname: string,
         width: number, height: number = 40, colspan = 1, rowspan = 1, order: number = 999, isStickyEnd: boolean = false,
-        public cellValueType: CellValueType = undefined, public editable = false) {
+        public cellValueType: CellValueType = undefined, public editable = false, public isSortable:boolean = false) {
         this.$children = new BehaviorSubject<ColumnConfig[]>(children);
         this.$isSticky = new BehaviorSubject<boolean>(sticky);
         this.$isVisible = new BehaviorSubject<boolean>(isVisible);

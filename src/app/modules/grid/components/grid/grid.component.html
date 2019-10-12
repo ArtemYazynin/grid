@@ -1,40 +1,62 @@
-<div class="example-container" *ngIf="$gridMetaData | async as gridMetaData">
-  <table mat-table [dataSource]="$dataSource | async">
-    <ng-container *ngIf="gridMetaData.$columnsMap | async as columnsMap">
-      <ng-container *ngFor="let levelPair of columnsMap | keyvalue">
-        <ng-container *ngFor="let pair of levelPair.value | keyvalue">
-          <ng-container matColumnDef="{{pair.key}}" 
-            [sticky]="pair.value.$isSticky | async"
-            [stickyEnd]="pair.value.$isStickyEnd | async"
-            *ngIf="pair.value.$width | async as width">
-            <th mat-header-cell *matHeaderCellDef [id]="levelPair.key"
-                [attr.colspan]="pair.value.$colspan | async"
+<div class="example-container">
+  <table mat-table matSort [dataSource]="dataSource">
+    <ng-container *ngIf="$gridMetaData | async as gridMetaData">
+      <ng-container *ngIf="gridMetaData.$columnsMap | async as columnsMap">
+        <ng-container *ngFor="let levelPair of columnsMap | keyvalue">
+          <ng-container *ngFor="let pair of levelPair.value | keyvalue">
+            <ng-container matColumnDef="{{pair.key}}" [sticky]="pair.value.$isSticky | async"
+              [stickyEnd]="pair.value.$isStickyEnd | async" *ngIf="pair.value.$width | async as width">
+              <ng-container *ngIf="pair.value.isSortable;else notSorting">
+                <th mat-header-cell *matHeaderCellDef [id]="levelPair.key"
+                  mat-sort-header
+                   [attr.colspan]="pair.value.$colspan | async"
+                  [attr.rowspan]="pair.value.$rowspan | async"
+                  [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'">
+                  <div>
+                    {{pair.value.friendlyname}}
+                  </div>
+                </th>
+              </ng-container>
+              <ng-template #notSorting>
+                <th mat-header-cell *matHeaderCellDef [id]="levelPair.key"
+                  [attr.colspan]="pair.value.$colspan | async"
+                  [attr.rowspan]="pair.value.$rowspan | async"
+                  [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'">
+                  <div>
+                    {{pair.value.friendlyname}}
+                  </div>
+                </th>
+              </ng-template>
+              <!-- <th mat-header-cell *matHeaderCellDef [id]="levelPair.key"
+                [mat-sort-header]="pair.value.isSortable ? true : null" [attr.colspan]="pair.value.$colspan | async"
                 [attr.rowspan]="pair.value.$rowspan | async"
                 [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'">
                 <div>
-                    {{pair.value.friendlyname}}
+                  {{pair.value.friendlyname}}
                 </div>
-              </th>
-            <td mat-cell *matCellDef="let el">
-              <ng-container *ngIf="pair.value.editable;else editableContent">
+              </th> -->
+              <td mat-cell *matCellDef="let el">
+                <ng-container *ngIf="pair.value.editable;else editableContent">
                   <div fxLayout="column" fxLayoutAlign="stretch stretch" fxFill>
-                    <app-default-cell fxFlex [row]="el" [pair]="pair" (updateCell)="gridMetaData.updateCell($event)"></app-default-cell>
+                    <app-default-cell fxFlex [row]="el" [pair]="pair" (updateCell)="gridMetaData.updateCell($event)">
+                    </app-default-cell>
                   </div>
-              </ng-container>
-              <ng-template #editableContent>
-                <div fxLayout="column" fxLayoutAlign="stretch stretch" fxFill>
+                </ng-container>
+                <ng-template #editableContent>
+                  <div fxLayout="column" fxLayoutAlign="stretch stretch" fxFill>
                     <input readonly fxFlex value="{{el[pair.key]}}">
-                </div>
-              </ng-template>
-            </td>
+                  </div>
+                </ng-template>
+              </td>
+            </ng-container>
           </ng-container>
         </ng-container>
-      </ng-container>
-      <ng-container *ngIf="gridMetaData.$displayedColumnsMap | async as displayedColumnsMap">
-        <ng-container *ngFor="let pair of displayedColumnsMap | keyvalue">
-          <tr mat-header-row *matHeaderRowDef="pair.value; sticky: true"></tr>
+        <ng-container *ngIf="gridMetaData.$displayedColumnsMap | async as displayedColumnsMap">
+          <ng-container *ngFor="let pair of displayedColumnsMap | keyvalue">
+            <tr mat-header-row *matHeaderRowDef="pair.value; sticky: true"></tr>
+          </ng-container>
+          <tr mat-row *matRowDef="let row; columns: gridMetaData.$displayedColumns | async;"></tr>
         </ng-container>
-        <tr mat-row *matRowDef="let row; columns: gridMetaData.$displayedColumns | async;"></tr>
       </ng-container>
     </ng-container>
   </table>

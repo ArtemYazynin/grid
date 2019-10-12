@@ -33,7 +33,7 @@ export class GridMetaDataGeneratorService {
         3.3, 3.3, 3.333, 3.3333,
         3.3, 3.3, 3.333, 3.3333,
         'summary3'),
-      new Indicator(4, 'tip4', 'Меро4', new Date(), 'Сочи ТЭЦ',
+      new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
         4.4, 4.44, 4.444, 4.4444,
         4.4, 4.44, 4.444, 4.4444,
         4.4, 4.44, 4.444, 4.4444,
@@ -48,49 +48,55 @@ export class GridMetaDataGeneratorService {
       const bandLevel2 = (() => {
         const res = new Map<string, ColumnConfig>();
         res.set('type6_val', new ColumnConfig('type6_val', [], false, true, 'type6_val', 'м3/ч',
-          50, undefined, undefined, undefined, 5, false, CellValueType.Double, true));
+          50, undefined, undefined, undefined, 5, false, CellValueType.Double, true, true));
         res.set('type6_persent', new ColumnConfig('type6_persent', [], false, true, 'type6_persent',
-          '%', 50, undefined, undefined, undefined, 6, false, CellValueType.Double, true));
+          '%', 50, undefined, undefined, undefined, 6, false, CellValueType.Double, true, true));
 
         res.set('type7_val', new ColumnConfig('type7_val', [], false, true, 'type7_val', 'м3/ч',
-          50, undefined, undefined, undefined, 9, false, CellValueType.Double, true));
+          50, undefined, undefined, undefined, 9, false, CellValueType.Double, true, true));
         res.set('type7_persent', new ColumnConfig('type7_persent', [], false, true, 'type7_persent',
-          '%', 50, undefined, undefined, undefined, 10, false, CellValueType.Double, true));
+          '%', 50, undefined, undefined, undefined, 10, false, CellValueType.Double, true, true));
 
         res.set('type8_val', new ColumnConfig('type8_val', [], false, true, 'type8_val',
-          'м3/ч', 50, undefined, undefined, undefined, 13, false, CellValueType.Double, true));
+          'м3/ч', 50, undefined, undefined, undefined, 13, false, CellValueType.Double, true, true));
         res.set('type8_persent', new ColumnConfig('type8_persent', [], false, true, 'type8_persent',
-          '%', 50, undefined, undefined, undefined, 14, false, CellValueType.Double, true));
+          '%', 50, undefined, undefined, undefined, 14, false, CellValueType.Double, true, true));
         return res;
       })();
 
       const bandLevel1 = (() => {
         const res = new Map<string, ColumnConfig>();
         res.set('created', new ColumnConfig('created', [], true, true, 'created', 'Дата создания', 100,
-          undefined, undefined, 2, 1, false, CellValueType.DateTime, true));
+          undefined, undefined, 2, 1, false, CellValueType.DateTime, true, true));
         res.set('friendlyname', new ColumnConfig('friendlyname', [], true, true, 'friendlyname', 'Наименование', 100,
-          undefined, undefined, 2, 1, false, CellValueType.String, true));
+          undefined, undefined, 2, 1, false, CellValueType.String, true, true));
         res.set('dzo', new ColumnConfig('dzo', [], true, true, 'dzo', 'ДЗО', 100,
-          undefined, undefined, 2, 2, false, CellValueType.String, true));
+          undefined, undefined, 2, 2, false, CellValueType.String, true, true));
         (() => {
-          res.set('type6_plan', new ColumnConfig('type6_plan', [], false, true, 'type6_plan', 'План', 100, undefined, undefined, 2, 3));
-          res.set('type6_fact', new ColumnConfig('type6_fact', [], false, true, 'type6_fact', 'Факт', 100, undefined, undefined, 2, 4));
+          res.set('type6_plan', new ColumnConfig('type6_plan', [], false, true,
+            'type6_plan', 'План', 100, undefined, undefined, 2, 3, false, undefined, false, true));
+          res.set('type6_fact', new ColumnConfig('type6_fact', [], false, true,
+            'type6_fact', 'Факт', 100, undefined, undefined, 2, 4, false, undefined, false, true));
           res.set('type6_deviation_band', new ColumnConfig(undefined, [
             bandLevel2.get('type6_val'),
             bandLevel2.get('type6_persent'),
           ], false, true, 'type6_deviation_band', 'Отклонение', 200, undefined, 2));
         })();
         (() => {
-          res.set('type7_plan', new ColumnConfig('type7_plan', [], false, true, 'type7_plan', 'План', 100, undefined, undefined, 2, 7));
-          res.set('type7_fact', new ColumnConfig('type7_fact', [], false, true, 'type7_fact', 'Факт', 100, undefined, undefined, 2, 8));
+          res.set('type7_plan', new ColumnConfig('type7_plan', [], false, true, 
+            'type7_plan', 'План', 100, undefined, undefined, 2, 7, false, undefined, false, true));
+          res.set('type7_fact', new ColumnConfig('type7_fact', [], false, true, 
+            'type7_fact', 'Факт', 100, undefined, undefined, 2, 8, false, undefined, false, true));
           res.set('type7_deviation_band', new ColumnConfig(undefined, [
             bandLevel2.get('type7_val'),
             bandLevel2.get('type7_persent')
           ], false, true, 'type7_deviation_band', 'Отклонение', 200, undefined, 2));
         })();
         (() => {
-          res.set('type8_plan', new ColumnConfig('type8_plan', [], false, true, 'type8_plan', 'План', 100, undefined, undefined, 2, 11));
-          res.set('type8_fact', new ColumnConfig('type8_fact', [], false, true, 'type8_fact', 'Факт', 100, undefined, undefined, 2, 12));
+          res.set('type8_plan', new ColumnConfig('type8_plan', [], false, true, 
+          'type8_plan', 'План', 100, undefined, undefined, 2, 11, false, undefined, false, true));
+          res.set('type8_fact', new ColumnConfig('type8_fact', [], false, true, 
+          'type8_fact', 'Факт', 100, undefined, undefined, 2, 12, false, undefined, false, true));
           res.set('type8_deviation_band', new ColumnConfig(undefined, [
             bandLevel2.get('type8_val'),
             bandLevel2.get('type8_persent')
@@ -101,7 +107,7 @@ export class GridMetaDataGeneratorService {
       const bandLevel0 = (() => {
         const res = new Map<string, ColumnConfig>();
         res.set('activity', new ColumnConfig(undefined, [bandLevel1.get('friendlyname'), bandLevel1.get('dzo'), bandLevel1.get('created')],
-          true, true, 'activity', 'Мероприятие', 200, undefined, 3));
+          true, true, 'activity', 'Мероприятие', 200, undefined, 3, 1, 1, false, undefined, false));
         res.set('type6', new ColumnConfig(undefined, [
           bandLevel1.get('type6_plan'),
           bandLevel1.get('type6_fact'),
@@ -117,8 +123,10 @@ export class GridMetaDataGeneratorService {
           bandLevel1.get('type8_fact'),
           bandLevel1.get('type8_deviation_band')
         ], false, true, 'type8', 'Типовой 8', 500, undefined, 4));
-        res.set('summary', new ColumnConfig('summary', [], false, true, 'summary', 'Сводка 8', 100, undefined, 1, 3, 15, true));
-        res.set('isDeleted', new ColumnConfig('isDeleted', [], false, true, 'isDeleted', 'Удален', 100, undefined, 1, 3, 16, true, CellValueType.Boolean, true));
+        res.set('summary', new ColumnConfig('summary', [], false, true, 'summary', 
+          'Сводка 8', 100, undefined, 1, 3, 15, true, undefined, false, true));
+        res.set('isDeleted', new ColumnConfig('isDeleted', [], false, true, 'isDeleted', 
+          'Удален', 100, undefined, 1, 3, 16, true, CellValueType.Boolean, true, true));
         res.set('hidden', new ColumnConfig('hidden', [], false, false, 'hidden', 'Скрытая колонка на 3 строки', 100, undefined, 1, 3, 16));
         return res;
       })();

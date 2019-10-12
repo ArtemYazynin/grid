@@ -12,7 +12,7 @@ import { GridMetaDataGeneratorService } from './modules/grid/services/grid-meta-
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
-  $dataSource: BehaviorSubject<Row[]>;
+  $rows: BehaviorSubject<Row[]>;
   $gridMetaData: BehaviorSubject<GridMetaData>;
 
   constructor(private gridMetaDataGeneratorService: GridMetaDataGeneratorService) {
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
 
   private preprareDataSource() {
     const rows = this.gridMetaDataGeneratorService.getRowsWithBands();
-    this.$dataSource = new BehaviorSubject<Row[]>(rows);
+    this.$rows = new BehaviorSubject<Row[]>(rows);
   }
 
   private prepareMetaData() {

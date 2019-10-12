@@ -15,7 +15,9 @@ import { DateCellComponent } from './components/date-cell/date-cell.component';
 import { CellPipe } from './pipes/cell/cell.pipe';
 import { BooleanCellComponent } from './components/boolean-cell/boolean-cell.component';
 import { YesNoPipe } from './pipes/yes-no/yes-no.pipe';
-
+import { MatSortModule } from '@angular/material/sort';
+import { CdkTableModule } from '@angular/cdk/table';
+import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations'
 @NgModule({
   declarations: [
     GridComponent,
@@ -36,8 +38,12 @@ import { YesNoPipe } from './pipes/yes-no/yes-no.pipe';
   ],
   imports: [
     CommonModule,
+    BrowserAnimationsModule,
+    NoopAnimationsModule,
     FormsModule,
+    CdkTableModule,
     MatTableModule,
+    MatSortModule,
     MatIconModule,
     LayoutModule, FlexLayoutModule, // Базовые модули для формирования louout
   ],
