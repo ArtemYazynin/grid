@@ -8,12 +8,8 @@ import { CellBase } from '../cell-base';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BooleanCellComponent extends CellBase{
-
   constructor() { 
     super();
   }
-
-  // updateState(val){
-  //   this.value = val;
-  // }
 }
+

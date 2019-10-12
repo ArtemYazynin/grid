@@ -44,7 +44,6 @@ export class CellBase implements AfterViewInit, OnDestroy {
     ngAfterViewInit(): void {
         setTimeout(() => {
             this.vc.nativeElement.select();
-            this.vc.nativeElement.focus();
             this.subsribeKeyUp();
             this.subscribeBlur();   
         });
