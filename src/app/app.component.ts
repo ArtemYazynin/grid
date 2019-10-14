@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
     const oldArray = this.$rows.value;
     const newArray = this.gridMetaDataGeneratorService.getRows();
     const result = [...oldArray, ...newArray];
-    this.$rows = new BehaviorSubject<any[]>(result);
+    this.$rows.next(result);
     setTimeout(() => {
       this.cdr.markForCheck(); 
     });

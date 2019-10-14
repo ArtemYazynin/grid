@@ -1,3 +1,6 @@
+import { MetaData } from './meta-data.model';
+
+
 export class Indicator {
     constructor(
         public friendlyname: CellMetaData<string>,
@@ -22,8 +25,5 @@ export class Indicator {
 }
 
 export class CellMetaData<TType extends string | number | boolean | Date> {
-    constructor(public value: TType, public metaData?: MetaData) { }
-}
-export class MetaData {
-    [key: string]: string
+    constructor(public value: TType, public metaData?: MetaData<string>) { }
 }

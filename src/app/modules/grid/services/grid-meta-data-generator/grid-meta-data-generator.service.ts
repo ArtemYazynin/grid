@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Indicator, CellMetaData, MetaData } from '../../models/indicator.model';
+import { Indicator, CellMetaData } from '../../models/indicator.model';
 import { ColumnConfig } from '../../models/column-config.model';
 import { CellValueType } from '../../models/cell-value-type.enum';
 import { GridMetaData } from '../../models/grid-meta-data.model';
+import { MetaData } from '../../models/meta-data.model';
 
 /**
  * Для тестирования модели грида
@@ -17,27 +18,27 @@ export class GridMetaDataGeneratorService {
 
   getRows() {
     const lightGreenBackGround = (()=>{
-      const result = new MetaData();
-      result.background = 'lightgreen'; 
+      const result = new MetaData<string>();
+      result['background'] = 'lightgreen'; 
       return result;
     })();
     const redBackGround = (()=>{
-      const result = new MetaData();
+      const result = new MetaData<string>();
       result.background = 'red'; 
       return result;
     })();
     const leftGradientBackGround = (()=>{
-      const result = new MetaData();
+      const result = new MetaData<string>();
       result.background = 'linear-gradient(to left, red, transparent)'; 
       return result;
     })();
     const rightGradientBackGround = (()=>{
-      const result = new MetaData();
+      const result = new MetaData<string>();
       result.background = 'linear-gradient(to left, transparent, red)'; 
       return result;
     })();
     const grayBackGround = (()=>{
-      const result = new MetaData();
+      const result = new MetaData<string>();
       result.background = 'darkgray'; 
       return result;
     })();
