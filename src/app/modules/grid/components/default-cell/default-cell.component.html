@@ -1,7 +1,7 @@
 <ng-template #editComponent>
 </ng-template>
 
-<div  *ngIf="!($component | async)" fxLayout="column" fxLayoutAlign="stretch stretch" fxFill 
+<div  *ngIf="!($component | async)" fxLayout="column" fxLayoutAlign="stretch stretch" fxFill [ngStyle]="row[pair.key].metaData"
   (click)="changeTemplate()" [ngStyle]="rowConfig">
   <input readonly fxFlex value="{{row[pair.key ] | cell}}">
 </div>

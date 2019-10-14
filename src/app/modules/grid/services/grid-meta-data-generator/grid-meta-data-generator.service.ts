@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Row } from '../../models/row.model';
-import { Indicator } from '../../models/indicator.model';
+import { Indicator, CellMetaData, MetaData } from '../../models/indicator.model';
 import { ColumnConfig } from '../../models/column-config.model';
 import { CellValueType } from '../../models/cell-value-type.enum';
 import { GridMetaData } from '../../models/grid-meta-data.model';
-import { RowsConfig } from '../../models/rows-config.model';
-import { RowConfig } from '../../models/row-config.model';
-import { MetaData } from '../../models/meta-data.model';
 
 /**
  * Для тестирования модели грида
@@ -19,63 +15,105 @@ export class GridMetaDataGeneratorService {
 
   constructor() { }
 
-  getRowsWithBands() {
-    const rows: Row[] = [
-      new Indicator(1, 'tip1', 'Меро1', new Date(1990, 5, 11), 'Ваз ТЭЦ',
-        1.1, 1.11, 1.111, 1.1111,
-        1.1, 1.11, 1.111, 1.1111,
-        1.1, 1.11, 1.111, 1.1111,
-        'summary1', 'hiddenValue', true),
-      new Indicator(2, 'tip2', 'Меро2', new Date(1995, 9, 5), 'Самара ТЭЦ',
-        2.2, 2.22, 2.222, 2.2222,
-        2.2, 2.22, 2.222, 2.2222,
-        2.2, 2.22, 2.222, 2.2222,
-        'summary2'),
-      new Indicator(3, 'tip3', 'Меро3', new Date(2010, 5, 10), 'волгоград ТЭЦ',
-        3.3, 3.3, 3.333, 3.3333,
-        3.3, 3.3, 3.333, 3.3333,
-        3.3, 3.3, 3.333, 3.3333,
-        'summary3'),
-      new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        'summary4'),
-        new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        'summary4'),
-        new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        'summary4'),
-        new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        'summary4'),
-        new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        'summary4'),
-        new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        'summary4'),
-        new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        'summary4'),
-        new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        4.4, 4.44, 4.444, 4.4444,
-        'summary4'),
+  getRows() {
+    const lightGreenBackGround = (()=>{
+      const result = new MetaData();
+      result.background = 'lightgreen'; 
+      return result;
+    })();
+    const redBackGround = (()=>{
+      const result = new MetaData();
+      result.background = 'red'; 
+      return result;
+    })();
+    const leftGradientBackGround = (()=>{
+      const result = new MetaData();
+      result.background = 'linear-gradient(to left, red, transparent)'; 
+      return result;
+    })();
+    const rightGradientBackGround = (()=>{
+      const result = new MetaData();
+      result.background = 'linear-gradient(to left, transparent, red)'; 
+      return result;
+    })();
+    const grayBackGround = (()=>{
+      const result = new MetaData();
+      result.background = 'darkgray'; 
+      return result;
+    })();
+    const rows: any[] = [
+      new Indicator(new CellMetaData('Меро1', lightGreenBackGround),
+        new CellMetaData(new Date(1990, 5, 11), lightGreenBackGround),
+        new CellMetaData('Ваз ТЭЦ', lightGreenBackGround),
+        new CellMetaData(1.1, lightGreenBackGround),
+        new CellMetaData(1.11, lightGreenBackGround),
+        new CellMetaData(1.111, lightGreenBackGround),
+        new CellMetaData(1.1111, lightGreenBackGround),
+        new CellMetaData(1.1, lightGreenBackGround),
+        new CellMetaData(1.11, lightGreenBackGround),
+        new CellMetaData(1.111, lightGreenBackGround),
+        new CellMetaData(1.1111, lightGreenBackGround),
+        new CellMetaData(1.1, lightGreenBackGround),
+        new CellMetaData(1.11, lightGreenBackGround),
+        new CellMetaData(1.111, lightGreenBackGround),
+        new CellMetaData(1.1111, lightGreenBackGround),
+        new CellMetaData('summary1', lightGreenBackGround),
+        new CellMetaData('hiddenValue', lightGreenBackGround),
+        new CellMetaData(true, lightGreenBackGround)),
+      new Indicator(new CellMetaData('Меро2', redBackGround),
+        new CellMetaData(new Date(1991, 7, 7), redBackGround),
+        new CellMetaData('Самара ТЭЦ', redBackGround),
+        new CellMetaData(2.2, redBackGround),
+        new CellMetaData(2.22, redBackGround),
+        new CellMetaData(2.222, redBackGround),
+        new CellMetaData(2.2222, redBackGround),
+        new CellMetaData(2.2, redBackGround),
+        new CellMetaData(2.22, redBackGround),
+        new CellMetaData(2.222, redBackGround),
+        new CellMetaData(2.2222, redBackGround),
+        new CellMetaData(2.2, redBackGround),
+        new CellMetaData(2.22, redBackGround),
+        new CellMetaData(2.222, redBackGround),
+        new CellMetaData(2.2222, redBackGround),
+        new CellMetaData('summary2', redBackGround),
+        new CellMetaData('hiddenValue', redBackGround),
+        new CellMetaData(true, redBackGround)),
+      new Indicator(new CellMetaData('Меро3'),
+        new CellMetaData(new Date(2000, 1, 2)),
+        new CellMetaData('волгоград ТЭЦ'),
+        new CellMetaData(3.3),
+        new CellMetaData(3.33),
+        new CellMetaData(3.333),
+        new CellMetaData(3.3333),
+        new CellMetaData(3.3),
+        new CellMetaData(3.33,rightGradientBackGround),
+        new CellMetaData(3.333,rightGradientBackGround),
+        new CellMetaData(3.3333,rightGradientBackGround),
+        new CellMetaData(3.3),
+        new CellMetaData(3.33),
+        new CellMetaData(3.333),
+        new CellMetaData(3.3333),
+        new CellMetaData('summary3'),
+        new CellMetaData('hiddenValue'),
+        new CellMetaData(true)),
+      new Indicator(new CellMetaData('Меро4',grayBackGround),
+        new CellMetaData(new Date(2000, 1, 2),grayBackGround),
+        new CellMetaData('артемовская ТЭЦ',grayBackGround),
+        new CellMetaData(4.4,grayBackGround),
+        new CellMetaData(4.44,grayBackGround),
+        new CellMetaData(4.444,grayBackGround),
+        new CellMetaData(4.4444,grayBackGround),
+        new CellMetaData(4.4,leftGradientBackGround),
+        new CellMetaData(4.44,leftGradientBackGround),
+        new CellMetaData(4.444,leftGradientBackGround),
+        new CellMetaData(4.4444,leftGradientBackGround),
+        new CellMetaData(4.4,grayBackGround),
+        new CellMetaData(4.44,grayBackGround),
+        new CellMetaData(4.444,grayBackGround),
+        new CellMetaData(4.4444,grayBackGround),
+        new CellMetaData('summary4',grayBackGround),
+        new CellMetaData('hiddenValue',grayBackGround),
+        new CellMetaData(true,grayBackGround)),
     ];
     return rows;
   }
@@ -121,9 +159,9 @@ export class GridMetaDataGeneratorService {
           ], false, true, 'type6_deviation_band', 'Отклонение', 200, undefined, 2));
         })();
         (() => {
-          res.set('type7_plan', new ColumnConfig('type7_plan', [], false, true, 
+          res.set('type7_plan', new ColumnConfig('type7_plan', [], false, true,
             'type7_plan', 'План', 100, undefined, undefined, 2, 7, false, undefined, false, true));
-          res.set('type7_fact', new ColumnConfig('type7_fact', [], false, true, 
+          res.set('type7_fact', new ColumnConfig('type7_fact', [], false, true,
             'type7_fact', 'Факт', 100, undefined, undefined, 2, 8, false, undefined, false, true));
           res.set('type7_deviation_band', new ColumnConfig(undefined, [
             bandLevel2.get('type7_val'),
@@ -131,10 +169,10 @@ export class GridMetaDataGeneratorService {
           ], false, true, 'type7_deviation_band', 'Отклонение', 200, undefined, 2));
         })();
         (() => {
-          res.set('type8_plan', new ColumnConfig('type8_plan', [], false, true, 
-          'type8_plan', 'План', 100, undefined, undefined, 2, 11, false, undefined, false, true));
-          res.set('type8_fact', new ColumnConfig('type8_fact', [], false, true, 
-          'type8_fact', 'Факт', 100, undefined, undefined, 2, 12, false, undefined, false, true));
+          res.set('type8_plan', new ColumnConfig('type8_plan', [], false, true,
+            'type8_plan', 'План', 100, undefined, undefined, 2, 11, false, undefined, false, true));
+          res.set('type8_fact', new ColumnConfig('type8_fact', [], false, true,
+            'type8_fact', 'Факт', 100, undefined, undefined, 2, 12, false, undefined, false, true));
           res.set('type8_deviation_band', new ColumnConfig(undefined, [
             bandLevel2.get('type8_val'),
             bandLevel2.get('type8_persent')
@@ -161,9 +199,9 @@ export class GridMetaDataGeneratorService {
           bandLevel1.get('type8_fact'),
           bandLevel1.get('type8_deviation_band')
         ], false, true, 'type8', 'Типовой 8', 500, undefined, 4));
-        res.set('summary', new ColumnConfig('summary', [], false, true, 'summary', 
+        res.set('summary', new ColumnConfig('summary', [], false, true, 'summary',
           'Сводка 8', 100, undefined, 1, 3, 15, true, undefined, false, true));
-        res.set('isDeleted', new ColumnConfig('isDeleted', [], false, true, 'isDeleted', 
+        res.set('isDeleted', new ColumnConfig('isDeleted', [], false, true, 'isDeleted',
           'Удален', 100, undefined, 1, 3, 16, true, CellValueType.Boolean, true, true));
         res.set('hidden', new ColumnConfig('hidden', [], false, false, 'hidden', 'Скрытая колонка на 3 строки', 100, undefined, 1, 3, 16));
         return res;
@@ -174,55 +212,7 @@ export class GridMetaDataGeneratorService {
 
       return result;
     })();
-    const rowsConfig = this.getRowsConfig();
-    const gridMetaData = new GridMetaData('base', columnsMap, rowsConfig);
+    const gridMetaData = new GridMetaData('base', columnsMap);
     return gridMetaData;
-  }
-
-  private getRowsConfig(){
-    const rowsConfig = new RowsConfig();
-    rowsConfig['tip4'] = (()=>{
-      const rowConfig = new RowConfig();
-      const redCells = ['friendlyname', 'created', 'dzo','type6_plan','type6_fact', 'type6_val', 'type6_persent', 'type7_plan',
-      'type7_fact', 'type7_val','type7_persent','type8_plan', 'type8_fact', 'type8_val', 'type8_persent', 'summary', 'isDeleted'];
-      redCells.forEach(rowProp => {
-        rowConfig[rowProp] = (()=>{
-          const res = new MetaData();
-          res['background'] = 'darkgray';
-          return res;
-        })();
-      });
-     
-      return rowConfig;
-    })();
-    rowsConfig['tip2'] = (()=>{
-      const rowConfig = new RowConfig();
-      const redCells = ['friendlyname', 'created', 'dzo','type6_plan','type6_fact', 'type6_val', 'type6_persent', 'type7_plan',
-      'type7_fact', 'type7_val','type7_persent','type8_plan', 'type8_fact', 'type8_val', 'type8_persent', 'summary', 'isDeleted'];
-      redCells.forEach(rowProp => {
-        rowConfig[rowProp] = (()=>{
-          const res = new MetaData();
-          res['background'] = 'red';
-          return res;
-        })();
-      });
-     
-      return rowConfig;
-    })();
-    rowsConfig['tip3'] = (()=>{
-      const rowConfig = new RowConfig();
-      const redCells = ['friendlyname', 'created', 'dzo','type6_plan','type6_fact', 'type6_val', 'type6_persent', 'type7_plan',
-      'type7_fact', 'type7_val','type7_persent','type8_plan', 'type8_fact', 'type8_val', 'type8_persent', 'summary', 'isDeleted'];
-      redCells.forEach(rowProp => {
-        rowConfig[rowProp] = (()=>{
-          const res = new MetaData();
-          res['background'] = 'lightgreen';
-          return res;
-        })();
-      });
-     
-      return rowConfig;
-    })();
-    return rowsConfig;
   }
 }

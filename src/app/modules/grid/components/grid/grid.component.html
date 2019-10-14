@@ -30,9 +30,7 @@
               <td mat-cell *matCellDef="let el" >
                 <ng-container >
                   <div fxLayout="column" fxLayoutAlign="stretch stretch" fxFill>
-                    <app-default-cell fxFlex [row]="el" 
-                      [rowConfig]="gridMetaData.rowsConfig[el.systemname] ? gridMetaData.rowsConfig[el.systemname][pair.key] : undefined" 
-                      [pair]="pair" (updateCell)="gridMetaData.updateCell($event)">
+                    <app-default-cell fxFlex [row]="el" [pair]="pair" (updateCell)="gridMetaData.updateCell($event)">
                     </app-default-cell>
                   </div>
                 </ng-container>

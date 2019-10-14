@@ -16,7 +16,7 @@ export class DateCellComponent extends CellBase implements OnInit {
   }
 
   ngOnInit(): void {
-    this.$dateValue = new BehaviorSubject<string>(this.datePipe.transform(this.value, this.DATE_FORMAT));
+    this.$dateValue = new BehaviorSubject<string>(this.datePipe.transform(this.cellMetaData.value, this.DATE_FORMAT));
   }
 
   updateDate(e) {

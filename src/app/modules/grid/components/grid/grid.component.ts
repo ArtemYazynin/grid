@@ -3,9 +3,10 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { flatMap, takeUntil, map } from 'rxjs/operators';
 import { GridMetaData } from '../../models/grid-meta-data.model';
 import { CssInjectorService } from '../../services/css-injector.service';
-import { Row } from '../../models/row.model';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { CellMetaData } from '../../models/indicator.model';
+import { MetaData } from '../../models/meta-data.model';
 
 @Component({
   selector: 'app-grid',
@@ -14,15 +15,15 @@ import { MatTableDataSource } from '@angular/material/table';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridComponent implements OnInit, OnDestroy {
-  @Input() rows: Row[];
+  @Input() $rows: BehaviorSubject<MetaData<CellMetaData<string | number | boolean | Date>>[]>;
   @Input() $gridMetaData: BehaviorSubject<GridMetaData>;
   @ViewChild(MatSort) sort: MatSort;
 
   private ngUnsubscribe: Subject<any> = new Subject();
   private id: string;
 
-  private _dataSource: MatTableDataSource<Row>;
-  get dataSource(): MatTableDataSource<Row> {
+  private _dataSource: MatTableDataSource<any>;
+  get dataSource(): MatTableDataSource<any> {
     return this._dataSource;
   };
 
@@ -33,20 +34,25 @@ export class GridComponent implements OnInit, OnDestroy {
     this.stylingColumns();
   }
   private initDataSource() {
-    this._dataSource = this.getDataSource();
+    this.$rows
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(rows=>{
+        this._dataSource = this.getDataSource(rows);
+      });
+    
   }
 
-  private getDataSource() {
-    const sortingDataAccessor = (row: Row, systemname: string) => {
-      switch (typeof row[systemname]) {
+  private getDataSource(rows:MetaData<CellMetaData<string | number | boolean | Date>>[]) {
+    const sortingDataAccessor = (row: any, systemname: string) => {
+      switch (typeof row[systemname].value) {
         case 'string':
-          return (row[systemname] as string).toLowerCase();
+          return (row[systemname].value as string).toLowerCase();
         default:
-          return row[systemname];
+          return row[systemname].value;
       }
 
     };
-    const result = new MatTableDataSource(this.rows);
+    const result = new MatTableDataSource(rows);
     result.sortingDataAccessor = sortingDataAccessor;
     result.sort = this.sort;
     return result;

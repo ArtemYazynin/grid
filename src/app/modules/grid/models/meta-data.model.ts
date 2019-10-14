@@ -1,3 +1,3 @@
-export class MetaData {
-    [key: string]: string
+export class MetaData<T>{
+    [type: string]: T;
 }

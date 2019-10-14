@@ -5,12 +5,8 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { CellValueType } from '../../models/cell-value-type.enum';
 import { CellBase } from '../cell-base';
-import { Row } from '../../models/row.model';
 import { ColumnConfig } from '../../models/column-config.model';
 import { Cell } from '../../models/cell.model';
-import { RowConfig } from '../../models/row-config.model';
-import { RowsConfig } from '../../models/rows-config.model';
-import { MetaData } from '../../models/meta-data.model';
 
 @Component({
   selector: 'app-default-cell',
@@ -19,8 +15,7 @@ import { MetaData } from '../../models/meta-data.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DefaultCellComponent implements OnInit, OnDestroy {
-  @Input() row: Row;
-  @Input() rowConfig: MetaData;
+  @Input() row: any;
   @Input() pair: { key: string, value: ColumnConfig };
   @Output() updateCell = new EventEmitter<Cell>();
   @ViewChild("editComponent", { read: ViewContainerRef }) vcRef;
@@ -57,9 +52,7 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
 
   changeTemplate() {
     (this.vcRef as ViewContainerRef).clear();
-    const isValidModel = !!this.pair && !!this.pair.value && !!this.pair.value.editable
-      && !!this.pair.value.cellValueType;
-    if (!isValidModel || this.$component.value) {
+    if (!this.isValid()) {
       return;
     }
     const template = this.cellTemplateMap[this.pair.value.cellValueType];
@@ -72,9 +65,15 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
     this.$component.next(component);
   }
 
+  private isValid(){
+    const isValidModel = !!this.pair && !!this.pair.value && !!this.pair.value.editable
+      && !!this.pair.value.cellValueType;
+    return isValidModel && !this.$component.value;
+  }
+
   private getComponent(factory: ComponentFactory<any>) {
     const result = this.vcRef.createComponent(factory) as ComponentRef<CellBase>;
-    result.instance.value = this.row[this.pair.key];
+    result.instance.cellMetaData = this.row[this.pair.key];
     result.instance.cancelEdit = (e) => {
       e.stopPropagation();
       e.preventDefault();

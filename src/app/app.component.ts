@@ -1,8 +1,7 @@
 import { Cell } from './modules/grid/models/cell.model';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { GridMetaData } from './modules/grid/models/grid-meta-data.model';
-import { Row } from './modules/grid/models/row.model';
 import { GridMetaDataGeneratorService } from './modules/grid/services/grid-meta-data-generator/grid-meta-data-generator.service';
 
 @Component({
@@ -12,10 +11,10 @@ import { GridMetaDataGeneratorService } from './modules/grid/services/grid-meta-
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
-  $rows: BehaviorSubject<Row[]>;
+  $rows: BehaviorSubject<any[]>;
   $gridMetaData: BehaviorSubject<GridMetaData>;
 
-  constructor(private gridMetaDataGeneratorService: GridMetaDataGeneratorService) {
+  constructor(private gridMetaDataGeneratorService: GridMetaDataGeneratorService,private cdr:ChangeDetectorRef) {
 
   }
   ngOnInit(): void {
@@ -27,8 +26,8 @@ export class AppComponent implements OnInit {
   }
 
   private preprareDataSource() {
-    const rows = this.gridMetaDataGeneratorService.getRowsWithBands();
-    this.$rows = new BehaviorSubject<Row[]>(rows);
+    const rows = this.gridMetaDataGeneratorService.getRows();
+    this.$rows = new BehaviorSubject<any[]>(rows);
   }
 
   private prepareMetaData() {
@@ -41,6 +40,16 @@ export class AppComponent implements OnInit {
     return (cell: Cell) => {
       console.log(`getUpdateCellHandler: ${cell.value}`);
     };
+  }
+
+  add(){
+    const oldArray = this.$rows.value;
+    const newArray = this.gridMetaDataGeneratorService.getRows();
+    const result = [...oldArray, ...newArray];
+    this.$rows = new BehaviorSubject<any[]>(result);
+    setTimeout(() => {
+      this.cdr.markForCheck(); 
+    });
   }
 }
 

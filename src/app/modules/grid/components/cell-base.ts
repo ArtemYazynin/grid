@@ -1,6 +1,7 @@
 import { ViewChild, ElementRef, AfterViewInit, OnDestroy, HostBinding } from '@angular/core';
 import { Subject, fromEvent } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { CellMetaData } from '../models/indicator.model';
 
 export class CellBase implements AfterViewInit, OnDestroy {
     @HostBinding('attr.class') _class = 'component-flex';
@@ -18,7 +19,7 @@ export class CellBase implements AfterViewInit, OnDestroy {
      * @type {number}
      * @memberof CellBase
      */
-    value: number;
+    cellMetaData: CellMetaData<string | number | boolean | Date>;
 
     /**
      * Уничтножение компонента и возврат к дефолтному представлению ячейки
@@ -32,7 +33,7 @@ export class CellBase implements AfterViewInit, OnDestroy {
      *
      * @memberof CellBase
      */
-    save: (e: KeyboardEvent | FocusEvent, value: string | number | Date) => void;
+    save: (e: KeyboardEvent | FocusEvent, value: string | number | boolean | Date) => void;
 
     private ngUnsubscribe: Subject<any> = new Subject();
 
@@ -61,7 +62,7 @@ export class CellBase implements AfterViewInit, OnDestroy {
                     case 'Enter':
                     case 'NumpadEnter':
                         console.log('NumpadEnter');
-                        this.save(e, this.value);
+                        this.save(e, this.cellMetaData.value);
                         break;
                     default:
                         break;
@@ -74,7 +75,7 @@ export class CellBase implements AfterViewInit, OnDestroy {
             .pipe(takeUntil(this.ngUnsubscribe))
             .subscribe((e: FocusEvent) => {
                 console.log('blur');
-                this.save(e, this.value);
+                this.save(e, this.cellMetaData.value);
             });
     }
 }

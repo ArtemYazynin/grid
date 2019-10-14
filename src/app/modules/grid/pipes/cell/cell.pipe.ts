@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform, LOCALE_ID, Inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { YesNoPipe } from '../yes-no/yes-no.pipe';
+import { CellMetaData } from '../../models/indicator.model';
 
 @Pipe({
   name: 'cell',
@@ -13,20 +14,20 @@ export class CellPipe implements PipeTransform {
     private yesNoPipe: YesNoPipe) {
 
   }
-  transform(value: any, args?: any): any {
+  transform(cellMetaData: CellMetaData<number | string | boolean | Date>, args?: any): any {
 
-    if (this.isComplexType(value)) {
+    if (this.isComplexType(cellMetaData.value)) {
       let result;
-      if (value instanceof Date) {
-        result = this.datePipe.transform(value, this.DATE_FORMAT);
+      if (cellMetaData.value instanceof Date) {
+        result = this.datePipe.transform(cellMetaData.value, this.DATE_FORMAT);
       } else {
-        result = value;
+        result = cellMetaData.value;
       }
       return result;
-    } else if ((typeof value) === 'boolean') {
-      return this.yesNoPipe.transform(value);
+    } else if ((typeof cellMetaData.value) === 'boolean') {
+      return this.yesNoPipe.transform(<boolean>cellMetaData.value);
     }
-    return value;
+    return cellMetaData.value;
   }
 
   private isComplexType(value: any) {

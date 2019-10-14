@@ -1,13 +1,10 @@
 import { BehaviorSubject } from 'rxjs';
 import { Cell } from './cell.model';
 import { ColumnConfig } from './column-config.model';
-import { RowsConfig } from './rows-config.model';
 
 
 export class GridMetaData {
     $columnsMap: BehaviorSubject<Map<number, Map<string, ColumnConfig>>>;
-    // rowsConfig: Map<string, Map<string, string>>;
-    rowsConfig: RowsConfig;
     /**
      * вычисляемая структура, необходима для отрисоки TR уровней шапки
      */
@@ -24,8 +21,7 @@ export class GridMetaData {
      * @param columnsMap соответствие колонок к уровням
      * @param rowsConfig CSS конфиг ячейки данных
      */
-    constructor(public id: string, columnsMap: Map<number, Map<string, ColumnConfig>>, rowsConfig: RowsConfig) {
-        this.rowsConfig = rowsConfig;
+    constructor(public id: string, columnsMap: Map<number, Map<string, ColumnConfig>>) {
         this.$columnsMap = new BehaviorSubject<Map<number, Map<string, ColumnConfig>>>(columnsMap);
         this.setDisplayedColumns(columnsMap);
     }

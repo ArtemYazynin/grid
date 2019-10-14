@@ -1,6 +1,7 @@
 input{
     border: unset;
     outline: none;
-    background-color: transparent
+    background-color: transparent;
+    text-align: center;
 }
     

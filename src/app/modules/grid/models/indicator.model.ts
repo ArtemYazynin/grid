@@ -1,26 +1,29 @@
-import { Row } from './row.model';
-
-
-export class Indicator extends Row {
-    constructor(id: number, systemname: string, friendlyname: string,
-        public created: Date,
-        public dzo: string,
-        public type6_plan: number,
-        public type6_fact: number,
-        public type6_val: number,
-        public type6_persent: number,
-        public type7_plan: number,
-        public type7_fact: number,
-        public type7_val: number,
-        public type7_persent: number,
-        public type8_plan: number,
-        public type8_fact: number,
-        public type8_val: number,
-        public type8_persent: number,
-        public summary: string,
-        public hidden: string = 'hiddenValue',
-        public isDeleted: boolean = false) {
-
-        super(id, systemname, friendlyname);
+export class Indicator {
+    constructor(
+        public friendlyname: CellMetaData<string>,
+        public created: CellMetaData<Date>,
+        public dzo: CellMetaData<string>,
+        public type6_plan: CellMetaData<number>,
+        public type6_fact: CellMetaData<number>,
+        public type6_val: CellMetaData<number>,
+        public type6_persent: CellMetaData<number>,
+        public type7_plan: CellMetaData<number>,
+        public type7_fact: CellMetaData<number>,
+        public type7_val: CellMetaData<number>,
+        public type7_persent: CellMetaData<number>,
+        public type8_plan: CellMetaData<number>,
+        public type8_fact: CellMetaData<number>,
+        public type8_val: CellMetaData<number>,
+        public type8_persent: CellMetaData<number>,
+        public summary: CellMetaData<string>,
+        public hidden: CellMetaData<string> = new CellMetaData<string>('hiddenValue'),
+        public isDeleted: CellMetaData<boolean> = new CellMetaData<boolean>(false)) {
     }
+}
+
+export class CellMetaData<TType extends string | number | boolean | Date> {
+    constructor(public value: TType, public metaData?: MetaData) { }
+}
+export class MetaData {
+    [key: string]: string
 }
