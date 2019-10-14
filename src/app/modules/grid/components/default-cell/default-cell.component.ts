@@ -1,6 +1,6 @@
 import {
   ChangeDetectionStrategy, Component, ComponentFactoryResolver, ComponentRef,
-  Input, OnDestroy, OnInit, Type, ViewContainerRef, Output, EventEmitter, HostBinding, ViewChild
+  Input, OnDestroy, OnInit, Type, ViewContainerRef, Output, EventEmitter, HostBinding, ViewChild, ComponentFactory
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CellValueType } from '../../models/cell-value-type.enum';
@@ -8,6 +8,9 @@ import { CellBase } from '../cell-base';
 import { Row } from '../../models/row.model';
 import { ColumnConfig } from '../../models/column-config.model';
 import { Cell } from '../../models/cell.model';
+import { RowConfig } from '../../models/row-config.model';
+import { RowsConfig } from '../../models/rows-config.model';
+import { MetaData } from '../../models/meta-data.model';
 
 @Component({
   selector: 'app-default-cell',
@@ -17,6 +20,7 @@ import { Cell } from '../../models/cell.model';
 })
 export class DefaultCellComponent implements OnInit, OnDestroy {
   @Input() row: Row;
+  @Input() rowConfig: MetaData;
   @Input() pair: { key: string, value: ColumnConfig };
   @Output() updateCell = new EventEmitter<Cell>();
   @ViewChild("editComponent", { read: ViewContainerRef }) vcRef;
@@ -64,25 +68,27 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
     const factoryClass = factories.find((x: any) => x.name === template) as Type<any>;
     if (!factoryClass) { return; }
     const factory = this.resolver.resolveComponentFactory(factoryClass);
-    const component = (() => {
-      const result = this.vcRef.createComponent(factory) as ComponentRef<CellBase>;
-      result.instance.value = this.row[this.pair.key];
-      result.instance.cancelEdit = (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        this.destroyEditComponent();
-      };
-      result.instance.save = (e, value: string | number | Date) => {
-        e.stopPropagation();
-        e.preventDefault();
-        if (this.updateCell) {
-          this.updateCell.emit(new Cell(this.row, this.pair, value));
-        }
-        this.destroyEditComponent();
-      };
-      return result;
-    })();
+    const component = this.getComponent(factory);
     this.$component.next(component);
+  }
+
+  private getComponent(factory: ComponentFactory<any>) {
+    const result = this.vcRef.createComponent(factory) as ComponentRef<CellBase>;
+    result.instance.value = this.row[this.pair.key];
+    result.instance.cancelEdit = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      this.destroyEditComponent();
+    };
+    result.instance.save = (e, value: string | number | Date) => {
+      e.stopPropagation();
+      e.preventDefault();
+      if (this.updateCell) {
+        this.updateCell.emit(new Cell(this.row, this.pair, value));
+      }
+      this.destroyEditComponent();
+    };
+    return result;
   }
 
   private destroyEditComponent() {

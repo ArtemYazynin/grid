@@ -4,6 +4,9 @@ import { Indicator } from '../../models/indicator.model';
 import { ColumnConfig } from '../../models/column-config.model';
 import { CellValueType } from '../../models/cell-value-type.enum';
 import { GridMetaData } from '../../models/grid-meta-data.model';
+import { RowsConfig } from '../../models/rows-config.model';
+import { RowConfig } from '../../models/row-config.model';
+import { MetaData } from '../../models/meta-data.model';
 
 /**
  * Для тестирования модели грида
@@ -22,7 +25,7 @@ export class GridMetaDataGeneratorService {
         1.1, 1.11, 1.111, 1.1111,
         1.1, 1.11, 1.111, 1.1111,
         1.1, 1.11, 1.111, 1.1111,
-        'summary1'),
+        'summary1', 'hiddenValue', true),
       new Indicator(2, 'tip2', 'Меро2', new Date(1995, 9, 5), 'Самара ТЭЦ',
         2.2, 2.22, 2.222, 2.2222,
         2.2, 2.22, 2.222, 2.2222,
@@ -38,12 +41,47 @@ export class GridMetaDataGeneratorService {
         4.4, 4.44, 4.444, 4.4444,
         4.4, 4.44, 4.444, 4.4444,
         'summary4'),
+        new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
+        4.4, 4.44, 4.444, 4.4444,
+        4.4, 4.44, 4.444, 4.4444,
+        4.4, 4.44, 4.444, 4.4444,
+        'summary4'),
+        new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
+        4.4, 4.44, 4.444, 4.4444,
+        4.4, 4.44, 4.444, 4.4444,
+        4.4, 4.44, 4.444, 4.4444,
+        'summary4'),
+        new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
+        4.4, 4.44, 4.444, 4.4444,
+        4.4, 4.44, 4.444, 4.4444,
+        4.4, 4.44, 4.444, 4.4444,
+        'summary4'),
+        new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
+        4.4, 4.44, 4.444, 4.4444,
+        4.4, 4.44, 4.444, 4.4444,
+        4.4, 4.44, 4.444, 4.4444,
+        'summary4'),
+        new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
+        4.4, 4.44, 4.444, 4.4444,
+        4.4, 4.44, 4.444, 4.4444,
+        4.4, 4.44, 4.444, 4.4444,
+        'summary4'),
+        new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
+        4.4, 4.44, 4.444, 4.4444,
+        4.4, 4.44, 4.444, 4.4444,
+        4.4, 4.44, 4.444, 4.4444,
+        'summary4'),
+        new Indicator(4, 'tip4', 'Меро4', new Date(), 'артемовская ТЭЦ',
+        4.4, 4.44, 4.444, 4.4444,
+        4.4, 4.44, 4.444, 4.4444,
+        4.4, 4.44, 4.444, 4.4444,
+        'summary4'),
     ];
     return rows;
   }
 
   buildGridMetaDataWithBands() {
-    const bands = (() => {
+    const columnsMap = (() => {
       const result = new Map<number, Map<string, ColumnConfig>>();
       const bandLevel2 = (() => {
         const res = new Map<string, ColumnConfig>();
@@ -136,7 +174,55 @@ export class GridMetaDataGeneratorService {
 
       return result;
     })();
-    const gridMetaData = new GridMetaData('base', bands);
+    const rowsConfig = this.getRowsConfig();
+    const gridMetaData = new GridMetaData('base', columnsMap, rowsConfig);
     return gridMetaData;
+  }
+
+  private getRowsConfig(){
+    const rowsConfig = new RowsConfig();
+    rowsConfig['tip4'] = (()=>{
+      const rowConfig = new RowConfig();
+      const redCells = ['friendlyname', 'created', 'dzo','type6_plan','type6_fact', 'type6_val', 'type6_persent', 'type7_plan',
+      'type7_fact', 'type7_val','type7_persent','type8_plan', 'type8_fact', 'type8_val', 'type8_persent', 'summary', 'isDeleted'];
+      redCells.forEach(rowProp => {
+        rowConfig[rowProp] = (()=>{
+          const res = new MetaData();
+          res['background'] = 'darkgray';
+          return res;
+        })();
+      });
+     
+      return rowConfig;
+    })();
+    rowsConfig['tip2'] = (()=>{
+      const rowConfig = new RowConfig();
+      const redCells = ['friendlyname', 'created', 'dzo','type6_plan','type6_fact', 'type6_val', 'type6_persent', 'type7_plan',
+      'type7_fact', 'type7_val','type7_persent','type8_plan', 'type8_fact', 'type8_val', 'type8_persent', 'summary', 'isDeleted'];
+      redCells.forEach(rowProp => {
+        rowConfig[rowProp] = (()=>{
+          const res = new MetaData();
+          res['background'] = 'red';
+          return res;
+        })();
+      });
+     
+      return rowConfig;
+    })();
+    rowsConfig['tip3'] = (()=>{
+      const rowConfig = new RowConfig();
+      const redCells = ['friendlyname', 'created', 'dzo','type6_plan','type6_fact', 'type6_val', 'type6_persent', 'type7_plan',
+      'type7_fact', 'type7_val','type7_persent','type8_plan', 'type8_fact', 'type8_val', 'type8_persent', 'summary', 'isDeleted'];
+      redCells.forEach(rowProp => {
+        rowConfig[rowProp] = (()=>{
+          const res = new MetaData();
+          res['background'] = 'lightgreen';
+          return res;
+        })();
+      });
+     
+      return rowConfig;
+    })();
+    return rowsConfig;
   }
 }

@@ -20,6 +20,5 @@ export class DateCellComponent extends CellBase implements OnInit {
   }
 
   updateDate(e) {
-
   }
 }

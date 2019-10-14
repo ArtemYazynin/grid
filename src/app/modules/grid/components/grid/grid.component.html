@@ -27,26 +27,15 @@
                   </div>
                 </th>
               </ng-template>
-              <!-- <th mat-header-cell *matHeaderCellDef [id]="levelPair.key"
-                [mat-sort-header]="pair.value.isSortable ? true : null" [attr.colspan]="pair.value.$colspan | async"
-                [attr.rowspan]="pair.value.$rowspan | async"
-                [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'">
-                <div>
-                  {{pair.value.friendlyname}}
-                </div>
-              </th> -->
-              <td mat-cell *matCellDef="let el">
-                <ng-container *ngIf="pair.value.editable;else editableContent">
+              <td mat-cell *matCellDef="let el" >
+                <ng-container >
                   <div fxLayout="column" fxLayoutAlign="stretch stretch" fxFill>
-                    <app-default-cell fxFlex [row]="el" [pair]="pair" (updateCell)="gridMetaData.updateCell($event)">
+                    <app-default-cell fxFlex [row]="el" 
+                      [rowConfig]="gridMetaData.rowsConfig[el.systemname] ? gridMetaData.rowsConfig[el.systemname][pair.key] : undefined" 
+                      [pair]="pair" (updateCell)="gridMetaData.updateCell($event)">
                     </app-default-cell>
                   </div>
                 </ng-container>
-                <ng-template #editableContent>
-                  <div fxLayout="column" fxLayoutAlign="stretch stretch" fxFill>
-                    <input readonly fxFlex value="{{el[pair.key]}}">
-                  </div>
-                </ng-template>
               </td>
             </ng-container>
           </ng-container>

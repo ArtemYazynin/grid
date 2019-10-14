@@ -18,7 +18,6 @@ export class GridComponent implements OnInit, OnDestroy {
   @Input() $gridMetaData: BehaviorSubject<GridMetaData>;
   @ViewChild(MatSort) sort: MatSort;
 
-
   private ngUnsubscribe: Subject<any> = new Subject();
   private id: string;
 

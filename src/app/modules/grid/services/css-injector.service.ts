@@ -41,17 +41,25 @@ export class CssInjectorService {
           let classes = '';
           const oneCellBand = columnConfig.$colspan.value === 1;
           if (oneCellBand) {
-            classes += `.mat-column-${columnConfig.systemname}{
+            const thClasses = `th.mat-column-${columnConfig.systemname}{
               min-width: ${columnConfig.$width.value}px;
               max-width: ${columnConfig.$width.value}px;
               width: ${columnConfig.$width.value}px;
               background-color: ${backgroundColor};
               border-right: 1px solid ${borderRightColor};
               box-sizing: border-box;
-              
             }`;
+            const tdClasses = `td.mat-column-${columnConfig.systemname}{
+              min-width: ${columnConfig.$width.value}px;
+              max-width: ${columnConfig.$width.value}px;
+              width: ${columnConfig.$width.value}px;
+              box-sizing: border-box;
+            }`;
+            classes += thClasses;
+            classes += tdClasses;
+
           } else {
-            classes += `.mat-column-${columnConfig.systemname}{
+            classes += `th.mat-column-${columnConfig.systemname}{
               background-color: ${backgroundColor};
               border-right: 1px solid ${borderRightColor};
               box-sizing: border-box;
