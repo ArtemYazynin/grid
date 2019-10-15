@@ -1,21 +1,23 @@
 import { Injectable } from '@angular/core';
 import { ColumnConfig } from '../models/column-config.model';
+import { DictionaryNumber } from '../models/dictionary-number.model';
+import { DictionaryString } from '../models/dictionary.model';
 
 @Injectable()
 export class CssInjectorService {
   constructor() { }
 
-  generateDynamicCssClasses(gridId: string, columnsMap: Map<number, Map<string, ColumnConfig>>): void {
-    const style = this.getStyleElement(gridId, columnsMap);
+  generateDynamicCssClasses(gridId: string, columnsLevelsDictionary: DictionaryNumber<DictionaryString<ColumnConfig>>): void {
+    const style = this.getStyleElement(gridId, columnsLevelsDictionary);
     document.getElementsByTagName('head')[0].appendChild(style);
   }
 
-  private getStyleElement(gridId: string, columnsMap: Map<number, Map<string, ColumnConfig>>): HTMLStyleElement {
+  private getStyleElement(gridId: string, columnsLevelsDictionary: DictionaryNumber<DictionaryString<ColumnConfig>>): HTMLStyleElement {
     const style = this.createOrGetStyleElement(gridId);
     style.id = gridId;
     // tslint:disable-next-line: deprecation
     style.type = 'text/css';
-    style.innerHTML = this.getCssClasses(columnsMap);
+    style.innerHTML = this.getCssClasses(columnsLevelsDictionary);
     return style;
   }
 
@@ -25,50 +27,56 @@ export class CssInjectorService {
       || document.createElement(styleTag);
   }
 
-  private getCssClasses(columnsMap: Map<number, Map<string, ColumnConfig>>): string {
+  private getCssClasses(columnsLevelsDictionary: DictionaryNumber<DictionaryString<ColumnConfig>>): string {
     let innerHtml = '';
-    innerHtml += this.getColumnsCssClasses(columnsMap);
+    innerHtml += this.getColumnsCssClasses(columnsLevelsDictionary);
     return innerHtml;
   }
 
-  private getColumnsCssClasses(bandsMap: Map<number, Map<string, ColumnConfig>>): string {
+  private getColumnsCssClasses(columnsLevelsDictionary: DictionaryNumber<DictionaryString<ColumnConfig>>): string {
     let innerHtml = '';
-    bandsMap.forEach((map, level) => {
-      map.forEach(columnConfig => {
-        const backgroundColor = this.getBandBackgoundColor(level);
-        const borderRightColor = this.getBandBorderRightColor(level);
-        if (columnConfig.$isVisible.value) {
-          let classes = '';
-          const oneCellBand = columnConfig.$colspan.value === 1;
-          if (oneCellBand) {
-            const thClasses = `th.mat-column-${columnConfig.systemname}{
-              min-width: ${columnConfig.$width.value}px;
-              max-width: ${columnConfig.$width.value}px;
-              width: ${columnConfig.$width.value}px;
-              background-color: ${backgroundColor};
-              border-right: 1px solid ${borderRightColor};
-              box-sizing: border-box;
-            }`;
-            const tdClasses = `td.mat-column-${columnConfig.systemname}{
-              min-width: ${columnConfig.$width.value}px;
-              max-width: ${columnConfig.$width.value}px;
-              width: ${columnConfig.$width.value}px;
-              box-sizing: border-box;
-            }`;
-            classes += thClasses;
-            classes += tdClasses;
-
-          } else {
-            classes += `th.mat-column-${columnConfig.systemname}{
-              background-color: ${backgroundColor};
-              border-right: 1px solid ${borderRightColor};
-              box-sizing: border-box;
-            }`;
+    for (const level in columnsLevelsDictionary) {
+      if (columnsLevelsDictionary.hasOwnProperty(level)) {
+        const columnsByLevel = columnsLevelsDictionary[level];
+        for (const key in columnsByLevel) {
+          if (columnsByLevel.hasOwnProperty(key)) {
+            const columnConfig = columnsByLevel[key];
+            const backgroundColor = this.getBandBackgoundColor(parseInt(level, 10));
+            const borderRightColor = this.getBandBorderRightColor(parseInt(level, 10));
+            if (columnConfig.$isVisible.value) {
+              let classes = '';
+              const oneCellBand = columnConfig.$colspan.value === 1;
+              if (oneCellBand) {
+                const thClasses = `th.mat-column-${columnConfig.systemname}{
+                  min-width: ${columnConfig.$width.value}px;
+                  max-width: ${columnConfig.$width.value}px;
+                  width: ${columnConfig.$width.value}px;
+                  background-color: ${backgroundColor};
+                  border-right: 1px solid ${borderRightColor};
+                  box-sizing: border-box;
+                }`;
+                const tdClasses = `td.mat-column-${columnConfig.systemname}{
+                  min-width: ${columnConfig.$width.value}px;
+                  max-width: ${columnConfig.$width.value}px;
+                  width: ${columnConfig.$width.value}px;
+                  box-sizing: border-box;
+                }`;
+                classes += thClasses;
+                classes += tdClasses;
+    
+              } else {
+                classes += `th.mat-column-${columnConfig.systemname}{
+                  background-color: ${backgroundColor};
+                  border-right: 1px solid ${borderRightColor};
+                  box-sizing: border-box;
+                }`;
+              }
+              innerHtml += classes;
+            }
           }
-          innerHtml += classes;
         }
-      });
-    });
+      }
+    }
     return innerHtml;
   }
 

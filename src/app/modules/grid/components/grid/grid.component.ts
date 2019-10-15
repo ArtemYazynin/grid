@@ -1,12 +1,12 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { flatMap, takeUntil, map } from 'rxjs/operators';
-import { GridMetaData } from '../../models/grid-meta-data.model';
-import { CssInjectorService } from '../../services/css-injector.service';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { flatMap, takeUntil } from 'rxjs/operators';
+import { DictionaryString } from '../../models/dictionary.model';
+import { GridMetaData } from '../../models/grid-meta-data.model';
 import { CellMetaData } from '../../models/indicator.model';
-import { MetaData } from '../../models/meta-data.model';
+import { MatTableDataSourceWithCustomSort } from '../../models/mat-table-data-source-with-custom-sort';
+import { CssInjectorService } from '../../services/css-injector.service';
 
 @Component({
   selector: 'app-grid',
@@ -15,17 +15,17 @@ import { MetaData } from '../../models/meta-data.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridComponent implements OnInit, OnDestroy {
-  @Input() $rows: BehaviorSubject<MetaData<CellMetaData<string | number | boolean | Date>>[]>;
+  @Input() $rows: BehaviorSubject<DictionaryString<CellMetaData<string | number | boolean | Date>>[]>;
   @Input() $gridMetaData: BehaviorSubject<GridMetaData>;
   @ViewChild(MatSort) sort: MatSort;
 
-  private ngUnsubscribe: Subject<any> = new Subject();
-  private id: string;
-
-  private _dataSource: MatTableDataSource<any>;
-  get dataSource(): MatTableDataSource<any> {
+  private _dataSource: MatTableDataSourceWithCustomSort<any>;
+  get dataSource(): MatTableDataSourceWithCustomSort<any> {
     return this._dataSource;
   };
+
+  private ngUnsubscribe: Subject<any> = new Subject();
+  private id: string;
 
   constructor(private cssInjectorService: CssInjectorService) { }
 
@@ -36,41 +36,36 @@ export class GridComponent implements OnInit, OnDestroy {
   private initDataSource() {
     this.$rows
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(rows=>{
+      .subscribe(rows => {
         this._dataSource = this.getDataSource(rows);
       });
-    
+
   }
 
-  private getDataSource(rows:MetaData<CellMetaData<string | number | boolean | Date>>[]) {
-    const sortingDataAccessor = (row: any, systemname: string) => {
-      switch (typeof row[systemname].value) {
-        case 'string':
-          return (row[systemname].value as string).toLowerCase();
-        default:
-          return row[systemname].value;
-      }
-
-    };
-    const result = new MatTableDataSource(rows);
-    result.sortingDataAccessor = sortingDataAccessor;
+  private getDataSource(rows: DictionaryString<CellMetaData<string | number | boolean | Date>>[]) {
+    const result = new MatTableDataSourceWithCustomSort(rows);
     result.sort = this.sort;
+    result.sort.start
     return result;
   }
 
-  private stylingColumns(){
+  private stylingColumns() {
     this.$gridMetaData
-    .pipe(flatMap(gridMeataData => {
-      this.id = gridMeataData.id;
-      return gridMeataData.$columnsMap;
-    }), takeUntil(this.ngUnsubscribe))
-    .subscribe(columnsMap => {
-      this.cssInjectorService.generateDynamicCssClasses(this.id, columnsMap);
-    });
+      .pipe(flatMap(gridMeataData => {
+        this.id = gridMeataData.id;
+        return gridMeataData.$columnsMap;
+      }), takeUntil(this.ngUnsubscribe))
+      .subscribe(columnsLevelsDictionary => {
+        this.cssInjectorService.generateDynamicCssClasses(this.id, columnsLevelsDictionary);
+      });
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  isGroup(index, item): boolean {
+    return item.groupName;
   }
 }

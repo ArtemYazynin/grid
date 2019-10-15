@@ -1,4 +1,4 @@
-import { MetaData } from './meta-data.model';
+import { DictionaryString } from './dictionary.model';
 
 
 export class Indicator {
@@ -25,5 +25,5 @@ export class Indicator {
 }
 
 export class CellMetaData<TType extends string | number | boolean | Date> {
-    constructor(public value: TType, public metaData?: MetaData<string>) { }
+    constructor(public value: TType, public metaData?: DictionaryString<string>) { }
 }
