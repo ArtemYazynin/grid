@@ -37,16 +37,20 @@ export class CssInjectorService {
     let innerHtml = '';
     for (const level in columnsLevelsDictionary) {
       if (columnsLevelsDictionary.hasOwnProperty(level)) {
-        const columnsByLevel = columnsLevelsDictionary[level];
-        for (const key in columnsByLevel) {
-          if (columnsByLevel.hasOwnProperty(key)) {
-            const columnConfig = columnsByLevel[key];
+        const columnsDictionary = columnsLevelsDictionary[level];
+        for (const columnName in columnsDictionary) {
+          if (columnsDictionary.hasOwnProperty(columnName)) {
+            const columnConfig = columnsDictionary[columnName];
             const backgroundColor = this.getBandBackgoundColor(parseInt(level, 10));
             const borderRightColor = this.getBandBorderRightColor(parseInt(level, 10));
             if (columnConfig.$isVisible.value) {
               let classes = '';
               const oneCellBand = columnConfig.$colspan.value === 1;
+              const thAlign = (()=>{
+                return 'padding-left: 12px !important;';
+              })();
               if (oneCellBand) {
+                
                 const thClasses = `th.mat-column-${columnConfig.systemname}{
                   min-width: ${columnConfig.$width.value}px;
                   max-width: ${columnConfig.$width.value}px;
@@ -54,22 +58,31 @@ export class CssInjectorService {
                   background-color: ${backgroundColor};
                   border-right: 1px solid ${borderRightColor};
                   box-sizing: border-box;
+                  ${thAlign}
                 }`;
                 const tdClasses = `td.mat-column-${columnConfig.systemname}{
                   min-width: ${columnConfig.$width.value}px;
                   max-width: ${columnConfig.$width.value}px;
                   width: ${columnConfig.$width.value}px;
+                  border-right: 1px solid #E6E6E9;
                   box-sizing: border-box;
                 }`;
                 classes += thClasses;
                 classes += tdClasses;
     
               } else {
-                classes += `th.mat-column-${columnConfig.systemname}{
+                const thClasses = `th.mat-column-${columnConfig.systemname}{
                   background-color: ${backgroundColor};
                   border-right: 1px solid ${borderRightColor};
                   box-sizing: border-box;
+                  ${thAlign}
                 }`;
+                // const tdClasses = `td.mat-column-${columnConfig.systemname}{
+                  
+                //   box-sizing: border-box;
+                // }`;
+                classes += thClasses;
+                // classes += tdClasses;
               }
               innerHtml += classes;
             }
@@ -92,6 +105,13 @@ export class CssInjectorService {
   }
 
   private getBandBorderRightColor(level: number): string {
-    return level === 0 ? 'rgb(120, 120, 136)' : 'rgb(103, 103, 121)';
+    switch (level) {
+      case 0:
+        return 'rgb(120, 120, 136)';
+      case 1:
+        return 'rgb(103, 103, 121)';
+      default:
+        return '#787888';
+    }
   }
 }

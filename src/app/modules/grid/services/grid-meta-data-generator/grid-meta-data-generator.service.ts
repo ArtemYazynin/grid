@@ -21,12 +21,12 @@ export class GridMetaDataGeneratorService {
   getRows() {
     const lightGreenBackGround = (() => {
       const result = new DictionaryString<string>();
-      result['background'] = 'lightgreen';
+      // result['background'] = 'lightgreen';
       return result;
     })();
     const redBackGround = (() => {
       const result = new DictionaryString<string>();
-      result.background = 'red';
+      // result.background = 'red';
       return result;
     })();
     const leftGradientBackGround = (() => {
@@ -41,11 +41,11 @@ export class GridMetaDataGeneratorService {
     })();
     const grayBackground = (() => {
       const result = new DictionaryString<string>();
-      result.background = 'darkgray';
+      // result.background = 'darkgray';
       return result;
     })();
     const rows: any[] = [
-      new GroupRow('Удалены', 'isDeleted', true),
+      
       new Indicator(new CellMetaData('Меро1', lightGreenBackGround),
         new CellMetaData(new Date(1990, 5, 11), lightGreenBackGround),
         new CellMetaData('Ваз ТЭЦ', lightGreenBackGround),
@@ -64,7 +64,7 @@ export class GridMetaDataGeneratorService {
         new CellMetaData('summary1', lightGreenBackGround),
         new CellMetaData('hiddenValue', lightGreenBackGround),
         new CellMetaData(true, lightGreenBackGround)),
-      new GroupRow('Не удалены', 'isDeleted', false),
+      
       new Indicator(new CellMetaData('Меро2', redBackGround),
         new CellMetaData(new Date(1991, 7, 7), redBackGround),
         new CellMetaData('Самара ТЭЦ', redBackGround),
@@ -129,17 +129,17 @@ export class GridMetaDataGeneratorService {
       const bandLevel2 = (() => {
         const res = new DictionaryString<ColumnConfig>();
         res['type6_val'] = new ColumnConfig('type6_val', [], false, true, 'type6_val', 'м3/ч',
-          50, undefined, undefined, undefined, 5, false, CellValueType.Double, true, true);
+          100, undefined, undefined, undefined, 5, false, CellValueType.Double, true, true);
         res['type6_persent'] = new ColumnConfig('type6_persent', [], false, true, 'type6_persent',
-          '%', 50, undefined, undefined, undefined, 6, false, CellValueType.Double, true, true);
+          '%', 100, undefined, undefined, undefined, 6, false, CellValueType.Double, true, true);
         res['type7_val'] = new ColumnConfig('type7_val', [], false, true, 'type7_val', 'м3/ч',
-          50, undefined, undefined, undefined, 9, false, CellValueType.Double, true, true);
+        100, undefined, undefined, undefined, 9, false, CellValueType.Double, true, true);
         res['type7_persent'] = new ColumnConfig('type7_persent', [], false, true, 'type7_persent',
-          '%', 50, undefined, undefined, undefined, 10, false, CellValueType.Double, true, true);
+          '%', 100, undefined, undefined, undefined, 10, false, CellValueType.Double, true, true);
         res['type8_val'] = new ColumnConfig('type8_val', [], false, true, 'type8_val',
-          'м3/ч', 50, undefined, undefined, undefined, 13, false, CellValueType.Double, true, true);
+          'м3/ч', 100, undefined, undefined, undefined, 13, false, CellValueType.Double, true, true);
         res['type8_persent'] = new ColumnConfig('type8_persent', [], false, true, 'type8_persent',
-          '%', 50, undefined, undefined, undefined, 14, false, CellValueType.Double, true, true);
+          '%', 100, undefined, undefined, undefined, 14, false, CellValueType.Double, true, true);
         return res;
       })();
 

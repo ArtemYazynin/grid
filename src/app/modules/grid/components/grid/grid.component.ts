@@ -7,6 +7,7 @@ import { GridMetaData } from '../../models/grid-meta-data.model';
 import { CellMetaData } from '../../models/indicator.model';
 import { MatTableDataSourceWithCustomSort } from '../../models/mat-table-data-source-with-custom-sort';
 import { CssInjectorService } from '../../services/css-injector.service';
+import { GroupRow } from '../../models/group-row.model';
 
 @Component({
   selector: 'app-grid',
@@ -45,7 +46,27 @@ export class GridComponent implements OnInit, OnDestroy {
   private getDataSource(rows: DictionaryString<CellMetaData<string | number | boolean | Date>>[]) {
     const result = new MatTableDataSourceWithCustomSort(rows);
     result.sort = this.sort;
-    result.sort.start
+    result.filterPredicate = (data: any, filter: string) => {
+      const filterParams: string[] = filter.split(';');
+      const property = filterParams[0];
+      if(!data[property]){ return true; }
+      const propertyValue = (()=>{
+        switch (typeof data[property].value) {
+          case 'boolean':
+            return filterParams[1] === 'true';
+        
+          default:
+            return filterParams[1];
+        }
+        
+      })();
+      const isVisible = filterParams[2] === 'true';
+
+      if (data[property].value == propertyValue) {
+        return isVisible;
+      }
+      return true;
+    }
     return result;
   }
 
@@ -67,5 +88,11 @@ export class GridComponent implements OnInit, OnDestroy {
 
   isGroup(index, item): boolean {
     return item.groupName;
+  }
+
+  expandOrCollapse(groupRow: GroupRow) {
+    this.dataSource.filter = `${groupRow.groupingProperty};${groupRow.groupingValue};${!groupRow.$isExpanded.value}`;
+    groupRow.$isExpanded.next(!groupRow.$isExpanded.value);
+    
   }
 }

@@ -12,12 +12,9 @@
     max-height: 40px
 
 .mat-header-cell
-    border-bottom: 1px solid #d5d5da
+    border-bottom: unset
     word-break: break-all
     color: rgb(230, 230, 233)
-
-.mat-header-cell > div
-    text-align: center
 
 .mat-header-cell:first-of-type
     padding-left: 0px
@@ -26,18 +23,37 @@
     padding-right: 0px
 
 .mat-row
-    border-bottom-width: 0px
     height: 40px
     max-height: 40px
     min-height: 40px
+    border: 2px solid red
+    box-sizing: border-box
 
 .mat-cell
     background-color: white
     color: #565667
-    border-right: 1px solid #d5d5da
-    border-bottom: 1px solid #d5d5da
+    // border-left: 1px solid #E6E6E9
+    // border-right: 0.5px solid #E6E6E9
+
+    border-bottom-width: 0.5px
+    border-bottom-style: solid
+    border-bottom-color: #E6E6E9
+
+    border-top-width: 0.5px
+    border-top-style: solid
+    border-top-color: #E6E6E9
 
 .mat-cell:first-of-type
     padding-left: 0px
 .mat-cell:last-of-type
     padding-right: 0px
+
+.mat-column-groupHeader
+    border-top-width: 0px
+    border-bottom-width: 0px
+    border-right: unset
+    padding-left: 12px !important
+    font-style: normal
+    font-weight: 500
+    font-size: 13px
+    line-height: 15px

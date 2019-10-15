@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef } from '@
 import { BehaviorSubject } from 'rxjs';
 import { GridMetaData } from './modules/grid/models/grid-meta-data.model';
 import { GridMetaDataGeneratorService } from './modules/grid/services/grid-meta-data-generator/grid-meta-data-generator.service';
+import { GroupRow } from './modules/grid/models/group-row.model';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,8 @@ export class AppComponent implements OnInit {
 
   private preprareDataSource() {
     const rows = this.gridMetaDataGeneratorService.getRows();
+    rows.push(new GroupRow('Удалены', 'isDeleted', true));
+    rows.push(new GroupRow('Не удалены', 'isDeleted', false));
     this.$rows = new BehaviorSubject<any[]>(rows);
   }
 

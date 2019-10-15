@@ -15,6 +15,9 @@ export class GridMetaData {
      * вычисляемые видимые колонки(порядок следования важен)
      */
     $displayedColumns: BehaviorSubject<string[]>;
+
+    $endStickyColumns = new BehaviorSubject<number>(0);
+
     updateCell: (cell: Cell) => void;
 
     /**
@@ -74,6 +77,9 @@ export class GridMetaData {
                 for (const property in columnsByLevel) {
                     if (columnsByLevel.hasOwnProperty(property)) {
                         const column = columnsByLevel[property];
+                        if (column.$isStickyEnd.value) {
+                            this.$endStickyColumns.next(this.$endStickyColumns.value + 1);
+                        }
                         if (resultDictionary[level]) {
                             const names = resultDictionary[level];
                             names.push(column.systemname);
