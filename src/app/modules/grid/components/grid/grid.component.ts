@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { flatMap, takeUntil } from 'rxjs/operators';
@@ -8,6 +8,7 @@ import { CellMetaData } from '../../models/indicator.model';
 import { MatTableDataSourceWithCustomSort } from '../../models/mat-table-data-source-with-custom-sort';
 import { CssInjectorService } from '../../services/css-injector.service';
 import { GroupRow } from '../../models/group-row.model';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-grid',
@@ -20,15 +21,18 @@ export class GridComponent implements OnInit, OnDestroy {
   @Input() $gridMetaData: BehaviorSubject<GridMetaData>;
   @ViewChild(MatSort) sort: MatSort;
 
+  selection = new SelectionModel<any>(false, []);
+  // tslint:disable-next-line: variable-name
   private _dataSource: MatTableDataSourceWithCustomSort<any>;
   get dataSource(): MatTableDataSourceWithCustomSort<any> {
     return this._dataSource;
-  };
+  }
+  selectedRow: any;
 
   private ngUnsubscribe: Subject<any> = new Subject();
   private id: string;
 
-  constructor(private cssInjectorService: CssInjectorService) { }
+  constructor(private cssInjectorService: CssInjectorService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.initDataSource();
@@ -40,7 +44,6 @@ export class GridComponent implements OnInit, OnDestroy {
       .subscribe(rows => {
         this._dataSource = this.getDataSource(rows);
       });
-
   }
 
   private getDataSource(rows: DictionaryString<CellMetaData<string | number | boolean | Date>>[]) {
@@ -49,16 +52,15 @@ export class GridComponent implements OnInit, OnDestroy {
     result.filterPredicate = (data: any, filter: string) => {
       const filterParams: string[] = filter.split(';');
       const property = filterParams[0];
-      if(!data[property]){ return true; }
-      const propertyValue = (()=>{
+      if (!data[property]) { return true; }
+      const propertyValue = (() => {
         switch (typeof data[property].value) {
           case 'boolean':
             return filterParams[1] === 'true';
-        
+
           default:
             return filterParams[1];
         }
-        
       })();
       const isVisible = filterParams[2] === 'true';
 
@@ -93,6 +95,9 @@ export class GridComponent implements OnInit, OnDestroy {
   expandOrCollapse(groupRow: GroupRow) {
     this.dataSource.filter = `${groupRow.groupingProperty};${groupRow.groupingValue};${!groupRow.$isExpanded.value}`;
     groupRow.$isExpanded.next(!groupRow.$isExpanded.value);
-    
+  }
+
+  selectRow(row, event) {
+
   }
 }

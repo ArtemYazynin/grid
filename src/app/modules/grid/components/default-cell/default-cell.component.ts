@@ -18,7 +18,7 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
   @Input() row: any;
   @Input() pair: { key: string, value: ColumnConfig };
   @Output() updateCell = new EventEmitter<Cell>();
-  @ViewChild("editComponent", { read: ViewContainerRef }) vcRef;
+  @ViewChild('editComponent', { read: ViewContainerRef }) vcRef;
 
   private $component = new BehaviorSubject<ComponentRef<CellBase>>(undefined);
   private cellTemplateMap = (() => {
@@ -65,7 +65,7 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
     this.$component.next(component);
   }
 
-  private isValid(){
+  private isValid() {
     const isValidModel = !!this.pair && !!this.pair.value && !!this.pair.value.editable
       && !!this.pair.value.cellValueType;
     return isValidModel && !this.$component.value;

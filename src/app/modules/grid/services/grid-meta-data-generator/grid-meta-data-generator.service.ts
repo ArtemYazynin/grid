@@ -21,7 +21,7 @@ export class GridMetaDataGeneratorService {
   getRows() {
     const lightGreenBackGround = (() => {
       const result = new DictionaryString<string>();
-      // result['background'] = 'lightgreen';
+       result['background'] = 'lightgreen';
       return result;
     })();
     const redBackGround = (() => {

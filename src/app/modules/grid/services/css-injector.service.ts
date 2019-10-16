@@ -69,7 +69,6 @@ export class CssInjectorService {
                 }`;
                 classes += thClasses;
                 classes += tdClasses;
-    
               } else {
                 const thClasses = `th.mat-column-${columnConfig.systemname}{
                   background-color: ${backgroundColor};
@@ -77,12 +76,7 @@ export class CssInjectorService {
                   box-sizing: border-box;
                   ${thAlign}
                 }`;
-                // const tdClasses = `td.mat-column-${columnConfig.systemname}{
-                  
-                //   box-sizing: border-box;
-                // }`;
                 classes += thClasses;
-                // classes += tdClasses;
               }
               innerHtml += classes;
             }
