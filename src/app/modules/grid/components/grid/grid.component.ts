@@ -19,15 +19,15 @@ import { SelectionModel } from '@angular/cdk/collections';
 export class GridComponent implements OnInit, OnDestroy {
   @Input() $rows: BehaviorSubject<DictionaryString<CellMetaData<string | number | boolean | Date>>[]>;
   @Input() $gridMetaData: BehaviorSubject<GridMetaData>;
+  @Input() isMultiple = false;
   @ViewChild(MatSort) sort: MatSort;
 
-  selection = new SelectionModel<any>(false, []);
+  selection: SelectionModel<CellMetaData<number | string | boolean | Date>>;
   // tslint:disable-next-line: variable-name
   private _dataSource: MatTableDataSourceWithCustomSort<any>;
   get dataSource(): MatTableDataSourceWithCustomSort<any> {
     return this._dataSource;
   }
-  selectedRow: any;
 
   private ngUnsubscribe: Subject<any> = new Subject();
   private id: string;
@@ -35,6 +35,7 @@ export class GridComponent implements OnInit, OnDestroy {
   constructor(private cssInjectorService: CssInjectorService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.selection = new SelectionModel<CellMetaData<number | string | boolean | Date>>(this.isMultiple, []);
     this.initDataSource();
     this.stylingColumns();
   }
@@ -97,7 +98,46 @@ export class GridComponent implements OnInit, OnDestroy {
     groupRow.$isExpanded.next(!groupRow.$isExpanded.value);
   }
 
-  selectRow(row, event) {
+  selectRow(row: CellMetaData<number | string | boolean | Date>, event: MouseEvent) {
+    if (!row) { return; }
+    if (this.selection.isMultipleSelection()) {
+      this.multipleSelect(row, event);
+    } else {
+      this.singleSelect(row, event);
+    }
+  }
 
+  private singleSelect(row: CellMetaData<number | string | boolean | Date>, event: MouseEvent) {
+    if (event.ctrlKey && this.selection.isSelected(row)) {
+      this.selection.deselect(row);
+    } else {
+      this.selectSingleRow(row);
+    }
+  }
+
+  private multipleSelect(row: CellMetaData<number | string | boolean | Date>, event: MouseEvent) {
+    if (!row || !event) { return; }
+    if (event.ctrlKey) {
+      this.selectSomeRows(row);
+    } else {
+      this.selectSingleRow(row);
+    }
+  }
+
+  private selectSingleRow(row: CellMetaData<number | string | boolean | Date>) {
+    if (!row) { return; }
+    this.selection.clear();
+    this.selection.select(row);
+  }
+
+  private selectSomeRows(row: CellMetaData<number | string | boolean | Date>) {
+    if (!row) { return; }
+    if (this.selection.isSelected(row)) {
+      this.selection.deselect(row);
+    } else {
+      const arr = this.selection.selected || [];
+      arr.push(row);
+      this.selection.select(...arr);
+    }
   }
 }
