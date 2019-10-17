@@ -41,7 +41,7 @@
           </ng-container>
           <ng-container *ngIf="gridMetaData.$displayedColumns | async as displayedColumns">
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-              (click)="selectRow(row,$event)" [ngClass]="{ 'selected': selection.isSelected(row) }"></tr>
+              (click)="selectRow(row,$event)" [ngClass]="{ 'selected': rowSelectionService.selection.isSelected(row) }"></tr>
             <!-- Group header -->
             <ng-container matColumnDef="groupHeader" sticky>
               <td  mat-cell *matCellDef="let groupRow"><strong>{{groupRow.groupName}}</strong></td>

@@ -9,12 +9,16 @@ import { MatTableDataSourceWithCustomSort } from '../../models/mat-table-data-so
 import { CssInjectorService } from '../../services/css-injector.service';
 import { GroupRow } from '../../models/group-row.model';
 import { SelectionModel } from '@angular/cdk/collections';
+import { RowSelectionService } from '../../services/row-selection/row-selection.service';
 
 @Component({
   selector: 'app-grid',
   templateUrl: './grid.component.html',
   styleUrls: ['./grid.component.sass'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    RowSelectionService
+  ]
 })
 export class GridComponent implements OnInit, OnDestroy {
   @Input() $rows: BehaviorSubject<DictionaryString<CellMetaData<string | number | boolean | Date>>[]>;
@@ -22,7 +26,6 @@ export class GridComponent implements OnInit, OnDestroy {
   @Input() isMultiple = false;
   @ViewChild(MatSort) sort: MatSort;
 
-  selection: SelectionModel<CellMetaData<number | string | boolean | Date>>;
   // tslint:disable-next-line: variable-name
   private _dataSource: MatTableDataSourceWithCustomSort<any>;
   get dataSource(): MatTableDataSourceWithCustomSort<any> {
@@ -32,10 +35,11 @@ export class GridComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
   private id: string;
 
-  constructor(private cssInjectorService: CssInjectorService, private cdr: ChangeDetectorRef) { }
+  constructor(private cssInjectorService: CssInjectorService, public rowSelectionService: RowSelectionService) {
+  }
 
   ngOnInit() {
-    this.selection = new SelectionModel<CellMetaData<number | string | boolean | Date>>(this.isMultiple, []);
+    this.rowSelectionService.selection = new SelectionModel<CellMetaData<number | string | boolean | Date>>(this.isMultiple, []);
     this.initDataSource();
     this.stylingColumns();
   }
@@ -100,44 +104,10 @@ export class GridComponent implements OnInit, OnDestroy {
 
   selectRow(row: CellMetaData<number | string | boolean | Date>, event: MouseEvent) {
     if (!row) { return; }
-    if (this.selection.isMultipleSelection()) {
-      this.multipleSelect(row, event);
+    if (this.rowSelectionService.selection.isMultipleSelection()) {
+      this.rowSelectionService.multipleSelect(row, event);
     } else {
-      this.singleSelect(row, event);
-    }
-  }
-
-  private singleSelect(row: CellMetaData<number | string | boolean | Date>, event: MouseEvent) {
-    if (event.ctrlKey && this.selection.isSelected(row)) {
-      this.selection.deselect(row);
-    } else {
-      this.selectSingleRow(row);
-    }
-  }
-
-  private multipleSelect(row: CellMetaData<number | string | boolean | Date>, event: MouseEvent) {
-    if (!row || !event) { return; }
-    if (event.ctrlKey) {
-      this.selectSomeRows(row);
-    } else {
-      this.selectSingleRow(row);
-    }
-  }
-
-  private selectSingleRow(row: CellMetaData<number | string | boolean | Date>) {
-    if (!row) { return; }
-    this.selection.clear();
-    this.selection.select(row);
-  }
-
-  private selectSomeRows(row: CellMetaData<number | string | boolean | Date>) {
-    if (!row) { return; }
-    if (this.selection.isSelected(row)) {
-      this.selection.deselect(row);
-    } else {
-      const arr = this.selection.selected || [];
-      arr.push(row);
-      this.selection.select(...arr);
+      this.rowSelectionService.singleSelect(row, event);
     }
   }
 }

@@ -6,6 +6,6 @@ import { BehaviorSubject } from 'rxjs';
  */
 export class GroupRow {
     $isExpanded = new BehaviorSubject<boolean>(true)
-    constructor(public groupName: string, public groupingProperty: string, public groupingValue: string | number | boolean | Date){
+    constructor(public groupName: string, public groupingProperty: string, public groupingValue: string | number | boolean | Date) {
     }
 }
