@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { CellMetaData } from '../../models/indicator.model';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Cell } from '../../models/cell.model';
 
 /**
  * Инкапсулирует логику работы с выделением строк
@@ -10,7 +10,7 @@ import { SelectionModel } from '@angular/cdk/collections';
  */
 @Injectable()
 export class RowSelectionService {
-  private SELECTION: SelectionModel<CellMetaData<number | string | boolean | Date>>;
+  private SELECTION: SelectionModel<Cell<number | string | boolean | Date>>;
   get selection() {
     return this.SELECTION;
   }
@@ -20,7 +20,7 @@ export class RowSelectionService {
   }
   constructor() { }
 
-  singleSelect(row: CellMetaData<number | string | boolean | Date>, event: MouseEvent) {
+  singleSelect(row: Cell<number | string | boolean | Date>, event: MouseEvent) {
     if (event.ctrlKey && this.SELECTION.isSelected(row)) {
       this.SELECTION.deselect(row);
     } else {
@@ -28,7 +28,7 @@ export class RowSelectionService {
     }
   }
 
-  multipleSelect(row: CellMetaData<number | string | boolean | Date>, event: MouseEvent) {
+  multipleSelect(row: Cell<number | string | boolean | Date>, event: MouseEvent) {
     if (!row || !event) { return; }
     if (event.ctrlKey) {
       this.selectSomeRows(row);
@@ -37,13 +37,13 @@ export class RowSelectionService {
     }
   }
 
-  private selectSingleRow(row: CellMetaData<number | string | boolean | Date>) {
+  private selectSingleRow(row: Cell<number | string | boolean | Date>) {
     if (!row) { return; }
     this.SELECTION.clear();
     this.SELECTION.select(row);
   }
 
-  private selectSomeRows(row: CellMetaData<number | string | boolean | Date>) {
+  private selectSomeRows(row: Cell<number | string | boolean | Date>) {
     if (!row) { return; }
     if (this.SELECTION.isSelected(row)) {
       this.SELECTION.deselect(row);

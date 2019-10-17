@@ -1,7 +1,5 @@
-import { ColumnConfig } from './column-config.model';
+import { CellMetaData } from './cell-meta-data.model';
 
-export class Cell {
-    constructor(public row: any, public pair: { key: string, value: ColumnConfig }, public value: string | number | Date) {
-
-    }
+export class Cell<TType extends string | number | boolean | Date> {
+    constructor(public value: TType, public metaData?: CellMetaData) { }
 }

@@ -24,7 +24,7 @@
                   </div>
                 </th>
               </ng-template>
-              <td mat-cell *matCellDef="let el" [ngStyle]="el[pair.key].metaData">
+              <td mat-cell *matCellDef="let el" [ngStyle]="el[pair.key]?.metaData?.css">
                 <ng-container>
                   <div fxLayout="column" fxLayoutAlign="stretch stretch" fxFill>
                     <app-default-cell fxFlex [row]="el" [pair]="pair" (updateCell)="gridMetaData.updateCell($event)">

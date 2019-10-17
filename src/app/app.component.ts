@@ -1,4 +1,4 @@
-import { Cell } from './modules/grid/models/cell.model';
+import { CellEditModel } from './modules/grid/models/cell-edit-model.model';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { GridMetaData } from './modules/grid/models/grid-meta-data.model';
@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
   }
 
   private getUpdateCellHandler() {
-    return (cell: Cell) => {
+    return (cell: CellEditModel) => {
       console.log(`getUpdateCellHandler: ${cell.value}`);
     };
   }

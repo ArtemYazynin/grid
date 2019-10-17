@@ -4,12 +4,12 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { flatMap, takeUntil } from 'rxjs/operators';
 import { DictionaryString } from '../../models/dictionary.model';
 import { GridMetaData } from '../../models/grid-meta-data.model';
-import { CellMetaData } from '../../models/indicator.model';
 import { MatTableDataSourceWithCustomSort } from '../../models/mat-table-data-source-with-custom-sort';
 import { CssInjectorService } from '../../services/css-injector.service';
 import { GroupRow } from '../../models/group-row.model';
 import { SelectionModel } from '@angular/cdk/collections';
 import { RowSelectionService } from '../../services/row-selection/row-selection.service';
+import { Cell } from '../../models/cell.model';
 
 @Component({
   selector: 'app-grid',
@@ -21,7 +21,7 @@ import { RowSelectionService } from '../../services/row-selection/row-selection.
   ]
 })
 export class GridComponent implements OnInit, OnDestroy {
-  @Input() $rows: BehaviorSubject<DictionaryString<CellMetaData<string | number | boolean | Date>>[]>;
+  @Input() $rows: BehaviorSubject<DictionaryString<Cell<string | number | boolean | Date>>[]>;
   @Input() $gridMetaData: BehaviorSubject<GridMetaData>;
   @Input() isMultiple = false;
   @ViewChild(MatSort) sort: MatSort;
@@ -39,7 +39,7 @@ export class GridComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.rowSelectionService.selection = new SelectionModel<CellMetaData<number | string | boolean | Date>>(this.isMultiple, []);
+    this.rowSelectionService.selection = new SelectionModel<Cell<number | string | boolean | Date>>(this.isMultiple, []);
     this.initDataSource();
     this.stylingColumns();
   }
@@ -51,7 +51,7 @@ export class GridComponent implements OnInit, OnDestroy {
       });
   }
 
-  private getDataSource(rows: DictionaryString<CellMetaData<string | number | boolean | Date>>[]) {
+  private getDataSource(rows: DictionaryString<Cell<string | number | boolean | Date>>[]) {
     const result = new MatTableDataSourceWithCustomSort(rows);
     result.sort = this.sort;
     result.filterPredicate = (data: any, filter: string) => {
@@ -102,7 +102,7 @@ export class GridComponent implements OnInit, OnDestroy {
     groupRow.$isExpanded.next(!groupRow.$isExpanded.value);
   }
 
-  selectRow(row: CellMetaData<number | string | boolean | Date>, event: MouseEvent) {
+  selectRow(row: Cell<number | string | boolean | Date>, event: MouseEvent) {
     if (!row) { return; }
     if (this.rowSelectionService.selection.isMultipleSelection()) {
       this.rowSelectionService.multipleSelect(row, event);

@@ -1,5 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
-import { Cell } from './cell.model';
+import { CellEditModel } from './cell-edit-model.model';
 import { ColumnConfig } from './column-config.model';
 import { DictionaryNumber } from './dictionary-number.model';
 import { DictionaryString } from './dictionary.model';
@@ -18,7 +18,7 @@ export class GridMetaData {
 
     $endStickyColumns = new BehaviorSubject<number>(0);
 
-    updateCell: (cell: Cell) => void;
+    updateCell: (cell: CellEditModel) => void;
 
     /**
      * 

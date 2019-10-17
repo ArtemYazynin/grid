@@ -1,7 +1,7 @@
 import { ViewChild, ElementRef, AfterViewInit, OnDestroy, HostBinding } from '@angular/core';
 import { Subject, fromEvent } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { CellMetaData } from '../models/indicator.model';
+import { Cell } from '../models/cell.model';
 
 export class CellBase implements AfterViewInit, OnDestroy {
     @HostBinding('attr.class') _class = 'component-flex';
@@ -19,7 +19,7 @@ export class CellBase implements AfterViewInit, OnDestroy {
      * @type {number}
      * @memberof CellBase
      */
-    cellMetaData: CellMetaData<string | number | boolean | Date>;
+    cellMetaData: Cell<string | number | boolean | Date>;
 
     /**
      * Уничтножение компонента и возврат к дефолтному представлению ячейки
@@ -46,7 +46,7 @@ export class CellBase implements AfterViewInit, OnDestroy {
         setTimeout(() => {
             this.vc.nativeElement.select();
             this.subsribeKeyUp();
-            this.subscribeBlur();   
+            this.subscribeBlur();
         });
     }
 

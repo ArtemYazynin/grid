@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 import { CellValueType } from '../../models/cell-value-type.enum';
 import { CellBase } from '../cell-base';
 import { ColumnConfig } from '../../models/column-config.model';
+import { CellEditModel } from '../../models/cell-edit-model.model';
 import { Cell } from '../../models/cell.model';
 
 @Component({
@@ -17,7 +18,7 @@ import { Cell } from '../../models/cell.model';
 export class DefaultCellComponent implements OnInit, OnDestroy {
   @Input() row: any;
   @Input() pair: { key: string, value: ColumnConfig };
-  @Output() updateCell = new EventEmitter<Cell>();
+  @Output() updateCell = new EventEmitter<CellEditModel>();
   @ViewChild('editComponent', { read: ViewContainerRef }) vcRef;
 
   private $component = new BehaviorSubject<ComponentRef<CellBase>>(undefined);
@@ -37,7 +38,7 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
     result[CellValueType.String] = 'StringCellComponent';
     result[CellValueType.Boolean] = 'BooleanCellComponent';
     result[CellValueType.DateTime] = 'DateCellComponent';
-    return result;
+    return result as { [type: string]: string };
   })();
 
   constructor(private resolver: ComponentFactoryResolver) { }
@@ -55,7 +56,7 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
     if (!this.isValid()) {
       return;
     }
-    const template = this.cellTemplateMap[this.pair.value.cellValueType];
+    const template = this.getTemplate();
     // tslint:disable-next-line: no-string-literal
     const factories = Array.from(this.resolver['_factories'].keys());
     const factoryClass = factories.find((x: any) => x.name === template) as Type<any>;
@@ -71,6 +72,15 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
     return isValidModel && !this.$component.value;
   }
 
+  private getTemplate() {
+    const cell = this.row[this.pair.key] as Cell<any>;
+    if (cell.metaData && cell.metaData.other && cell.metaData.other.valueType) {
+      return this.cellTemplateMap[cell.metaData.other.valueType];
+    } else {
+      return this.cellTemplateMap[this.pair.value.cellValueType];
+    }
+  }
+
   private getComponent(factory: ComponentFactory<any>) {
     const result = this.vcRef.createComponent(factory) as ComponentRef<CellBase>;
     result.instance.cellMetaData = this.row[this.pair.key];
@@ -83,7 +93,7 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
       e.stopPropagation();
       e.preventDefault();
       if (this.updateCell) {
-        this.updateCell.emit(new Cell(this.row, this.pair, value));
+        this.updateCell.emit(new CellEditModel(this.row, this.pair, value));
       }
       this.destroyEditComponent();
     };

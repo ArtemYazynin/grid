@@ -1,3 +1,3 @@
-export class DictionaryString<T>{
+export class DictionaryString<T> {
     [type: string]: T;
 }
