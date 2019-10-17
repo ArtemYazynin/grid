@@ -1,13 +1,11 @@
-import {
-  ChangeDetectionStrategy, Component, ComponentFactoryResolver, ComponentRef,
-  Input, OnDestroy, OnInit, Type, ViewContainerRef, Output, EventEmitter, HostBinding, ViewChild, ComponentFactory
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ComponentFactory, ComponentFactoryResolver, ComponentRef, EventEmitter, Input, OnDestroy, OnInit, Output, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CellValueType } from '../../models/cell-value-type.enum';
-import { CellBase } from '../cell-base';
-import { ColumnConfig } from '../../models/column-config.model';
 import { CellEditModel } from '../../models/cell-edit-model.model';
+import { CellValueType } from '../../models/cell-value-type.enum';
 import { Cell } from '../../models/cell.model';
+import { ColumnConfig } from '../../models/column-config.model';
+import { CellTemplatesService } from '../../services/cell-templates/cell-templates.service';
+import { CellBase } from '../cell-base';
 
 @Component({
   selector: 'app-default-cell',
@@ -22,26 +20,8 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
   @ViewChild('editComponent', { read: ViewContainerRef }) vcRef;
 
   private $component = new BehaviorSubject<ComponentRef<CellBase>>(undefined);
-  private cellTemplateMap = (() => {
-    const numberCellComponent = 'NumberCellComponent';
-    const result = Object.create({});
-    result[CellValueType.Int16] = numberCellComponent;
-    result[CellValueType.UInt16] = numberCellComponent;
-    result[CellValueType.Int32] = numberCellComponent;
-    result[CellValueType.UInt32] = numberCellComponent;
-    result[CellValueType.Int64] = numberCellComponent;
-    result[CellValueType.UInt64] = numberCellComponent;
-    result[CellValueType.Single] = numberCellComponent;
-    result[CellValueType.Decimal] = numberCellComponent;
-    result[CellValueType.Double] = numberCellComponent;
 
-    result[CellValueType.String] = 'StringCellComponent';
-    result[CellValueType.Boolean] = 'BooleanCellComponent';
-    result[CellValueType.DateTime] = 'DateCellComponent';
-    return result as { [type: string]: string };
-  })();
-
-  constructor(private resolver: ComponentFactoryResolver) { }
+  constructor(private resolver: ComponentFactoryResolver, private cellTemplatesService: CellTemplatesService) { }
 
   ngOnInit() {
   }
@@ -75,9 +55,9 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
   private getTemplate() {
     const cell = this.row[this.pair.key] as Cell<any>;
     if (cell.metaData && cell.metaData.other && cell.metaData.other.valueType) {
-      return this.cellTemplateMap[cell.metaData.other.valueType];
+      return this.cellTemplatesService.get(cell.metaData.other.valueType as CellValueType);
     } else {
-      return this.cellTemplateMap[this.pair.value.cellValueType];
+      return this.cellTemplatesService.get(this.pair.value.cellValueType);
     }
   }
 

@@ -1,8 +1,9 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { GridModule } from './modules/grid/grid.module';
+
+
 
 @NgModule({
   declarations: [
@@ -11,7 +12,7 @@ import { GridModule } from './modules/grid/grid.module';
   imports: [
     BrowserModule,
     GridModule,
-    
+
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -17,7 +17,8 @@ import { BooleanCellComponent } from './components/boolean-cell/boolean-cell.com
 import { YesNoPipe } from './pipes/yes-no/yes-no.pipe';
 import { MatSortModule } from '@angular/material/sort';
 import { CdkTableModule } from '@angular/cdk/table';
-import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations'
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations'
+
 @NgModule({
   declarations: [
     GridComponent,
@@ -30,10 +31,10 @@ import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-b
     YesNoPipe
   ],
   entryComponents: [
-    DefaultCellComponent, 
-    NumberCellComponent, 
-    StringCellComponent, 
-    DateCellComponent, 
+    DefaultCellComponent,
+    NumberCellComponent,
+    StringCellComponent,
+    DateCellComponent,
     BooleanCellComponent
   ],
   imports: [
@@ -52,8 +53,7 @@ import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-b
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'en-US' },
-    { provide: 'dateFormat', useValue: 'dd.MM.yyyy'},
-
+    { provide: 'dateFormat', useValue: 'dd.MM.yyyy' },
     DatePipe,
     YesNoPipe,
     CssInjectorService,
