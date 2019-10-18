@@ -49,9 +49,9 @@ export class GridMetaData {
         for (const key in columnsLevelsDictionary) {
             if (columnsLevelsDictionary.hasOwnProperty(key)) {
                 const columnsByLevel = columnsLevelsDictionary[key];
-                for (const key in columnsByLevel) {
-                    if (columnsByLevel.hasOwnProperty(key)) {
-                        const columnConfig = columnsByLevel[key];
+                for (const columnName in columnsByLevel) {
+                    if (columnsByLevel.hasOwnProperty(columnName)) {
+                        const columnConfig = columnsByLevel[columnName];
                         if (columnConfig.$isVisible.value && columnConfig.dataField) {
                             result.push(columnConfig);
                         }

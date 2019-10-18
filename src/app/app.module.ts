@@ -3,16 +3,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { GridModule } from './modules/grid/grid.module';
 
-
-
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
     BrowserModule,
-    GridModule,
-
+    GridModule
   ],
   providers: [],
   bootstrap: [AppComponent]

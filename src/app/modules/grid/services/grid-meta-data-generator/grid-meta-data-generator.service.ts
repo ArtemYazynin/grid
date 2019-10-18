@@ -150,8 +150,8 @@ export class GridMetaDataGeneratorService {
 
       const bandLevel1 = (() => {
         const res = new DictionaryString<ColumnConfig>();
-        res.created = new ColumnConfig('created', [], true, true, 'created', 'Дата создания', 100,
-          undefined, undefined, 2, 1, false, CellValueType.DateTime, true, true);
+        res.created = new ColumnConfig('created', [], false, false, 'created', 'Дата создания', 100,
+          undefined, undefined, 2, 1, false, CellValueType.DateTime, true,true);
         res.friendlyname = new ColumnConfig('friendlyname', [], true, true, 'friendlyname', 'Наименование', 100,
           undefined, undefined, 2, 1, false, CellValueType.String, true, true);
         res.dzo = new ColumnConfig('dzo', [], true, true, 'dzo', 'ДЗО', 100,
@@ -192,7 +192,7 @@ export class GridMetaDataGeneratorService {
         const res = new DictionaryString<ColumnConfig>();
         res.activity = new ColumnConfig(undefined,
           [bandLevel1.friendlyname, bandLevel1.dzo, bandLevel1.created],
-          true, true, 'activity', 'Мероприятие', 200, undefined, 3, 1, 1, false, undefined, false);
+          true, true, 'activity', 'Мероприятие', 200, undefined, 2, 1, 1, false, undefined, false);
         res.type6 = new ColumnConfig(undefined, [
           bandLevel1.type6_plan,
           bandLevel1.type6_fact,

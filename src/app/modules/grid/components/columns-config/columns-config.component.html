@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Выбор колонок</h1>
+<div mat-dialog-content>
+
+    <div  fxLayout="row" fxLayoutAlign=" stretch" *ngIf="$hiddenColumns | async as hiddenColumns">
+      <ng-container *ngIf="$displayedColumns | async as displayedColumns">
+        <div fxFlex="50" fxLayout="column" fxLayoutAlign=" stretch"
+          style="overflow-y: auto; height: 500px;"
+          cdkDropList
+          #todoList="cdkDropList"
+          [cdkDropListData]="hiddenColumns"
+          [cdkDropListConnectedTo]="[doneList]"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let item of hiddenColumns" cdkDrag>{{item.friendlyname}}</div>
+        </div>
+        <div fxFlex="50" fxLayout="column" fxLayoutAlign=" stretch"
+          style="overflow-y: auto; height: 500px;"
+          cdkDropList
+          #doneList="cdkDropList"
+          [cdkDropListData]="displayedColumns"
+          [cdkDropListConnectedTo]="[todoList]"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let item of displayedColumns" cdkDrag>{{item.friendlyname}}</div>
+        </div>
+      </ng-container>
+    </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button cdkFocusInitial (click)="apply()">Применить</button>
+  <button mat-button (click)="onNoClick()">Отмена</button>
+</div>

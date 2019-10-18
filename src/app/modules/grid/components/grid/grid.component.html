@@ -9,7 +9,8 @@
               <ng-container *ngIf="pair.value.isSortable;else notSorting">
                 <th mat-header-cell *matHeaderCellDef [id]="levelPair.key" mat-sort-header
                   [attr.colspan]="pair.value.$colspan | async" [attr.rowspan]="pair.value.$rowspan | async"
-                  [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'">
+                  [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'"
+                  (contextmenu)="onContextMenu($event, item)">
                   <div>
                     {{pair.value.friendlyname}}
                   </div>
@@ -23,6 +24,7 @@
                     {{pair.value.friendlyname}}
                   </div>
                 </th>
+
               </ng-template>
               <td mat-cell *matCellDef="let el" [ngStyle]="el[pair.key]?.metaData?.css">
                 <ng-container>
@@ -35,21 +37,31 @@
             </ng-container>
           </ng-container>
         </ng-container>
+
         <ng-container *ngIf="gridMetaData.$displayedColumnsDictionary | async as displayedColumnsDictionary">
           <ng-container *ngFor="let pair of displayedColumnsDictionary | keyvalue">
             <tr mat-header-row *matHeaderRowDef="pair.value; sticky: true"></tr>
           </ng-container>
           <ng-container *ngIf="gridMetaData.$displayedColumns | async as displayedColumns">
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-              (click)="selectRow(row,$event)" [ngClass]="{ 'selected': rowSelectionService.selection.isSelected(row) }"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectRow(row,$event)"
+              [ngClass]="{ 'selected': rowSelectionService.selection.isSelected(row) }"></tr>
             <!-- Group header -->
             <ng-container matColumnDef="groupHeader" sticky>
-              <td  mat-cell *matCellDef="let groupRow"><strong>{{groupRow.groupName}}</strong></td>
+              <td mat-cell *matCellDef="let groupRow"><strong>{{groupRow.groupName}}</strong></td>
             </ng-container>
-            <tr (click)="expandOrCollapse(row)" mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup;"> </tr>
+            <tr (click)="expandOrCollapse(row)" mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup;">
+            </tr>
           </ng-container>
         </ng-container>
       </ng-container>
     </ng-container>
   </table>
+  <div style="visibility: hidden; position: fixed" [style.left]="contextMenuPosition.$x | async"
+    [style.top]="contextMenuPosition.$y  | async" [matMenuTriggerFor]="contextMenu">
+  </div>
+  <mat-menu #contextMenu="matMenu" >
+    <ng-template matMenuContent>
+      <button mat-menu-item (click)="changeColumns(item)">Настройка колонок</button>
+    </ng-template>
+  </mat-menu>
 </div>

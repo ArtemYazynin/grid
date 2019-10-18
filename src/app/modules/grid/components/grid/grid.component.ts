@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild, ChangeDetectorRef, Inject } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { flatMap, takeUntil } from 'rxjs/operators';
@@ -10,6 +10,9 @@ import { GroupRow } from '../../models/group-row.model';
 import { SelectionModel } from '@angular/cdk/collections';
 import { RowSelectionService } from '../../services/row-selection/row-selection.service';
 import { Cell } from '../../models/cell.model';
+import { MatMenuTrigger, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ColumnsConfigComponent } from '../columns-config/columns-config.component';
+import { ColumnsConfig } from '../../models/columns-config.model';
 
 @Component({
   selector: 'app-grid',
@@ -25,6 +28,8 @@ export class GridComponent implements OnInit, OnDestroy {
   @Input() $gridMetaData: BehaviorSubject<GridMetaData>;
   @Input() isMultiple = false;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatMenuTrigger) contextMenu: MatMenuTrigger;
+  contextMenuPosition = { $x: new BehaviorSubject<string>('0px'), $y: new BehaviorSubject<string>('0px') };
 
   // tslint:disable-next-line: variable-name
   private _dataSource: MatTableDataSourceWithCustomSort<any>;
@@ -35,7 +40,8 @@ export class GridComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
   private id: string;
 
-  constructor(private cssInjectorService: CssInjectorService, public rowSelectionService: RowSelectionService) {
+  constructor(private cssInjectorService: CssInjectorService, public rowSelectionService: RowSelectionService,
+    private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -109,5 +115,34 @@ export class GridComponent implements OnInit, OnDestroy {
     } else {
       this.rowSelectionService.singleSelect(row, event);
     }
+  }
+
+  onContextMenu(event: MouseEvent, item: any) {
+    event.preventDefault();
+    this.contextMenuPosition.$x.next(event.clientX + 'px');
+    this.contextMenuPosition.$y.next(event.clientY + 'px');
+    this.contextMenu.menuData = { 'item': item };
+    this.contextMenu.openMenu();
+  }
+
+  changeColumns(item: any) {
+    this.openDialog();
+  }
+
+  private openDialog(): void {
+    const dialogRef = this.dialog.open(ColumnsConfigComponent, {
+      width: '500px',
+      height: '550px',
+      data: (() => {
+        const result = new ColumnsConfig();
+        result.columnsDictionary = this.$gridMetaData.value.$columnsMap.value;
+        result.displayedColumns = this.$gridMetaData.value.$displayedColumns.value;
+        return result;
+      })()
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 }

@@ -1,26 +1,31 @@
-import { NgModule, LOCALE_ID, InjectionToken } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
-import { MatIconModule } from '@angular/material/icon';
-import { GridComponent } from './components/grid/grid.component';
-import { CssInjectorService } from './services/css-injector.service';
 import { LayoutModule } from '@angular/cdk/layout';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { DefaultCellComponent } from './components/default-cell/default-cell.component';
-import { NumberCellComponent } from './components/number-cell/number-cell.component';
-import { GridMetaDataGeneratorService } from './services/grid-meta-data-generator/grid-meta-data-generator.service';
-import { FormsModule } from '@angular/forms';
-import { StringCellComponent } from './components/string-cell/string-cell.component';
-import { DateCellComponent } from './components/date-cell/date-cell.component';
-import { CellPipe } from './pipes/cell/cell.pipe';
-import { BooleanCellComponent } from './components/boolean-cell/boolean-cell.component';
-import { YesNoPipe } from './pipes/yes-no/yes-no.pipe';
-import { MatSortModule } from '@angular/material/sort';
 import { CdkTableModule } from '@angular/cdk/table';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations'
-
+import { CommonModule, DatePipe } from '@angular/common';
+import { LOCALE_ID, NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { BooleanCellComponent } from './components/boolean-cell/boolean-cell.component';
+import { ColumnsConfigComponent } from './components/columns-config/columns-config.component';
+import { DateCellComponent } from './components/date-cell/date-cell.component';
+import { DefaultCellComponent } from './components/default-cell/default-cell.component';
+import { GridComponent } from './components/grid/grid.component';
+import { NumberCellComponent } from './components/number-cell/number-cell.component';
+import { StringCellComponent } from './components/string-cell/string-cell.component';
+import { CellPipe } from './pipes/cell/cell.pipe';
+import { YesNoPipe } from './pipes/yes-no/yes-no.pipe';
+import { CssInjectorService } from './services/css-injector.service';
+import { GridMetaDataGeneratorService } from './services/grid-meta-data-generator/grid-meta-data-generator.service';
+import {MatListModule} from '@angular/material/list';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 @NgModule({
   declarations: [
+    ColumnsConfigComponent,
     GridComponent,
     DefaultCellComponent,
     NumberCellComponent,
@@ -35,17 +40,22 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform
     NumberCellComponent,
     StringCellComponent,
     DateCellComponent,
-    BooleanCellComponent
+    BooleanCellComponent,
+    ColumnsConfigComponent
   ],
   imports: [
     CommonModule,
     BrowserAnimationsModule,
     NoopAnimationsModule,
     FormsModule,
+    DragDropModule,
+    MatListModule,
+    MatDialogModule,
     CdkTableModule,
     MatTableModule,
     MatSortModule,
     MatIconModule,
+    MatMenuModule,
     LayoutModule, FlexLayoutModule, // Базовые модули для формирования louout
   ],
   exports: [
