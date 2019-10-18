@@ -77,11 +77,16 @@ export class GridComponent implements OnInit, OnDestroy {
         }
       })();
       const isVisible = filterParams[2] === 'true';
-
-      if (data[property].value == propertyValue) {
+      const rowValue = data[property].value;
+      if (rowValue === propertyValue) {
         return isVisible;
       }
       return true;
+      // const rows = this.dataSource.data.filter(x => {
+      //   if (!x[property]) { return false; }
+      //   return x[property].value === propertyValue;
+      // });
+      
     };
     return result;
   }
@@ -107,8 +112,8 @@ export class GridComponent implements OnInit, OnDestroy {
   }
 
   expandOrCollapse(groupRow: GroupRow) {
-    this.dataSource.filter = `${groupRow.groupingProperty};${groupRow.groupingValue};${!groupRow.$isExpanded.value}`;
     groupRow.$isExpanded.next(!groupRow.$isExpanded.value);
+    this.dataSource.filter = `${groupRow.groupingProperty};${groupRow.groupingValue};${groupRow.$isExpanded.value}`;
   }
 
   selectRow(row: Cell<number | string | boolean | Date>, event: MouseEvent) {

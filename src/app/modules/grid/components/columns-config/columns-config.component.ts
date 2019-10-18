@@ -26,7 +26,7 @@ export class ColumnsConfigComponent implements OnInit {
     };
     const displayColumnQualifierFunc = (columnConfig: ColumnConfig) => {
       return this.data.displayedColumns.includes(columnConfig.systemname) && columnConfig.$isVisible.value
-       && !columnConfig.$isSticky.value && !columnConfig.$isStickyEnd.value;
+        && !columnConfig.$isSticky.value && !columnConfig.$isStickyEnd.value;
     };
     const sortingFunc = (next, curr) => {
       return next.$order.value - curr.$order.value;
@@ -55,7 +55,7 @@ export class ColumnsConfigComponent implements OnInit {
   }
 
   apply() {
-    this.dialogRef.close();
+    this.dialogRef.close({ displayedColumns: this.displayedColumns, hiddenColumns: this.hiddenColumns });
   }
 
   trackByFunction(index, item) {

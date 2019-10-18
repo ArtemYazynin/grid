@@ -56,7 +56,7 @@
               [ngClass]="{ 'selected': rowSelectionService.selection.isSelected(row) }"></tr>
             <!-- Group header -->
             <ng-container matColumnDef="groupHeader" sticky>
-              <td mat-cell *matCellDef="let groupRow"><strong>{{groupRow.groupName}}</strong></td>
+              <td mat-cell *matCellDef="let groupRow"><strong>{{groupRow.groupName}} {{groupRow.$isExpanded | async}}</strong></td>
             </ng-container>
             <tr (click)="expandOrCollapse(row)" mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup;">
             </tr>

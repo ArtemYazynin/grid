@@ -25,6 +25,6 @@
     </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-button cdkFocusInitial [mat-dialog-close]="{ displayedColumns:displayedColumns, hiddenColumns: hiddenColumns }" >Применить</button>
+  <button mat-button cdkFocusInitial (click)="apply()" >Применить</button>
   <button mat-button (click)="onNoClick()">Отмена</button>
 </div>
