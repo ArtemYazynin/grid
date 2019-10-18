@@ -1,9 +1,8 @@
-import { ColumnConfig } from './../../models/column-config.model';
-import { BehaviorSubject } from 'rxjs';
-import { ColumnsConfig } from './../../models/columns-config.model';
-import { Component, OnInit, ChangeDetectionStrategy, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ColumnConfig } from './../../models/column-config.model';
+import { ColumnsConfig } from './../../models/columns-config.model';
 
 @Component({
   selector: 'app-columns-config',
@@ -12,53 +11,42 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ColumnsConfigComponent implements OnInit {
-  $displayedColumns: BehaviorSubject<ColumnConfig[]>;
-  $hiddenColumns: BehaviorSubject<ColumnConfig[]>;
-  todo = [
-    'Get to work',
-    'Pick up groceries',
-    'Go home',
-    'Fall asleep'
-  ];
-
-  done = [
-    'Get up',
-    'Brush teeth',
-    'Take a shower',
-    'Check e-mail',
-    'Walk dog'
-  ];
+  displayedColumns: ColumnConfig[] = [];
+  hiddenColumns: ColumnConfig[] = [];
   constructor(public dialogRef: MatDialogRef<ColumnsConfigComponent>, @Inject(MAT_DIALOG_DATA) public data: ColumnsConfig) { }
 
   ngOnInit() {
-    const displayedColumns = [];
-    this.data.displayedColumns.forEach(columnName => {
-      for (const level in this.data.columnsDictionary) {
-        if (this.data.columnsDictionary.hasOwnProperty(level)) {
-          const columnDictionary = this.data.columnsDictionary[parseInt(level, 10)];
-          if (columnDictionary[columnName] && columnDictionary[columnName].$isVisible.value) {
-            displayedColumns.push(columnDictionary[columnName]);
-          }
-        }
-      }
-    });
-    const hiddenColumns = [];
+    this.initColumns();
+  }
+
+  private initColumns() {
+    const hiddenColumnQualifierFunc = (columnConfig: ColumnConfig) => {
+      const columnHasData = !!columnConfig.$children && columnConfig.$children.value.length === 0;
+      return columnHasData && !columnConfig.$isVisible.value;
+    };
+    const displayColumnQualifierFunc = (columnConfig: ColumnConfig) => {
+      return this.data.displayedColumns.includes(columnConfig.systemname) && columnConfig.$isVisible.value;
+    };
+    const sortingFunc = (next, curr) => {
+      return next.$order.value - curr.$order.value;
+    };
     for (const level in this.data.columnsDictionary) {
       if (this.data.columnsDictionary.hasOwnProperty(level)) {
         const columnDictionary = this.data.columnsDictionary[parseInt(level, 10)];
         for (const columnName in columnDictionary) {
           if (columnDictionary.hasOwnProperty(columnName)) {
             const columnConfig = columnDictionary[columnName];
-            const columnHasData = !!columnConfig.$children && columnConfig.$children.value.length === 0;
-            if (columnHasData && !columnConfig.$isVisible.value) {
-              hiddenColumns.push(columnConfig);
+            if (displayColumnQualifierFunc(columnConfig)) {
+              this.displayedColumns.push(columnConfig);
+            } else if (hiddenColumnQualifierFunc(columnConfig)) {
+              this.hiddenColumns.push(columnConfig);
             }
           }
         }
       }
     }
-    this.$displayedColumns = new BehaviorSubject<ColumnConfig[]>(displayedColumns);
-    this.$hiddenColumns = new BehaviorSubject<ColumnConfig[]>(hiddenColumns);
+    this.displayedColumns.sort(sortingFunc);
+    this.hiddenColumns.sort(sortingFunc);
   }
 
   onNoClick(): void {

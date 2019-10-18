@@ -1,18 +1,20 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild, ChangeDetectorRef, Inject } from '@angular/core';
+import { SelectionModel } from '@angular/cdk/collections';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild, ChangeDetectorRef, ViewChildren, QueryList } from '@angular/core';
+import { MatDialog, MatMenuTrigger, MatColumnDef } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { flatMap, takeUntil } from 'rxjs/operators';
+import { Cell } from '../../models/cell.model';
+import { ColumnsConfig } from '../../models/columns-config.model';
 import { DictionaryString } from '../../models/dictionary.model';
 import { GridMetaData } from '../../models/grid-meta-data.model';
+import { GroupRow } from '../../models/group-row.model';
 import { MatTableDataSourceWithCustomSort } from '../../models/mat-table-data-source-with-custom-sort';
 import { CssInjectorService } from '../../services/css-injector.service';
-import { GroupRow } from '../../models/group-row.model';
-import { SelectionModel } from '@angular/cdk/collections';
 import { RowSelectionService } from '../../services/row-selection/row-selection.service';
-import { Cell } from '../../models/cell.model';
-import { MatMenuTrigger, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ColumnsConfigComponent } from '../columns-config/columns-config.component';
-import { ColumnsConfig } from '../../models/columns-config.model';
+import { ColumnConfig } from './../../models/column-config.model';
+import { Unar } from '../../models/unar.enum';
 
 @Component({
   selector: 'app-grid',
@@ -29,6 +31,7 @@ export class GridComponent implements OnInit, OnDestroy {
   @Input() isMultiple = false;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatMenuTrigger) contextMenu: MatMenuTrigger;
+  @ViewChildren(MatColumnDef) matColumnDefs: QueryList<MatColumnDef>;
   contextMenuPosition = { $x: new BehaviorSubject<string>('0px'), $y: new BehaviorSubject<string>('0px') };
 
   // tslint:disable-next-line: variable-name
@@ -41,7 +44,7 @@ export class GridComponent implements OnInit, OnDestroy {
   private id: string;
 
   constructor(private cssInjectorService: CssInjectorService, public rowSelectionService: RowSelectionService,
-    private dialog: MatDialog) {
+    private dialog: MatDialog, private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -79,7 +82,7 @@ export class GridComponent implements OnInit, OnDestroy {
         return isVisible;
       }
       return true;
-    }
+    };
     return result;
   }
 
@@ -121,7 +124,7 @@ export class GridComponent implements OnInit, OnDestroy {
     event.preventDefault();
     this.contextMenuPosition.$x.next(event.clientX + 'px');
     this.contextMenuPosition.$y.next(event.clientY + 'px');
-    this.contextMenu.menuData = { 'item': item };
+    this.contextMenu.menuData = { item: item };
     this.contextMenu.openMenu();
   }
 
@@ -141,8 +144,78 @@ export class GridComponent implements OnInit, OnDestroy {
       })()
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+    dialogRef.afterClosed()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((result: { hiddenColumns: ColumnConfig[], displayedColumns: ColumnConfig[] }) => {
+        result.hiddenColumns.forEach(hiddenColumnConfig => {
+          for (const level in this.$gridMetaData.value.$columnsMap.value) {
+            if (this.$gridMetaData.value.$columnsMap.value.hasOwnProperty(level)) {
+              const columnsDictionary = this.$gridMetaData.value.$columnsMap.value[level];
+              for (const columnSystemname in columnsDictionary) {
+                if (columnsDictionary.hasOwnProperty(columnSystemname)) {
+                  const columnConfig = columnsDictionary[columnSystemname];
+                  this.recursivellyChangeVisivility(columnConfig, hiddenColumnConfig, false, columnConfig);
+                }
+              }
+            }
+          }
+        });
+        result.displayedColumns.forEach(displayedColumnConfig => {
+          for (const level in this.$gridMetaData.value.$columnsMap.value) {
+            if (this.$gridMetaData.value.$columnsMap.value.hasOwnProperty(level)) {
+              const columnsDictionary = this.$gridMetaData.value.$columnsMap.value[level];
+              for (const columnSystemname in columnsDictionary) {
+                if (columnsDictionary.hasOwnProperty(columnSystemname)) {
+                  const columnConfig = columnsDictionary[columnSystemname];
+                  this.recursivellyChangeVisivility(columnConfig, displayedColumnConfig, true, columnConfig);
+                }
+              }
+            }
+          }
+        });
+        
+        // const matColumnDefs = this.matColumnDefs
+        // this.matColumnDefs.forEach(element => {
+        //   if (element.hasStickyChanged()) {
+        //     debugger;
+        //     element.resetStickyChanged();
+        //   }
+          
+        // });
+        this.$gridMetaData.next(new GridMetaData(this.$gridMetaData.value.id, this.$gridMetaData.value.$columnsMap.value));
+        // this.cssInjectorService.generateDynamicCssClasses(this.id, this.$gridMetaData.value.$columnsMap.value);
+      });
+  }
+
+  private recursivellyChangeVisivility(iteratorColumnConfig: ColumnConfig, displayedColumnConfig: ColumnConfig, makeVisible: boolean, parentColumnConfig: ColumnConfig) {
+    if (iteratorColumnConfig.systemname === displayedColumnConfig.systemname && iteratorColumnConfig.$isVisible.value !== makeVisible) {
+      iteratorColumnConfig.$isVisible.next(makeVisible);
+      iteratorColumnConfig.$isSticky.next(parentColumnConfig.$isSticky.value);
+      return true;
+    }
+    if (!iteratorColumnConfig.$children) { return; }
+    iteratorColumnConfig.$children.value.forEach(childColumnConfig => {
+      const visibilityChanged = this.recursivellyChangeVisivility(childColumnConfig, displayedColumnConfig, makeVisible, parentColumnConfig);
+      if (visibilityChanged) {
+        const unar = makeVisible ? Unar.Increment : Unar.Decrement;
+        switch (unar) {
+          case Unar.Increment:
+            iteratorColumnConfig.$colspan.next(iteratorColumnConfig.$colspan.value + 1);
+            break;
+          case Unar.Decrement:
+            iteratorColumnConfig.$colspan.next(iteratorColumnConfig.$colspan.value - 1);
+            break;
+          default:
+            break;
+        }
+      }
+    });
+  }
+
+  private recursivellyChangeSticky(columnConfig: ColumnConfig) {
+    if (!columnConfig.$children) { return; }
+    columnConfig.$children.value.forEach(element => {
+
     });
   }
 }

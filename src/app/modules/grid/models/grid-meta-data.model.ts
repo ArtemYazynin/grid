@@ -16,8 +16,6 @@ export class GridMetaData {
      */
     $displayedColumns: BehaviorSubject<string[]>;
 
-    $endStickyColumns = new BehaviorSubject<number>(0);
-
     updateCell: (cell: CellEditModel) => void;
 
     /**
@@ -27,6 +25,7 @@ export class GridMetaData {
      * @param rowsConfig CSS конфиг ячейки данных
      */
     constructor(public id: string, columnsMap: DictionaryNumber<DictionaryString<ColumnConfig>>) {
+        debugger
         this.$columnsMap = new BehaviorSubject<DictionaryNumber<DictionaryString<ColumnConfig>>>(columnsMap);
         this.setDisplayedColumns(columnsMap);
     }
@@ -77,9 +76,6 @@ export class GridMetaData {
                 for (const property in columnsByLevel) {
                     if (columnsByLevel.hasOwnProperty(property)) {
                         const column = columnsByLevel[property];
-                        if (column.$isStickyEnd.value) {
-                            this.$endStickyColumns.next(this.$endStickyColumns.value + 1);
-                        }
                         if (resultDictionary[level]) {
                             const names = resultDictionary[level];
                             names.push(column.systemname);
