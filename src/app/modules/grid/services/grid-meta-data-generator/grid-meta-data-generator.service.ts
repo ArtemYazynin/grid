@@ -63,7 +63,6 @@ export class GridMetaDataGeneratorService {
         new Cell(1.111, new CellMetaData(lightGreenBackGround)),
         new Cell(1.1111, new CellMetaData(lightGreenBackGround)),
         new Cell('summary1', new CellMetaData(lightGreenBackGround)),
-        new Cell('hiddenValue', new CellMetaData(lightGreenBackGround)),
         new Cell(true, new CellMetaData(lightGreenBackGround)),
         new Cell(1.22, new CellMetaData(undefined, { valueType: CellValueType.Int32 }))),
 
@@ -83,7 +82,7 @@ export class GridMetaDataGeneratorService {
         new Cell(2.222, new CellMetaData(redBackGround)),
         new Cell(2.2222, new CellMetaData(redBackGround)),
         new Cell('summary2', new CellMetaData(redBackGround)),
-        new Cell('hiddenValue', new CellMetaData(redBackGround)),
+        
         new Cell(false, new CellMetaData(redBackGround)),
         new Cell('some string', new CellMetaData(undefined, { valueType: CellValueType.String }))),
       new Indicator(new Cell('Меро3'),
@@ -102,7 +101,7 @@ export class GridMetaDataGeneratorService {
         new Cell(3.333),
         new Cell(3.3333),
         new Cell('summary3'),
-        new Cell('hiddenValue'),
+        
         new Cell(true),
         new Cell('some Date', new CellMetaData(undefined, { valueType: CellValueType.DateTime }))),
       new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
@@ -121,7 +120,7 @@ export class GridMetaDataGeneratorService {
         new Cell(4.444, new CellMetaData(grayBackground)),
         new Cell(4.4444, new CellMetaData(grayBackground)),
         new Cell('summary4', new CellMetaData(grayBackground)),
-        new Cell('hiddenValue', new CellMetaData(grayBackground)),
+        
         new Cell(false, new CellMetaData(grayBackground)),
         new Cell('some boolean', new CellMetaData(undefined, { valueType: CellValueType.Boolean }))),
     ];
@@ -150,8 +149,8 @@ export class GridMetaDataGeneratorService {
 
       const bandLevel1 = (() => {
         const res = new DictionaryString<ColumnConfig>();
-        res.created = new ColumnConfig('created', [], false, false, 'created', 'Дата создания', 100,
-          undefined, undefined, 2, 1, false, CellValueType.DateTime, true,true);
+        res.created = new ColumnConfig('created', [], true, true, 'created', 'Дата создания', 100,
+          undefined, undefined, 2, 1, false, CellValueType.DateTime, true, true);
         res.friendlyname = new ColumnConfig('friendlyname', [], true, true, 'friendlyname', 'Наименование', 100,
           undefined, undefined, 2, 1, false, CellValueType.String, true, true);
         res.dzo = new ColumnConfig('dzo', [], true, true, 'dzo', 'ДЗО', 100,
@@ -192,7 +191,7 @@ export class GridMetaDataGeneratorService {
         const res = new DictionaryString<ColumnConfig>();
         res.activity = new ColumnConfig(undefined,
           [bandLevel1.friendlyname, bandLevel1.dzo, bandLevel1.created],
-          true, true, 'activity', 'Мероприятие', 200, undefined, 2, 1, 1, false, undefined, false);
+          true, true, 'activity', 'Мероприятие', 200, undefined, 3, 1, 1, false, undefined, false);
         res.type6 = new ColumnConfig(undefined, [
           bandLevel1.type6_plan,
           bandLevel1.type6_fact,
@@ -209,12 +208,12 @@ export class GridMetaDataGeneratorService {
           bandLevel1.type8_deviation_band
         ], false, true, 'type8', 'Типовой 8', 500, undefined, 4);
         res.summary = new ColumnConfig('summary', [], false, true, 'summary',
-          'Сводка 8', 100, undefined, 1, 3, 15, true, undefined, false, true);
+          'Сводка 8', 100, undefined, 1, 3, 15, false, undefined, false, true);
         res.isDeleted = new ColumnConfig('isDeleted', [], false, true, 'isDeleted',
-          'Удален', 100, undefined, 1, 3, 16, true, CellValueType.Boolean, true, true);
-        res.hidden = new ColumnConfig('hidden', [], false, false, 'hidden', 'Скрытая колонка на 3 строки', 100, undefined, 1, 3, 16);
+          'Удален', 100, undefined, 1, 3, 16, false, CellValueType.Boolean, true, true);
+          
         res.customEdit = new ColumnConfig('customEdit', [], false, true, 'customEdit',
-        'Различное редактирование ячейки', 200, undefined, 1, 3, 17, true, CellValueType.Boolean, true, true);
+          'Различное редактирование ячейки', 200, undefined, 1, 3, 17, false, CellValueType.Boolean, true, true);
         return res;
       })();
       result[0] = bandLevel0;

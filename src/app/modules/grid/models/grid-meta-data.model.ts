@@ -25,7 +25,31 @@ export class GridMetaData {
      * @param rowsConfig CSS конфиг ячейки данных
      */
     constructor(public id: string, columnsMap: DictionaryNumber<DictionaryString<ColumnConfig>>) {
-        debugger
+        const map = (() => {
+            const result = new DictionaryNumber<DictionaryString<ColumnConfig>>();
+            (() => {
+                const maxLevel = Object.keys(columnsMap).length;
+                for (let index = 0; index < maxLevel; index++) {
+                    result[index] = new DictionaryString<ColumnConfig>();
+                }
+            })();
+
+            for (const level in columnsMap) {
+                if (columnsMap.hasOwnProperty(level)) {
+                    const columnConfigDictionary = columnsMap[level];
+                    for (const columnSystemname in columnConfigDictionary) {
+                        if (columnConfigDictionary.hasOwnProperty(columnSystemname)) {
+                            const columnConfig = columnConfigDictionary[columnSystemname];
+                            if (columnConfig.$isVisible.value) {
+                                result[level][columnConfig.systemname] = columnConfig;
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
+        })();
+
         this.$columnsMap = new BehaviorSubject<DictionaryNumber<DictionaryString<ColumnConfig>>>(columnsMap);
         this.setDisplayedColumns(columnsMap);
     }
@@ -75,13 +99,13 @@ export class GridMetaData {
                 const columnsByLevel = columnsLevelsDictionary[level];
                 for (const property in columnsByLevel) {
                     if (columnsByLevel.hasOwnProperty(property)) {
-                        const column = columnsByLevel[property];
+                        const columnConfig = columnsByLevel[property];
                         if (resultDictionary[level]) {
                             const names = resultDictionary[level];
-                            names.push(column.systemname);
+                            names.push(columnConfig.systemname);
                             resultDictionary[level] = names;
                         } else {
-                            resultDictionary[level] = [column.systemname];
+                            resultDictionary[level] = [columnConfig.systemname];
                         }
                     }
                 }

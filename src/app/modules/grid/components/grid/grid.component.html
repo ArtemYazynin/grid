@@ -4,11 +4,14 @@
       <ng-container *ngIf="gridMetaData.$columnsMap | async as columnsMap">
         <ng-container *ngFor="let levelPair of columnsMap | keyvalue">
           <ng-container *ngFor="let pair of levelPair.value | keyvalue">
+            
             <ng-container matColumnDef="{{pair.key}}" [sticky]="pair.value.$isSticky | async"
               [stickyEnd]="pair.value.$isStickyEnd | async" *ngIf="pair.value.$width | async as width">
               <ng-container *ngIf="pair.value.isSortable;else notSorting">
+                
                 <th mat-header-cell *matHeaderCellDef [id]="levelPair.key" mat-sort-header
-                  [attr.colspan]="pair.value.$colspan | async" [attr.rowspan]="pair.value.$rowspan | async"
+                  [attr.colspan]="pair.value.$colspan | async" 
+                  [attr.rowspan]="pair.value.$rowspan | async"
                   [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'"
                   (contextmenu)="onContextMenu($event, item)">
                   <div>
@@ -16,10 +19,16 @@
                   </div>
                 </th>
               </ng-container>
+              
               <ng-template #notSorting>
-                <th mat-header-cell *matHeaderCellDef [id]="levelPair.key" [attr.colspan]="pair.value.$colspan | async"
+                  <ng-container *ngIf="pair.value.$isVisible | async">
+
+                    </ng-container>
+                <th mat-header-cell *matHeaderCellDef [id]="levelPair.key" 
+                  [attr.colspan]="pair.value.$colspan | async"
                   [attr.rowspan]="pair.value.$rowspan | async"
-                  [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'">
+                  [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'"
+                  (contextmenu)="onContextMenu($event, item)">
                   <div>
                     {{pair.value.friendlyname}}
                   </div>

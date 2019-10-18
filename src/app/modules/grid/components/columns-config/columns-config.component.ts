@@ -22,10 +22,11 @@ export class ColumnsConfigComponent implements OnInit {
   private initColumns() {
     const hiddenColumnQualifierFunc = (columnConfig: ColumnConfig) => {
       const columnHasData = !!columnConfig.$children && columnConfig.$children.value.length === 0;
-      return columnHasData && !columnConfig.$isVisible.value;
+      return columnHasData && !columnConfig.$isVisible.value && !columnConfig.$isSticky.value && !columnConfig.$isStickyEnd.value;
     };
     const displayColumnQualifierFunc = (columnConfig: ColumnConfig) => {
-      return this.data.displayedColumns.includes(columnConfig.systemname) && columnConfig.$isVisible.value;
+      return this.data.displayedColumns.includes(columnConfig.systemname) && columnConfig.$isVisible.value
+       && !columnConfig.$isSticky.value && !columnConfig.$isStickyEnd.value;
     };
     const sortingFunc = (next, curr) => {
       return next.$order.value - curr.$order.value;

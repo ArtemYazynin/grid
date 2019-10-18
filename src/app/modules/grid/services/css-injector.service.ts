@@ -45,12 +45,12 @@ export class CssInjectorService {
             const borderRightColor = this.getBandBorderRightColor(parseInt(level, 10));
             if (columnConfig.$isVisible.value) {
               let classes = '';
-              const oneCellBand = columnConfig.$colspan.value === 1;
-              const thAlign = (()=>{
+              const columnWithData = columnConfig.$children.value.length === 0;
+              const thAlign = (() => {
                 return 'padding-left: 12px !important;';
               })();
-              if (oneCellBand) {
-                
+              if (columnWithData) {
+
                 const thClasses = `th.mat-column-${columnConfig.systemname}{
                   min-width: ${columnConfig.$width.value}px;
                   max-width: ${columnConfig.$width.value}px;

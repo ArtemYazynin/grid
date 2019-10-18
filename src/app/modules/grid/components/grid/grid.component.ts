@@ -15,6 +15,7 @@ import { RowSelectionService } from '../../services/row-selection/row-selection.
 import { ColumnsConfigComponent } from '../columns-config/columns-config.component';
 import { ColumnConfig } from './../../models/column-config.model';
 import { Unar } from '../../models/unar.enum';
+import { debug } from 'util';
 
 @Component({
   selector: 'app-grid',
@@ -31,7 +32,6 @@ export class GridComponent implements OnInit, OnDestroy {
   @Input() isMultiple = false;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatMenuTrigger) contextMenu: MatMenuTrigger;
-  @ViewChildren(MatColumnDef) matColumnDefs: QueryList<MatColumnDef>;
   contextMenuPosition = { $x: new BehaviorSubject<string>('0px'), $y: new BehaviorSubject<string>('0px') };
 
   // tslint:disable-next-line: variable-name
@@ -173,49 +173,53 @@ export class GridComponent implements OnInit, OnDestroy {
             }
           }
         });
-        
-        // const matColumnDefs = this.matColumnDefs
-        // this.matColumnDefs.forEach(element => {
-        //   if (element.hasStickyChanged()) {
-        //     debugger;
-        //     element.resetStickyChanged();
-        //   }
-          
-        // });
         this.$gridMetaData.next(new GridMetaData(this.$gridMetaData.value.id, this.$gridMetaData.value.$columnsMap.value));
         // this.cssInjectorService.generateDynamicCssClasses(this.id, this.$gridMetaData.value.$columnsMap.value);
       });
   }
 
-  private recursivellyChangeVisivility(iteratorColumnConfig: ColumnConfig, displayedColumnConfig: ColumnConfig, makeVisible: boolean, parentColumnConfig: ColumnConfig) {
+  private recursivellyChangeVisivility(iteratorColumnConfig: ColumnConfig, displayedColumnConfig: ColumnConfig,
+    makeVisible: boolean, parentColumnConfig: ColumnConfig) {
     if (iteratorColumnConfig.systemname === displayedColumnConfig.systemname && iteratorColumnConfig.$isVisible.value !== makeVisible) {
       iteratorColumnConfig.$isVisible.next(makeVisible);
-      iteratorColumnConfig.$isSticky.next(parentColumnConfig.$isSticky.value);
+      // iteratorColumnConfig.$isSticky.next(parentColumnConfig.$isSticky.value);
       return true;
     }
     if (!iteratorColumnConfig.$children) { return; }
     iteratorColumnConfig.$children.value.forEach(childColumnConfig => {
-      const visibilityChanged = this.recursivellyChangeVisivility(childColumnConfig, displayedColumnConfig, makeVisible, parentColumnConfig);
+      const visibilityChanged = this.recursivellyChangeVisivility(childColumnConfig, displayedColumnConfig,
+        makeVisible, parentColumnConfig);
       if (visibilityChanged) {
         const unar = makeVisible ? Unar.Increment : Unar.Decrement;
         switch (unar) {
           case Unar.Increment:
             iteratorColumnConfig.$colspan.next(iteratorColumnConfig.$colspan.value + 1);
+            if (iteratorColumnConfig.$colspan.value > 0 && !iteratorColumnConfig.$isVisible.value) {
+              iteratorColumnConfig.$isVisible.next(true);
+            }
+            if (parentColumnConfig.systemname !== iteratorColumnConfig.systemname) {
+              parentColumnConfig.$colspan.next(parentColumnConfig.$colspan.value + 1);
+              if (parentColumnConfig.$colspan.value > 0) {
+                parentColumnConfig.$isVisible.next(true);
+              }
+            }
             break;
           case Unar.Decrement:
             iteratorColumnConfig.$colspan.next(iteratorColumnConfig.$colspan.value - 1);
+            if (iteratorColumnConfig.$colspan.value === 0) {
+              iteratorColumnConfig.$isVisible.next(false);
+            }
+            if (parentColumnConfig.systemname !== iteratorColumnConfig.systemname) {
+              parentColumnConfig.$colspan.next(parentColumnConfig.$colspan.value - 1);
+              if (parentColumnConfig.$colspan.value === 0) {
+                parentColumnConfig.$isVisible.next(false);
+              }
+            }
             break;
           default:
             break;
         }
       }
-    });
-  }
-
-  private recursivellyChangeSticky(columnConfig: ColumnConfig) {
-    if (!columnConfig.$children) { return; }
-    columnConfig.$children.value.forEach(element => {
-
     });
   }
 }

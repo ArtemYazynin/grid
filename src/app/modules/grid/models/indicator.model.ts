@@ -20,7 +20,6 @@ export class Indicator {
         public type8_val: Cell<number>,
         public type8_persent: Cell<number>,
         public summary: Cell<string>,
-        public hidden: Cell<string> = new Cell<string>('hiddenValue'),
         public isDeleted: Cell<boolean> = new Cell<boolean>(false),
         public customEdit: Cell<any>) {
     }
