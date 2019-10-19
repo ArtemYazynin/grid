@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { ColumnsConfigComponent } from './columns-config.component';
+import { ColumnsConfigComponent } from './columns-selector.component';
 
 describe('ColumnsConfigComponent', () => {
   let component: ColumnsConfigComponent;

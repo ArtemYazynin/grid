@@ -2,11 +2,10 @@ import { DictionaryNumber } from './dictionary-number.model';
 import { ColumnConfig } from './column-config.model';
 import { DictionaryString } from './dictionary.model';
 
-export class ColumnsConfig {
-    displayedColumns: string[];
+export class ColumnsSelector {
     columnsDictionary: DictionaryNumber<DictionaryString<ColumnConfig>>;
+}
 
-    constructor() {
+export class ColumnSelector2{
 
-    }
 }

@@ -5,14 +5,14 @@ import { MatSort } from '@angular/material/sort';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { flatMap, takeUntil } from 'rxjs/operators';
 import { Cell } from '../../models/cell.model';
-import { ColumnsConfig } from '../../models/columns-config.model';
+import { ColumnsSelector } from '../../models/columns-selector.model';
 import { DictionaryString } from '../../models/dictionary.model';
 import { GridMetaData } from '../../models/grid-meta-data.model';
 import { GroupRow } from '../../models/group-row.model';
 import { MatTableDataSourceWithCustomSort } from '../../models/mat-table-data-source-with-custom-sort';
 import { CssInjectorService } from '../../services/css-injector.service';
 import { RowSelectionService } from '../../services/row-selection/row-selection.service';
-import { ColumnsConfigComponent } from '../columns-config/columns-config.component';
+import { ColumnsConfigComponent } from '../columns-selector/columns-selector.component';
 import { ColumnConfig } from './../../models/column-config.model';
 import { Unar } from '../../models/unar.enum';
 import { debug } from 'util';
@@ -117,9 +117,8 @@ export class GridComponent implements OnInit, OnDestroy {
       width: '500px',
       height: '550px',
       data: (() => {
-        const result = new ColumnsConfig();
+        const result = new ColumnsSelector();
         result.columnsDictionary = this.$gridMetaData.value.$columnsMap.value;
-        result.displayedColumns = this.$gridMetaData.value.$displayedColumns.value;
         return result;
       })()
     });

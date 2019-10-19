@@ -1,9 +1,9 @@
 <h1 mat-dialog-title>Выбор колонок</h1>
 <div mat-dialog-content>
 
-    <div  fxLayout="row" fxLayoutAlign=" stretch">
+    <div  fxLayout="row" fxLayoutAlign=" stretch" style="height: 400px;">
         <div fxFlex="50" fxLayout="column" fxLayoutAlign=" stretch"
-          style="overflow-y: auto; height: 500px;"
+          style="overflow-y: auto;"
           cdkDropList
           #todoList="cdkDropList"
           [cdkDropListData]="hiddenColumns"
@@ -13,7 +13,7 @@
           <div class="example-box" *ngFor="let item of hiddenColumns; trackBy: trackByFunction;" cdkDrag>{{item.friendlyname}}</div>
         </div>
       <div fxFlex="50" fxLayout="column" fxLayoutAlign=" stretch"
-        style="overflow-y: auto; height: 500px;"
+        style="overflow-y: auto;"
         cdkDropList
         #doneList="cdkDropList"
         [cdkDropListData]="displayedColumns"

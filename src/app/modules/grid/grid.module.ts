@@ -11,7 +11,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BooleanCellComponent } from './components/boolean-cell/boolean-cell.component';
-import { ColumnsConfigComponent } from './components/columns-config/columns-config.component';
+import { ColumnsConfigComponent } from './components/columns-selector/columns-selector.component';
 import { DateCellComponent } from './components/date-cell/date-cell.component';
 import { DefaultCellComponent } from './components/default-cell/default-cell.component';
 import { GridComponent } from './components/grid/grid.component';

@@ -1,19 +1,21 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { ColumnConfig } from './../../models/column-config.model';
-import { ColumnsConfig } from './../../models/columns-config.model';
+import { ColumnConfig } from '../../models/column-config.model';
+import { ColumnsSelector } from '../../models/columns-selector.model';
+import { DictionaryString } from '../../models/dictionary.model';
 
 @Component({
-  selector: 'app-columns-config',
-  templateUrl: './columns-config.component.html',
-  styleUrls: ['./columns-config.component.css'],
+  selector: 'app-columns-selector',
+  templateUrl: './columns-selector.component.html',
+  styleUrls: ['./columns-selector.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ColumnsConfigComponent implements OnInit {
   displayedColumns: ColumnConfig[] = [];
   hiddenColumns: ColumnConfig[] = [];
-  constructor(public dialogRef: MatDialogRef<ColumnsConfigComponent>, @Inject(MAT_DIALOG_DATA) public data: ColumnsConfig) { }
+
+  constructor(public dialogRef: MatDialogRef<ColumnsConfigComponent>, @Inject(MAT_DIALOG_DATA) public data: ColumnsSelector) { }
 
   ngOnInit() {
     this.initColumns();
@@ -21,11 +23,12 @@ export class ColumnsConfigComponent implements OnInit {
 
   private initColumns() {
     const hiddenColumnQualifierFunc = (columnConfig: ColumnConfig) => {
-      const columnHasData = !!columnConfig.$children && columnConfig.$children.value.length === 0;
+      const columnHasData = columnConfig.$children.value.length === 0;
       return columnHasData && !columnConfig.$isVisible.value && !columnConfig.$isSticky.value && !columnConfig.$isStickyEnd.value;
     };
     const displayColumnQualifierFunc = (columnConfig: ColumnConfig) => {
-      return this.data.displayedColumns.includes(columnConfig.systemname) && columnConfig.$isVisible.value
+      const columnHasData = columnConfig.$children.value.length === 0;
+      return columnHasData && columnConfig.$isVisible.value
         && !columnConfig.$isSticky.value && !columnConfig.$isStickyEnd.value;
     };
     const sortingFunc = (next, curr) => {
