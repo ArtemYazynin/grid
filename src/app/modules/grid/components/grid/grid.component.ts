@@ -44,7 +44,7 @@ export class GridComponent implements OnInit, OnDestroy {
   private id: string;
 
   constructor(private cssInjectorService: CssInjectorService, public rowSelectionService: RowSelectionService,
-    private dialog: MatDialog, private cdr: ChangeDetectorRef) {
+    private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -63,31 +63,6 @@ export class GridComponent implements OnInit, OnDestroy {
   private getDataSource(rows: DictionaryString<Cell<string | number | boolean | Date>>[]) {
     const result = new MatTableDataSourceWithCustomSort(rows);
     result.sort = this.sort;
-    result.filterPredicate = (data: any, filter: string) => {
-      const filterParams: string[] = filter.split(';');
-      const property = filterParams[0];
-      if (!data[property]) { return true; }
-      const propertyValue = (() => {
-        switch (typeof data[property].value) {
-          case 'boolean':
-            return filterParams[1] === 'true';
-
-          default:
-            return filterParams[1];
-        }
-      })();
-      const isVisible = filterParams[2] === 'true';
-      const rowValue = data[property].value;
-      if (rowValue === propertyValue) {
-        return isVisible;
-      }
-      return true;
-      // const rows = this.dataSource.data.filter(x => {
-      //   if (!x[property]) { return false; }
-      //   return x[property].value === propertyValue;
-      // });
-      
-    };
     return result;
   }
 
@@ -114,6 +89,24 @@ export class GridComponent implements OnInit, OnDestroy {
   expandOrCollapse(groupRow: GroupRow) {
     groupRow.$isExpanded.next(!groupRow.$isExpanded.value);
     this.dataSource.filter = `${groupRow.groupingProperty};${groupRow.groupingValue};${groupRow.$isExpanded.value}`;
+  }
+
+  /**
+ *Функция группировки массива по ключу
+ *
+ * @export
+ * @param {*} xs
+ * @param {*} key
+ * @returns
+ */
+  private groupBy(xs: any[], key: string) {
+    return xs.reduce(function (rv, x) {
+      if (!x[key]) {
+        return rv;
+      }
+      (rv[x[key].value] = rv[x[key].value] || []).push(x);
+      return rv;
+    }, {});
   }
 
   selectRow(row: Cell<number | string | boolean | Date>, event: MouseEvent) {

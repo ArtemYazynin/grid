@@ -56,6 +56,33 @@ export class MatTableDataSourceWithCustomSort<T> extends MatTableDataSource<T> {
         }
     }
 
+    filterPredicate = (data: any, filter: string) => {
+        const getPropertyValue = () => {
+            switch (typeof data[property].value) {
+                case 'boolean':
+                    return filterParams[1] === 'true';
+
+                default:
+                    return filterParams[1];
+            }
+        };
+        const filterParams: string[] = filter.split(';');
+        const property = filterParams[0];
+        if (!data[property]) { return true; }
+        const propertyValue = getPropertyValue();
+        const isVisible = filterParams[2] === 'true';
+        if (data[property].value === propertyValue) {
+            return isVisible;
+        }
+        const group = this.data.find(x => {
+            if (x instanceof GroupRow) {
+                return x.groupingProperty === property && x.groupingValue !== propertyValue;
+            }
+        }) as unknown as GroupRow;
+        return group.$isExpanded.value;
+    };
+
+
     private sortCompareFn(active: string, direction: SortDirection) {
         return (a, b) => {
             const valueA = this.sortingDataAccessor(a, active);
