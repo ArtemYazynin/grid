@@ -19,11 +19,7 @@
                   </div>
                 </th>
               </ng-container>
-              
               <ng-template #notSorting>
-                  <ng-container *ngIf="pair.value.$isVisible | async">
-
-                    </ng-container>
                 <th mat-header-cell *matHeaderCellDef [id]="levelPair.key" 
                   [attr.colspan]="pair.value.$colspan | async"
                   [attr.rowspan]="pair.value.$rowspan | async"
@@ -35,10 +31,10 @@
                 </th>
 
               </ng-template>
-              <td mat-cell *matCellDef="let el" [ngStyle]="el[pair.key]?.metaData?.css">
+              <td mat-cell *matCellDef="let el" >
                 <ng-container>
-                  <div fxLayout="column" fxLayoutAlign="stretch stretch" fxFill>
-                    <app-default-cell fxFlex [row]="el" [pair]="pair" (updateCell)="gridMetaData.updateCell($event)">
+                  <div fxLayout="column" fxLayoutAlign="stretch stretch" fxFill [ngStyle]="el[pair.key]?.metaData?.css">
+                    <app-default-cell fxFlex [row]="el" [pair]="pair" (updateCell)="gridMetaData?.updateCell($event)">
                     </app-default-cell>
                   </div>
                 </ng-container>
@@ -58,15 +54,15 @@
             <ng-container matColumnDef="groupHeader" sticky>
               <td mat-cell *matCellDef="let groupRow"><strong>{{groupRow.groupName}}</strong></td>
             </ng-container>
-            <tr (click)="expandOrCollapse(row)" mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup;">
+            <tr class="group-row" (click)="expandOrCollapse(row)" mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup;">
             </tr>
           </ng-container>
         </ng-container>
       </ng-container>
     </ng-container>
   </table>
-  <div style="visibility: hidden; position: fixed" [style.left]="contextMenuPosition.$x | async"
-    [style.top]="contextMenuPosition.$y  | async" [matMenuTriggerFor]="contextMenu">
+  <div style="visibility: hidden; position: fixed" [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y" [matMenuTriggerFor]="contextMenu">
   </div>
   <mat-menu #contextMenu="matMenu" >
     <ng-template matMenuContent>

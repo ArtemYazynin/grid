@@ -32,12 +32,12 @@ export class GridMetaDataGeneratorService {
     })();
     const leftGradientBackGround = (() => {
       const result = new DictionaryString<string>();
-      result.background = 'linear-gradient(to left, red, transparent)';
+      result.background = 'linear-gradient(to left, yellow, white)';
       return result;
     })();
     const rightGradientBackGround = (() => {
       const result = new DictionaryString<string>();
-      result.background = 'linear-gradient(to left, transparent, red)';
+      result.background = 'linear-gradient(to left, white, red)';
       return result;
     })();
     const grayBackground = (() => {
@@ -103,7 +103,7 @@ export class GridMetaDataGeneratorService {
         new Cell('summary3'),
         
         new Cell(true),
-        new Cell('some Date', new CellMetaData(undefined, { valueType: CellValueType.DateTime }))),
+        new Cell(new Date(), new CellMetaData(undefined, { valueType: CellValueType.DateTime }))),
       new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
         new Cell(new Date(2000, 1, 2), new CellMetaData(grayBackground)),
         new Cell('артемовская ТЭЦ', new CellMetaData(grayBackground)),

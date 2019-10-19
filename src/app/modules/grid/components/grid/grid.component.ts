@@ -32,7 +32,7 @@ export class GridComponent implements OnInit, OnDestroy {
   @Input() isMultiple = false;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatMenuTrigger) contextMenu: MatMenuTrigger;
-  contextMenuPosition = { $x: new BehaviorSubject<string>('0px'), $y: new BehaviorSubject<string>('0px') };
+  contextMenuPosition = { x: '0px', y: '0px' };
 
   // tslint:disable-next-line: variable-name
   private _dataSource: MatTableDataSourceWithCustomSort<any>;
@@ -91,24 +91,6 @@ export class GridComponent implements OnInit, OnDestroy {
     this.dataSource.filter = `${groupRow.groupingProperty};${groupRow.groupingValue};${groupRow.$isExpanded.value}`;
   }
 
-  /**
- *Функция группировки массива по ключу
- *
- * @export
- * @param {*} xs
- * @param {*} key
- * @returns
- */
-  private groupBy(xs: any[], key: string) {
-    return xs.reduce(function (rv, x) {
-      if (!x[key]) {
-        return rv;
-      }
-      (rv[x[key].value] = rv[x[key].value] || []).push(x);
-      return rv;
-    }, {});
-  }
-
   selectRow(row: Cell<number | string | boolean | Date>, event: MouseEvent) {
     if (!row) { return; }
     if (this.rowSelectionService.selection.isMultipleSelection()) {
@@ -120,8 +102,8 @@ export class GridComponent implements OnInit, OnDestroy {
 
   onContextMenu(event: MouseEvent, item: any) {
     event.preventDefault();
-    this.contextMenuPosition.$x.next(event.clientX + 'px');
-    this.contextMenuPosition.$y.next(event.clientY + 'px');
+    this.contextMenuPosition.x = event.clientX + 'px';
+    this.contextMenuPosition.y = event.clientY + 'px';
     this.contextMenu.menuData = { item: item };
     this.contextMenu.openMenu();
   }
@@ -145,35 +127,29 @@ export class GridComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((result: { hiddenColumns: ColumnConfig[], displayedColumns: ColumnConfig[] }) => {
-        result.hiddenColumns.forEach(hiddenColumnConfig => {
-          for (const level in this.$gridMetaData.value.$columnsMap.value) {
-            if (this.$gridMetaData.value.$columnsMap.value.hasOwnProperty(level)) {
-              const columnsDictionary = this.$gridMetaData.value.$columnsMap.value[level];
-              for (const columnSystemname in columnsDictionary) {
-                if (columnsDictionary.hasOwnProperty(columnSystemname)) {
-                  const columnConfig = columnsDictionary[columnSystemname];
-                  this.recursivellyChangeVisivility(columnConfig, hiddenColumnConfig, false, columnConfig);
-                }
-              }
-            }
-          }
-        });
-        result.displayedColumns.forEach(displayedColumnConfig => {
-          for (const level in this.$gridMetaData.value.$columnsMap.value) {
-            if (this.$gridMetaData.value.$columnsMap.value.hasOwnProperty(level)) {
-              const columnsDictionary = this.$gridMetaData.value.$columnsMap.value[level];
-              for (const columnSystemname in columnsDictionary) {
-                if (columnsDictionary.hasOwnProperty(columnSystemname)) {
-                  const columnConfig = columnsDictionary[columnSystemname];
-                  this.recursivellyChangeVisivility(columnConfig, displayedColumnConfig, true, columnConfig);
-                }
-              }
-            }
-          }
-        });
+        if(!result) { return; }
+        this.changeVisibility(result.hiddenColumns, false);
+        this.changeVisibility(result.displayedColumns, true);
         this.$gridMetaData.next(new GridMetaData(this.$gridMetaData.value.id, this.$gridMetaData.value.$columnsMap.value));
         // this.cssInjectorService.generateDynamicCssClasses(this.id, this.$gridMetaData.value.$columnsMap.value);
       });
+  }
+
+  private changeVisibility(columns: ColumnConfig[], isVisible){
+    if(!columns) { return; }
+    columns.forEach(interableColumnConfig => {
+      for (const level in this.$gridMetaData.value.$columnsMap.value) {
+        if (this.$gridMetaData.value.$columnsMap.value.hasOwnProperty(level)) {
+          const columnsDictionary = this.$gridMetaData.value.$columnsMap.value[level];
+          for (const columnSystemname in columnsDictionary) {
+            if (columnsDictionary.hasOwnProperty(columnSystemname)) {
+              const columnConfig = columnsDictionary[columnSystemname];
+              this.recursivellyChangeVisivility(columnConfig, interableColumnConfig, isVisible, columnConfig);
+            }
+          }
+        }
+      }
+    });
   }
 
   private recursivellyChangeVisivility(iteratorColumnConfig: ColumnConfig, displayedColumnConfig: ColumnConfig,

@@ -25,6 +25,7 @@ export class GridMetaData {
      * @param rowsConfig CSS конфиг ячейки данных
      */
     constructor(public id: string, columnsMap: DictionaryNumber<DictionaryString<ColumnConfig>>) {
+        console.log("INIT GRID METADATA")
         this.$columnsMap = new BehaviorSubject<DictionaryNumber<DictionaryString<ColumnConfig>>>(columnsMap);
         this.setDisplayedColumns(columnsMap);
     }
