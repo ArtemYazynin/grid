@@ -68,6 +68,11 @@ export class ColumnsConfigComponent implements OnInit {
 
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
+      const columnsConfigs = event.container.data as unknown as ColumnConfig[];
+      const previousOrder = columnsConfigs[event.previousIndex].$order.value;
+      const currentOrder = columnsConfigs[event.currentIndex].$order.value
+      columnsConfigs[event.previousIndex].$order.next(currentOrder);
+      columnsConfigs[event.currentIndex].$order.next(previousOrder);
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       transferArrayItem(event.previousContainer.data,
@@ -75,5 +80,6 @@ export class ColumnsConfigComponent implements OnInit {
         event.previousIndex,
         event.currentIndex);
     }
+    
   }
 }

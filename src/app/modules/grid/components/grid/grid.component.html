@@ -2,8 +2,8 @@
   <table mat-table matSort [dataSource]="dataSource">
     <ng-container *ngIf="$gridMetaData | async as gridMetaData">
       <ng-container *ngIf="gridMetaData.$columnsMap | async as columnsMap">
-        <ng-container *ngFor="let levelPair of columnsMap | keyvalue">
-          <ng-container *ngFor="let pair of levelPair.value | keyvalue">
+        <ng-container *ngFor="let levelPair of columnsMap | keyvalue; trackBy: trackByFunction;">
+          <ng-container *ngFor="let pair of levelPair.value | keyvalue; trackBy: trackByFunction;">
             
             <ng-container matColumnDef="{{pair.key}}" [sticky]="pair.value.$isSticky | async"
               [stickyEnd]="pair.value.$isStickyEnd | async" *ngIf="pair.value.$width | async as width">
@@ -44,7 +44,7 @@
         </ng-container>
 
         <ng-container *ngIf="gridMetaData.$displayedColumnsDictionary | async as displayedColumnsDictionary">
-          <ng-container *ngFor="let pair of displayedColumnsDictionary | keyvalue">
+          <ng-container *ngFor="let pair of displayedColumnsDictionary | keyvalue; trackBy: trackByFunction;">
             <tr mat-header-row *matHeaderRowDef="pair.value; sticky: true"></tr>
           </ng-container>
           <ng-container *ngIf="gridMetaData.$displayedColumns | async as displayedColumns">

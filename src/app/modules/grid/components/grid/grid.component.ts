@@ -16,6 +16,7 @@ import { ColumnsConfigComponent } from '../columns-selector/columns-selector.com
 import { ColumnConfig } from './../../models/column-config.model';
 import { Unar } from '../../models/unar.enum';
 import { debug } from 'util';
+import { GridService } from '../../services/grid/grid.service';
 
 @Component({
   selector: 'app-grid',
@@ -44,7 +45,7 @@ export class GridComponent implements OnInit, OnDestroy {
   private id: string;
 
   constructor(private cssInjectorService: CssInjectorService, public rowSelectionService: RowSelectionService,
-    private dialog: MatDialog) {
+    private dialog: MatDialog, private gridService: GridService) {
   }
 
   ngOnInit() {
@@ -112,6 +113,11 @@ export class GridComponent implements OnInit, OnDestroy {
     this.openDialog();
   }
 
+  trackByFunction(index, item) {
+    if (!item) { return null; }
+    return index;
+  }
+
   private openDialog(): void {
     const dialogRef = this.dialog.open(ColumnsConfigComponent, {
       width: '500px',
@@ -126,73 +132,11 @@ export class GridComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((result: { hiddenColumns: ColumnConfig[], displayedColumns: ColumnConfig[] }) => {
-        if(!result) { return; }
-        this.changeVisibility(result.hiddenColumns, false);
-        this.changeVisibility(result.displayedColumns, true);
+        if (!result) { return; }
+        this.gridService.changeVisibility(this.$gridMetaData.value, result.hiddenColumns, false);
+        this.gridService.changeVisibility(this.$gridMetaData.value, result.displayedColumns, true);
+        this.gridService.sortColumns(this.$gridMetaData.value);
         this.$gridMetaData.next(new GridMetaData(this.$gridMetaData.value.id, this.$gridMetaData.value.$columnsMap.value));
-        // this.cssInjectorService.generateDynamicCssClasses(this.id, this.$gridMetaData.value.$columnsMap.value);
       });
-  }
-
-  private changeVisibility(columns: ColumnConfig[], isVisible){
-    if(!columns) { return; }
-    columns.forEach(interableColumnConfig => {
-      for (const level in this.$gridMetaData.value.$columnsMap.value) {
-        if (this.$gridMetaData.value.$columnsMap.value.hasOwnProperty(level)) {
-          const columnsDictionary = this.$gridMetaData.value.$columnsMap.value[level];
-          for (const columnSystemname in columnsDictionary) {
-            if (columnsDictionary.hasOwnProperty(columnSystemname)) {
-              const columnConfig = columnsDictionary[columnSystemname];
-              this.recursivellyChangeVisivility(columnConfig, interableColumnConfig, isVisible, columnConfig);
-            }
-          }
-        }
-      }
-    });
-  }
-
-  private recursivellyChangeVisivility(iteratorColumnConfig: ColumnConfig, displayedColumnConfig: ColumnConfig,
-    makeVisible: boolean, parentColumnConfig: ColumnConfig) {
-    if (iteratorColumnConfig.systemname === displayedColumnConfig.systemname && iteratorColumnConfig.$isVisible.value !== makeVisible) {
-      iteratorColumnConfig.$isVisible.next(makeVisible);
-      // iteratorColumnConfig.$isSticky.next(parentColumnConfig.$isSticky.value);
-      return true;
-    }
-    if (!iteratorColumnConfig.$children) { return; }
-    iteratorColumnConfig.$children.value.forEach(childColumnConfig => {
-      const visibilityChanged = this.recursivellyChangeVisivility(childColumnConfig, displayedColumnConfig,
-        makeVisible, parentColumnConfig);
-      if (visibilityChanged) {
-        const unar = makeVisible ? Unar.Increment : Unar.Decrement;
-        switch (unar) {
-          case Unar.Increment:
-            iteratorColumnConfig.$colspan.next(iteratorColumnConfig.$colspan.value + 1);
-            if (iteratorColumnConfig.$colspan.value > 0 && !iteratorColumnConfig.$isVisible.value) {
-              iteratorColumnConfig.$isVisible.next(true);
-            }
-            if (parentColumnConfig.systemname !== iteratorColumnConfig.systemname) {
-              parentColumnConfig.$colspan.next(parentColumnConfig.$colspan.value + 1);
-              if (parentColumnConfig.$colspan.value > 0) {
-                parentColumnConfig.$isVisible.next(true);
-              }
-            }
-            break;
-          case Unar.Decrement:
-            iteratorColumnConfig.$colspan.next(iteratorColumnConfig.$colspan.value - 1);
-            if (iteratorColumnConfig.$colspan.value === 0) {
-              iteratorColumnConfig.$isVisible.next(false);
-            }
-            if (parentColumnConfig.systemname !== iteratorColumnConfig.systemname) {
-              parentColumnConfig.$colspan.next(parentColumnConfig.$colspan.value - 1);
-              if (parentColumnConfig.$colspan.value === 0) {
-                parentColumnConfig.$isVisible.next(false);
-              }
-            }
-            break;
-          default:
-            break;
-        }
-      }
-    });
   }
 }

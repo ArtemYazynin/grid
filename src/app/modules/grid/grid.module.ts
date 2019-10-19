@@ -23,6 +23,7 @@ import { CssInjectorService } from './services/css-injector.service';
 import { GridMetaDataGeneratorService } from './services/grid-meta-data-generator/grid-meta-data-generator.service';
 import {MatListModule} from '@angular/material/list';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import { GridService } from './services/grid/grid.service';
 @NgModule({
   declarations: [
     ColumnsConfigComponent,
@@ -67,7 +68,8 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     DatePipe,
     YesNoPipe,
     CssInjectorService,
-    GridMetaDataGeneratorService
+    GridMetaDataGeneratorService,
+    GridService
   ]
 })
 export class GridModule { }
