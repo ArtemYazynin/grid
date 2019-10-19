@@ -1,4 +1,4 @@
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ColumnConfig } from '../../models/column-config.model';
@@ -67,19 +67,29 @@ export class ColumnsConfigComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      const columnsConfigs = event.container.data as unknown as ColumnConfig[];
-      const previousOrder = columnsConfigs[event.previousIndex].$order.value;
-      const currentOrder = columnsConfigs[event.currentIndex].$order.value
-      columnsConfigs[event.previousIndex].$order.next(currentOrder);
-      columnsConfigs[event.currentIndex].$order.next(previousOrder);
+    const dragListSafed = event.previousContainer === event.container; // событие внутри листа, без добавления/удаления
+    const columnsConfigs = event.container.data as unknown as ColumnConfig[];
+    if (dragListSafed) {
+      this.sort(columnsConfigs, event.previousIndex, event.currentIndex);
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       transferArrayItem(event.previousContainer.data,
         event.container.data,
         event.previousIndex,
         event.currentIndex);
+      const previousIndex = event.currentIndex - 1;
+      if (!columnsConfigs[previousIndex] || !columnsConfigs[event.currentIndex]) {
+        return;
+      }
+
+      this.sort(columnsConfigs, previousIndex, event.currentIndex);
     }
-    
+  }
+
+  private sort(columnsConfigs: ColumnConfig[], previousIndex: number, currentIndex: number) {
+    const previousOrder = columnsConfigs[previousIndex].$order.value;
+    const currentOrder = columnsConfigs[currentIndex].$order.value
+    columnsConfigs[previousIndex].$order.next(currentOrder);
+    columnsConfigs[currentIndex].$order.next(previousOrder);
   }
 }
