@@ -82,7 +82,7 @@ export class GridMetaDataGeneratorService {
         new Cell(2.222, new CellMetaData(redBackGround)),
         new Cell(2.2222, new CellMetaData(redBackGround)),
         new Cell('summary2', new CellMetaData(redBackGround)),
-        
+
         new Cell(false, new CellMetaData(redBackGround)),
         new Cell('some string', new CellMetaData(undefined, { valueType: CellValueType.String }))),
       new Indicator(new Cell('Меро3'),
@@ -101,7 +101,7 @@ export class GridMetaDataGeneratorService {
         new Cell(3.333),
         new Cell(3.3333),
         new Cell('summary3'),
-        
+
         new Cell(true),
         new Cell(new Date(), new CellMetaData(undefined, { valueType: CellValueType.DateTime }))),
       new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
@@ -120,7 +120,7 @@ export class GridMetaDataGeneratorService {
         new Cell(4.444, new CellMetaData(grayBackground)),
         new Cell(4.4444, new CellMetaData(grayBackground)),
         new Cell('summary4', new CellMetaData(grayBackground)),
-        
+
         new Cell(false, new CellMetaData(grayBackground)),
         new Cell('some boolean', new CellMetaData(undefined, { valueType: CellValueType.Boolean }))),
     ];
@@ -163,7 +163,7 @@ export class GridMetaDataGeneratorService {
           res.type6_deviation_band = new ColumnConfig(undefined, [
             bandLevel2.type6_val,
             bandLevel2.type6_persent,
-          ], false, true, 'type6_deviation_band', 'Отклонение', 200, undefined, 2);
+          ], false, true, 'type6_deviation_band', 'Отклонение', undefined, undefined, 2);
         })();
         (() => {
           res.type7_plan = new ColumnConfig('type7_plan', [], false, true,
@@ -173,7 +173,7 @@ export class GridMetaDataGeneratorService {
           res.type7_deviation_band = new ColumnConfig(undefined, [
             bandLevel2.type7_val,
             bandLevel2.type7_persent
-          ], false, true, 'type7_deviation_band', 'Отклонение', 200, undefined, 2);
+          ], false, true, 'type7_deviation_band', 'Отклонение', undefined, undefined, 2);
         })();
         (() => {
           res.type8_plan = new ColumnConfig('type8_plan', [], false, true,
@@ -183,7 +183,7 @@ export class GridMetaDataGeneratorService {
           res.type8_deviation_band = new ColumnConfig(undefined, [
             bandLevel2.type8_val,
             bandLevel2.type8_persent
-          ], false, true, 'type8_deviation_band', 'Отклонение', 200, undefined, 2);
+          ], false, true, 'type8_deviation_band', 'Отклонение', undefined, undefined, 2);
         })();
         return res;
       })();
@@ -191,29 +191,28 @@ export class GridMetaDataGeneratorService {
         const res = new DictionaryString<ColumnConfig>();
         res.activity = new ColumnConfig(undefined,
           [bandLevel1.friendlyname, bandLevel1.dzo, bandLevel1.created],
-          true, true, 'activity', 'Мероприятие', 200, undefined, 3, 1, 1, false, undefined, false);
+          true, true, 'activity', 'Мероприятие', undefined, undefined, 3, 1, 1, false, undefined, false);
         res.type6 = new ColumnConfig(undefined, [
           bandLevel1.type6_plan,
           bandLevel1.type6_fact,
           bandLevel1.type6_deviation_band
-        ], false, true, 'type6', 'Типовой 6', 500, undefined, 4);
+        ], false, true, 'type6', 'Типовой 6', undefined, undefined, 4);
         res.type7 = new ColumnConfig(undefined, [
           bandLevel1.type7_plan,
           bandLevel1.type7_fact,
           bandLevel1.type7_deviation_band
-        ], false, true, 'type7', 'Типовой 7', 500, undefined, 4);
+        ], false, true, 'type7', 'Типовой 7', undefined, undefined, 4);
         res.type8 = new ColumnConfig(undefined, [
           bandLevel1.type8_plan,
           bandLevel1.type8_fact,
           bandLevel1.type8_deviation_band
-        ], false, true, 'type8', 'Типовой 8', 500, undefined, 4);
+        ], false, true, 'type8', 'Типовой 8', undefined, undefined, 4);
         res.summary = new ColumnConfig('summary', [], false, true, 'summary',
-          'Сводка 8', 100, undefined, 1, 3, 15, false, undefined, false, true);
+          'Сводка 8', 100, undefined, 1, 3, 15, true, undefined, false, true);
         res.isDeleted = new ColumnConfig('isDeleted', [], false, true, 'isDeleted',
-          'Удален', 100, undefined, 1, 3, 16, false, CellValueType.Boolean, true, true);
-          
+          'Удален', 100, undefined, 1, 3, 16, true, CellValueType.Boolean, true, true);
         res.customEdit = new ColumnConfig('customEdit', [], false, true, 'customEdit',
-          'Различное редактирование ячейки', 200, undefined, 1, 3, 17, false, CellValueType.Boolean, true, true);
+          'Различное редактирование ячейки', 200, undefined, 1, 3, 17, true, CellValueType.Boolean, true, true);
         return res;
       })();
       result[0] = bandLevel0;

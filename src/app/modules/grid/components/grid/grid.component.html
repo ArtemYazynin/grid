@@ -6,10 +6,10 @@
           <ng-container *ngFor="let pair of levelPair.value | keyvalue; trackBy: trackByFunction;">
             
             <ng-container matColumnDef="{{pair.key}}" [sticky]="pair.value.$isSticky | async"
-              [stickyEnd]="pair.value.$isStickyEnd | async" *ngIf="pair.value.$width | async as width">
+              [stickyEnd]="pair.value.$isStickyEnd | async">
               <ng-container *ngIf="pair.value.isSortable;else notSorting">
                 
-                <th mat-header-cell *matHeaderCellDef [id]="levelPair.key" mat-sort-header
+                <th mat-header-cell *matHeaderCellDef [id]="pair.value.$order | async" mat-sort-header
                   [attr.colspan]="pair.value.$colspan | async" 
                   [attr.rowspan]="pair.value.$rowspan | async"
                   [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'"
@@ -20,7 +20,7 @@
                 </th>
               </ng-container>
               <ng-template #notSorting>
-                <th mat-header-cell *matHeaderCellDef [id]="levelPair.key" 
+                <th mat-header-cell *matHeaderCellDef [id]="pair.value.$order | async" 
                   [attr.colspan]="pair.value.$colspan | async"
                   [attr.rowspan]="pair.value.$rowspan | async"
                   [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'"
