@@ -133,17 +133,17 @@ export class GridMetaDataGeneratorService {
       const bandLevel2 = (() => {
         const res = new DictionaryString<ColumnConfig>();
         res.type6_val = new ColumnConfig('type6_val', [], false, true, 'type6_val', 'м3/ч',
-          100, undefined, undefined, undefined, 5, false, CellValueType.Double, true, true);
+          100, undefined, undefined, undefined, 6, false, CellValueType.Double, true, true);
         res.type6_persent = new ColumnConfig('type6_persent', [], false, true, 'type6_persent',
-          '%', 100, undefined, undefined, undefined, 6, false, CellValueType.Double, true, true);
+          '%', 100, undefined, undefined, undefined, 7, false, CellValueType.Double, true, true);
         res.type7_val = new ColumnConfig('type7_val', [], false, true, 'type7_val', 'м3/ч',
-          100, undefined, undefined, undefined, 9, false, CellValueType.Double, true, true);
+          100, undefined, undefined, undefined, 10, false, CellValueType.Double, true, true);
         res.type7_persent = new ColumnConfig('type7_persent', [], false, true, 'type7_persent',
-          '%', 100, undefined, undefined, undefined, 10, false, CellValueType.Double, true, true);
+          '%', 100, undefined, undefined, undefined, 11, false, CellValueType.Double, true, true);
         res.type8_val = new ColumnConfig('type8_val', [], false, true, 'type8_val',
-          'м3/ч', 100, undefined, undefined, undefined, 13, false, CellValueType.Double, true, true);
+          'м3/ч', 100, undefined, undefined, undefined, 14, false, CellValueType.Double, true, true);
         res.type8_persent = new ColumnConfig('type8_persent', [], false, true, 'type8_persent',
-          '%', 100, undefined, undefined, undefined, 14, false, CellValueType.Double, true, true);
+          '%', 100, undefined, undefined, undefined, 15, false, CellValueType.Double, true, true);
         return res;
       })();
 
@@ -152,14 +152,14 @@ export class GridMetaDataGeneratorService {
         res.created = new ColumnConfig('created', [], true, true, 'created', 'Дата создания', 100,
           undefined, undefined, 2, 1, false, CellValueType.DateTime, true, true);
         res.friendlyname = new ColumnConfig('friendlyname', [], true, true, 'friendlyname', 'Наименование', 100,
-          undefined, undefined, 2, 1, false, CellValueType.String, true, true);
-        res.dzo = new ColumnConfig('dzo', [], true, true, 'dzo', 'ДЗО', 100,
           undefined, undefined, 2, 2, false, CellValueType.String, true, true);
+        res.dzo = new ColumnConfig('dzo', [], true, true, 'dzo', 'ДЗО', 100,
+          undefined, undefined, 2, 3, false, CellValueType.String, true, true);
         (() => {
           res.type6_plan = new ColumnConfig('type6_plan', [], false, true,
-            'type6_plan', 'План', 100, undefined, undefined, 2, 3, false, undefined, false, true);
+            'type6_plan', 'План', 100, undefined, undefined, 2, 4, false, undefined, false, true);
           res.type6_fact = new ColumnConfig('type6_fact', [], false, true,
-            'type6_fact', 'Факт', 100, undefined, undefined, 2, 4, false, undefined, false, true);
+            'type6_fact', 'Факт', 100, undefined, undefined, 2, 5, false, undefined, false, true);
           res.type6_deviation_band = new ColumnConfig(undefined, [
             bandLevel2.type6_val,
             bandLevel2.type6_persent,
@@ -167,9 +167,9 @@ export class GridMetaDataGeneratorService {
         })();
         (() => {
           res.type7_plan = new ColumnConfig('type7_plan', [], false, true,
-            'type7_plan', 'План', 100, undefined, undefined, 2, 7, false, undefined, false, true);
+            'type7_plan', 'План', 100, undefined, undefined, 2, 8, false, undefined, false, true);
           res.type7_fact = new ColumnConfig('type7_fact', [], false, true,
-            'type7_fact', 'Факт', 100, undefined, undefined, 2, 8, false, undefined, false, true);
+            'type7_fact', 'Факт', 100, undefined, undefined, 2, 9, false, undefined, false, true);
           res.type7_deviation_band = new ColumnConfig(undefined, [
             bandLevel2.type7_val,
             bandLevel2.type7_persent
@@ -177,9 +177,9 @@ export class GridMetaDataGeneratorService {
         })();
         (() => {
           res.type8_plan = new ColumnConfig('type8_plan', [], false, true,
-            'type8_plan', 'План', 100, undefined, undefined, 2, 11, false, undefined, false, true);
+            'type8_plan', 'План', 100, undefined, undefined, 2, 12, false, undefined, false, true);
           res.type8_fact = new ColumnConfig('type8_fact', [], false, true,
-            'type8_fact', 'Факт', 100, undefined, undefined, 2, 12, false, undefined, false, true);
+            'type8_fact', 'Факт', 100, undefined, undefined, 2, 13, false, undefined, false, true);
           res.type8_deviation_band = new ColumnConfig(undefined, [
             bandLevel2.type8_val,
             bandLevel2.type8_persent
@@ -191,7 +191,7 @@ export class GridMetaDataGeneratorService {
         const res = new DictionaryString<ColumnConfig>();
         res.activity = new ColumnConfig(undefined,
           [bandLevel1.friendlyname, bandLevel1.dzo, bandLevel1.created],
-          true, true, 'activity', 'Мероприятие', undefined, undefined, 3, 1, 1, false, undefined, false);
+          true, true, 'activity', 'Мероприятие', undefined, undefined, 3, 1, 999, false, undefined, false);
         res.type6 = new ColumnConfig(undefined, [
           bandLevel1.type6_plan,
           bandLevel1.type6_fact,
@@ -208,11 +208,11 @@ export class GridMetaDataGeneratorService {
           bandLevel1.type8_deviation_band
         ], false, true, 'type8', 'Типовой 8', undefined, undefined, 4);
         res.summary = new ColumnConfig('summary', [], false, true, 'summary',
-          'Сводка 8', 100, undefined, 1, 3, 15, true, undefined, false, true);
+          'Сводка 8', 100, undefined, 1, 3, 16, false, undefined, false, true);
         res.isDeleted = new ColumnConfig('isDeleted', [], false, true, 'isDeleted',
-          'Удален', 100, undefined, 1, 3, 16, true, CellValueType.Boolean, true, true);
+          'Удален', 100, undefined, 1, 3, 17, false, CellValueType.Boolean, true, true);
         res.customEdit = new ColumnConfig('customEdit', [], false, true, 'customEdit',
-          'Различное редактирование ячейки', 200, undefined, 1, 3, 17, true, CellValueType.Boolean, true, true);
+          'Различное редактирование ячейки', 200, undefined, 1, 3, 18, false, CellValueType.Boolean, true, true);
         return res;
       })();
       result[0] = bandLevel0;
