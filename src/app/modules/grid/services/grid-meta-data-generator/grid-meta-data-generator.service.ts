@@ -390,11 +390,11 @@ export class GridMetaDataGeneratorService {
           bandLevel1.type8_deviation_band
         ], false, true, 'type8', 'Типовой 8', undefined, undefined, 3);
         res.summary = new ColumnConfig('summary', [], false, true, 'summary',
-          'Сводка 8', 100, undefined, 1, 3, 16, true, undefined, false, true);
+          'Сводка 8', 100, undefined, 1, 3, 16, false, undefined, false, true);
         res.isDeleted = new ColumnConfig('isDeleted', [], false, true, 'isDeleted',
-          'Удален', 200, undefined, 1, 3, 17, true, CellValueType.Boolean, true, true);
+          'Удален', 200, undefined, 1, 3, 17, false, CellValueType.Boolean, true, true);
         res.customEdit = new ColumnConfig('customEdit', [], false, true, 'customEdit',
-          'Различное редактирование ячейки', 200, undefined, 1, 3, 18, true, CellValueType.Boolean, true, true);
+          'Различное редактирование ячейки', 200, undefined, 1, 3, 18, false, CellValueType.Boolean, true, true);
         return res;
       })();
       result[0] = bandLevel0;

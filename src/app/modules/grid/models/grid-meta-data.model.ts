@@ -96,15 +96,27 @@ export class GridMetaData {
         return result;
     }
 
+    getStickyEndColumnsCount() {
+        let result = 0;
+        const incrementStickyColumnsCount = (level: number, columnConfig: ColumnConfig) => {
+            if (columnConfig.$isVisible.value && columnConfig.dataField && columnConfig.$isStickyEnd.value) {
+                result++;
+            }
+        };
+        this.crawl(this.$columnsMap.value, incrementStickyColumnsCount);
+        return result;
+    }
+
     getNotStickyColumnsCount() {
         let result = 0;
         this.crawl(this.$columnsMap.value, (level: number, columnConfig: ColumnConfig) => {
-            if (columnConfig.$isVisible.value && columnConfig.dataField && !columnConfig.$isSticky.value) {
+            if (columnConfig.$isVisible.value && columnConfig.dataField && !columnConfig.$isSticky.value && !columnConfig.$isStickyEnd.value) {
                 result++;
             }
         });
         return result;
     }
+
 
     /**
      * выполняет обход метаданных колонок всех уровней и выполняет функцию параметр

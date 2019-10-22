@@ -25,8 +25,17 @@ export class GridFootersMetaData {
         footers.forEach(footer => {
             if (footer.systemname !== this.techCellName) {
                 const colspan = (() => {
-                    const stickyColumnsCount = gridMetaData.getStickyColumnsCount();
-                    return stickyColumnsCount === 0 ? gridMetaData.$displayedColumns.value.length : stickyColumnsCount;
+                    const stickyColumnsCount = gridMetaData.getStickyColumnsCount()
+                    const stickyEndColumnsCount = gridMetaData.getStickyEndColumnsCount();
+                    const noStickyColumnsCount = gridMetaData.getNotStickyColumnsCount();
+                    if (stickyEndColumnsCount === 0) {
+                        if (stickyColumnsCount === 0) {
+                            return noStickyColumnsCount/2;
+                        }
+                        return noStickyColumnsCount;
+                    }else{
+                        return stickyColumnsCount + noStickyColumnsCount;
+                    }
                 })();
                 footer.$colspan.next(colspan);
             }
@@ -50,8 +59,15 @@ export class GridFootersMetaData {
         if (!footers || !gridMetaData) { return; }
         const technicalFooter = footers.find(x => x.systemname === this.techCellName);
         const colspan = (() => {
-            const notStickyColumnsCount = gridMetaData.getNotStickyColumnsCount();
-            return notStickyColumnsCount === gridMetaData.$displayedColumns.value.length ? 0 : notStickyColumnsCount;
+            const stickyColumnsCount = gridMetaData.getStickyColumnsCount()
+            if (stickyColumnsCount === 0) {
+                const stickyEndColumnsCount = gridMetaData.getStickyEndColumnsCount();
+                if (stickyEndColumnsCount === 0) {
+                    return gridMetaData.getNotStickyColumnsCount()/2;
+                }
+                return stickyEndColumnsCount;
+            }
+            return stickyColumnsCount;
         })();
         if (technicalFooter) {
             this.updateTechnicalFooterColspan(technicalFooter, footers, colspan);
@@ -72,5 +88,6 @@ export class GridFootersMetaData {
 
     private createTechnicalFooter(footers: FooterRow[], colspan: number) {
         if (!footers || !colspan) { return; }
-        footers.push(new FooterRow(this.techCellName, '', colspan));    }
+        footers.push(new FooterRow(this.techCellName, '', colspan));
+    }
 }
