@@ -1,36 +1,32 @@
-.example-container
-    width: 80%
-    overflow: auto
-    // height: 500px
-.mat-table
-    min-width: max-content
-    height: 100%
-.mat-header-row
+#new-grid .mat-header-row
     border-bottom-width: 0px
     height: 40px
     min-height: 40px
     max-height: 40px
 
-.mat-header-cell
+#new-grid .mat-header-cell
     border-bottom: unset
     word-break: break-all
     color: rgb(230, 230, 233)
 
-.mat-header-cell:first-of-type
+#new-grid .mat-header-cell:first-of-type
     padding-left: 0px
 
-.mat-header-cell:last-of-type
+#new-grid .mat-header-cell:last-of-type
     padding-right: 0px
 
-.mat-row
+#new-grid .mat-row
     height: 40px
     max-height: 40px
     min-height: 40px
     box-sizing: border-box
-.mat-row:not(.group-row):hover>td
-    background: #F6FAFF
+#new-grid .mat-row:not(.group-row):hover>td
+    background: #F6FAFF 
 
-.mat-cell
+#new-grid .mat-cell
+    height: 40px
+    max-height: 40px
+    min-height: 40px
     background-color: white
     color: #565667
     border-bottom-width: 0.5px
@@ -40,12 +36,12 @@
     border-top-style: solid
     border-top-color: #E6E6E9
 
-.mat-cell:first-of-type
+#new-grid .mat-cell:first-of-type
     padding-left: 0px
-.mat-cell:last-of-type
+#new-grid .mat-cell:last-of-type
     padding-right: 0px
 
-.mat-column-groupHeader
+#new-grid .mat-column-groupHeader
     border-top-width: 0px
     border-bottom-width: 0px
     border-right: unset
@@ -56,5 +52,15 @@
     line-height: 15px
 
     /////S
-.selected > td
+#new-grid .selected > td
     background: #D6EAFF !important
+
+#new-grid .light-green
+    background: lightgreen
+#new-grid .selected .light-green
+    background: transparent
+#new-grid .mat-row:hover .light-green
+    background: transparent
+
+#new-grid .max-min-cell
+    background: linear-gradient(to left, white, red)

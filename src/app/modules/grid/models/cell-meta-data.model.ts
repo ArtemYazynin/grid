@@ -7,7 +7,7 @@ import { DictionaryString } from './dictionary.model';
  * @class CellMetaData
  */
 export class CellMetaData {
-    constructor(public css?: DictionaryString<string>, public other?: DictionaryString<string>) {
+    constructor(public css?: DictionaryString<string>, public other?: DictionaryString<string>, public classes?: string) {
 
     }
 }

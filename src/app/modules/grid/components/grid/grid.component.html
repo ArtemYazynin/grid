@@ -1,72 +1,69 @@
-<div class="example-container">
-  <table mat-table matSort [dataSource]="dataSource">
-    <ng-container *ngIf="$gridMetaData | async as gridMetaData">
-      <ng-container *ngIf="gridMetaData.$columnsMap | async as columnsMap">
-        <ng-container *ngFor="let levelPair of columnsMap | keyvalue; trackBy: trackByFunction;">
-          <ng-container *ngFor="let pair of levelPair.value | keyvalue; trackBy: trackByFunction;">
-            
-            <ng-container matColumnDef="{{pair.key}}" [sticky]="pair.value.$isSticky | async"
-              [stickyEnd]="pair.value.$isStickyEnd | async">
-              <ng-container *ngIf="pair.value.isSortable;else notSorting">
-                
-                <th mat-header-cell *matHeaderCellDef [id]="pair.value.$order | async" mat-sort-header
-                  [attr.colspan]="pair.value.$colspan | async" 
-                  [attr.rowspan]="pair.value.$rowspan | async"
-                  [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'"
-                  (contextmenu)="onContextMenu($event, item)">
-                  <div>
-                    {{pair.value.friendlyname}}
-                  </div>
-                </th>
+<table mat-table matSort [dataSource]="dataSource" id="new-grid">
+  <ng-container *ngIf="$gridMetaData | async as gridMetaData">
+    <ng-container *ngIf="gridMetaData.$columnsMap | async as columnsMap">
+      <ng-container *ngFor="let levelPair of columnsMap | keyvalue; trackBy: trackByFunction;">
+        <ng-container *ngFor="let pair of levelPair.value | keyvalue; trackBy: trackByFunction;">
+
+          <ng-container matColumnDef="{{pair.key}}" [sticky]="pair.value.$isSticky | async"
+            [stickyEnd]="pair.value.$isStickyEnd | async">
+            <ng-container *ngIf="pair.value.isSortable;else notSorting">
+
+              <th mat-header-cell *matHeaderCellDef [id]="pair.value.$order | async" mat-sort-header
+                [attr.colspan]="pair.value.$colspan | async" [attr.rowspan]="pair.value.$rowspan | async"
+                [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'"
+                (contextmenu)="onContextMenu($event, item)">
+                <div fxFlex fxLayout="column" fxLayoutAlign="center stretch" style="text-align: center;">
+                  {{pair.value.friendlyname}}
+                </div>
+              </th>
+            </ng-container>
+            <ng-template #notSorting>
+              <th mat-header-cell *matHeaderCellDef [id]="pair.value.$order | async"
+                [attr.colspan]="pair.value.$colspan | async" [attr.rowspan]="pair.value.$rowspan | async"
+                [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'"
+                (contextmenu)="onContextMenu($event, item)">
+                <div fxFlex fxLayout="column" fxLayoutAlign="center stretch" style="text-align: center;">
+                  {{pair.value.friendlyname}}
+                </div>
+              </th>
+
+            </ng-template>
+            <td mat-cell *matCellDef="let el">
+              <ng-container>
+                <div fxLayout="column" fxLayoutAlign="stretch stretch" fxFill [ngStyle]="el[pair.key]?.metaData?.css" [ngClass]="el[pair.key]?.metaData?.classes">
+                  <app-default-cell fxFlex [row]="el" [pair]="pair" (updateCell)="gridMetaData?.updateCell($event)">
+                  </app-default-cell>
+                </div>
               </ng-container>
-              <ng-template #notSorting>
-                <th mat-header-cell *matHeaderCellDef [id]="pair.value.$order | async" 
-                  [attr.colspan]="pair.value.$colspan | async"
-                  [attr.rowspan]="pair.value.$rowspan | async"
-                  [style.display]="(pair.value.$isVisible | async) ? 'table-cell' : 'none'"
-                  (contextmenu)="onContextMenu($event, item)">
-                  <div>
-                    {{pair.value.friendlyname}}
-                  </div>
-                </th>
-
-              </ng-template>
-              <td mat-cell *matCellDef="let el" >
-                <ng-container>
-                  <div fxLayout="column" fxLayoutAlign="stretch stretch" fxFill [ngStyle]="el[pair.key]?.metaData?.css">
-                    <app-default-cell fxFlex [row]="el" [pair]="pair" (updateCell)="gridMetaData?.updateCell($event)">
-                    </app-default-cell>
-                  </div>
-                </ng-container>
-              </td>
-            </ng-container>
-          </ng-container>
-        </ng-container>
-
-        <ng-container *ngIf="gridMetaData.$displayedColumnsDictionary | async as displayedColumnsDictionary">
-          <ng-container *ngFor="let pair of displayedColumnsDictionary | keyvalue; trackBy: trackByFunction;">
-            <tr mat-header-row *matHeaderRowDef="pair.value; sticky: true"></tr>
-          </ng-container>
-          <ng-container *ngIf="gridMetaData.$displayedColumns | async as displayedColumns">
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectRow(row,$event)"
-              [ngClass]="{ 'selected': rowSelectionService.selection.isSelected(row) }"></tr>
-            <!-- Group header -->
-            <ng-container matColumnDef="groupHeader" sticky>
-              <td mat-cell *matCellDef="let groupRow"><strong>{{groupRow.groupName}}</strong></td>
-            </ng-container>
-            <tr class="group-row" (click)="expandOrCollapse(row)" mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup;">
-            </tr>
+            </td>
           </ng-container>
         </ng-container>
       </ng-container>
+
+      <ng-container *ngIf="gridMetaData.$displayedColumnsDictionary | async as displayedColumnsDictionary">
+        <ng-container *ngFor="let pair of displayedColumnsDictionary | keyvalue; trackBy: trackByFunction;">
+          <tr mat-header-row *matHeaderRowDef="pair.value; sticky: true"></tr>
+        </ng-container>
+        <ng-container *ngIf="gridMetaData.$displayedColumns | async as displayedColumns">
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectRow(row,$event)"
+            [ngClass]="{ 'selected': rowSelectionService.selection.isSelected(row) }"></tr>
+          <!-- Group header -->
+          <ng-container matColumnDef="groupHeader" sticky>
+            <td mat-cell *matCellDef="let groupRow"><strong>{{groupRow.groupName}}</strong></td>
+          </ng-container>
+          <tr class="group-row" (click)="expandOrCollapse(row)" mat-row
+            *matRowDef="let row; columns: ['groupHeader']; when: isGroup;">
+          </tr>
+        </ng-container>
+      </ng-container>
     </ng-container>
-  </table>
-  <div style="visibility: hidden; position: fixed" [style.left]="contextMenuPosition.x"
-    [style.top]="contextMenuPosition.y" [matMenuTriggerFor]="contextMenu">
-  </div>
-  <mat-menu #contextMenu="matMenu" >
-    <ng-template matMenuContent>
-      <button mat-menu-item (click)="changeColumns(item)">Настройка колонок</button>
-    </ng-template>
-  </mat-menu>
+  </ng-container>
+</table>
+<div style="visibility: hidden; position: fixed" [style.left]="contextMenuPosition.x"
+  [style.top]="contextMenuPosition.y" [matMenuTriggerFor]="contextMenu">
 </div>
+<mat-menu #contextMenu="matMenu">
+  <ng-template matMenuContent>
+    <button mat-menu-item (click)="changeColumns(item)">Настройка колонок</button>
+  </ng-template>
+</mat-menu>

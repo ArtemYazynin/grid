@@ -1,5 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
-import { CellEditModel } from './cell-edit-model.model';
+import { EditedCell } from './edited-cell.model';
 import { ColumnConfig } from './column-config.model';
 import { DictionaryNumber } from './dictionary-number.model';
 import { DictionaryString } from './dictionary.model';
@@ -16,7 +16,7 @@ export class GridMetaData {
      */
     $displayedColumns: BehaviorSubject<string[]>;
 
-    updateCell: (cell: CellEditModel) => void;
+    updateCell: (cell: EditedCell) => void;
 
     /**
      * 

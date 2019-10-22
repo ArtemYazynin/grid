@@ -49,28 +49,39 @@ export class CssInjectorService {
               const thAlign = (() => {
                 return 'padding-left: 12px !important;';
               })();
+              const width = (() => {
+                switch (typeof columnConfig.$width.value) {
+                  case 'number':
+                    return ` width: ${columnConfig.$width.value}px;
+                             min-width: ${columnConfig.$width.value}px;
+                             max-width: ${columnConfig.$width.value}px;`;
+                  case 'string':
+                    return '';
+                  case 'undefined':
+                    return '';
+                  default:
+                    break;
+                }
+              })();
+
               if (columnWithData) {
 
-                const thClasses = `th.mat-column-${columnConfig.systemname}{
-                  min-width: ${columnConfig.$width.value}px;
-                  max-width: ${columnConfig.$width.value}px;
-                  width: ${columnConfig.$width.value}px;
+                const thClasses = `#new-grid th.mat-column-${columnConfig.systemname}{
+                  ${width}
                   background-color: ${backgroundColor};
                   border-right: 1px solid ${borderRightColor};
                   box-sizing: border-box;
                   ${thAlign}
                 }`;
-                const tdClasses = `td.mat-column-${columnConfig.systemname}{
-                  min-width: ${columnConfig.$width.value}px;
-                  max-width: ${columnConfig.$width.value}px;
-                  width: ${columnConfig.$width.value}px;
+                const tdClasses = `#new-grid td.mat-column-${columnConfig.systemname}{
+                  ${width}
                   border-right: 1px solid #E6E6E9;
                   box-sizing: border-box;
                 }`;
                 classes += thClasses;
                 classes += tdClasses;
               } else {
-                const thClasses = `th.mat-column-${columnConfig.systemname}{
+                const thClasses = `#new-grid th.mat-column-${columnConfig.systemname}{
                   background-color: ${backgroundColor};
                   border-right: 1px solid ${borderRightColor};
                   box-sizing: border-box;

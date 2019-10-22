@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild, ChangeDetectorRef, ViewChildren, QueryList } from '@angular/core';
-import { MatDialog, MatMenuTrigger, MatColumnDef } from '@angular/material';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild, HostBinding } from '@angular/core';
+import { MatDialog, MatMenuTrigger } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { flatMap, takeUntil } from 'rxjs/operators';
@@ -11,12 +11,10 @@ import { GridMetaData } from '../../models/grid-meta-data.model';
 import { GroupRow } from '../../models/group-row.model';
 import { MatTableDataSourceWithCustomSort } from '../../models/mat-table-data-source-with-custom-sort';
 import { CssInjectorService } from '../../services/css-injector.service';
+import { GridService } from '../../services/grid/grid.service';
 import { RowSelectionService } from '../../services/row-selection/row-selection.service';
 import { ColumnsConfigComponent } from '../columns-selector/columns-selector.component';
 import { ColumnConfig } from './../../models/column-config.model';
-import { Unar } from '../../models/unar.enum';
-import { debug } from 'util';
-import { GridService } from '../../services/grid/grid.service';
 
 @Component({
   selector: 'app-grid',
@@ -28,6 +26,8 @@ import { GridService } from '../../services/grid/grid.service';
   ]
 })
 export class GridComponent implements OnInit, OnDestroy {
+  @HostBinding('style.overflow') _overflow = 'auto';
+  @HostBinding('style.width') width = '97vw';
   @Input() $rows: BehaviorSubject<DictionaryString<Cell<string | number | boolean | Date>>[]>;
   @Input() $gridMetaData: BehaviorSubject<GridMetaData>;
   @Input() isMultiple = false;

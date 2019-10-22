@@ -6,7 +6,7 @@ import { ColumnConfig } from './column-config.model';
  * @export
  * @class CellEditModel
  */
-export class CellEditModel {
+export class EditedCell {
     constructor(public row: any, public pair: { key: string, value: ColumnConfig }, public value: string | number | Date) {
 
     }

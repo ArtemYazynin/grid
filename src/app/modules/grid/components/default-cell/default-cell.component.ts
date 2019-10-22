@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ComponentFactory, ComponentFactoryResolver, ComponentRef, EventEmitter, Input, OnDestroy, OnInit, Output, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CellEditModel } from '../../models/cell-edit-model.model';
+import { EditedCell } from '../../models/edited-cell.model';
 import { CellValueType } from '../../models/cell-value-type.enum';
 import { Cell } from '../../models/cell.model';
 import { ColumnConfig } from '../../models/column-config.model';
@@ -16,7 +16,7 @@ import { CellBase } from '../cell-base';
 export class DefaultCellComponent implements OnInit, OnDestroy {
   @Input() row: any;
   @Input() pair: { key: string, value: ColumnConfig };
-  @Output() updateCell = new EventEmitter<CellEditModel>();
+  @Output() updateCell = new EventEmitter<EditedCell>();
   @ViewChild('editComponent', { read: ViewContainerRef }) vcRef;
 
   private $component = new BehaviorSubject<ComponentRef<CellBase>>(undefined);
@@ -73,7 +73,7 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
       e.stopPropagation();
       e.preventDefault();
       if (this.updateCell) {
-        this.updateCell.emit(new CellEditModel(this.row, this.pair, value));
+        this.updateCell.emit(new EditedCell(this.row, this.pair, value));
       }
       this.destroyEditComponent();
     };
