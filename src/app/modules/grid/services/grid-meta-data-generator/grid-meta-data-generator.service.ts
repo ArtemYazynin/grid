@@ -7,6 +7,8 @@ import { DictionaryString } from '../../models/dictionary.model';
 import { DictionaryNumber } from '../../models/dictionary-number.model';
 import { Cell } from '../../models/cell.model';
 import { CellMetaData } from '../../models/cell-meta-data.model';
+import { GridFootersMetaData } from '../../models/grid-footers-meta-data.model';
+import { FooterRow } from '../../models/footer-row.model';
 
 /**
  * Для тестирования модели грида
@@ -113,7 +115,7 @@ export class GridMetaDataGeneratorService {
 
         new Cell(false, new CellMetaData(grayBackground)),
         new Cell('some boolean', new CellMetaData(undefined, { valueType: CellValueType.Boolean }))),
-        new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
+      new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
         new Cell(new Date(2000, 1, 2), new CellMetaData(grayBackground)),
         new Cell('артемовская ТЭЦ', new CellMetaData(grayBackground)),
         new Cell(4.4, new CellMetaData(grayBackground)),
@@ -132,7 +134,7 @@ export class GridMetaDataGeneratorService {
 
         new Cell(false, new CellMetaData(grayBackground)),
         new Cell('some boolean', new CellMetaData(undefined, { valueType: CellValueType.Boolean }))),
-        new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
+      new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
         new Cell(new Date(2000, 1, 2), new CellMetaData(grayBackground)),
         new Cell('артемовская ТЭЦ', new CellMetaData(grayBackground)),
         new Cell(4.4, new CellMetaData(grayBackground)),
@@ -151,7 +153,7 @@ export class GridMetaDataGeneratorService {
 
         new Cell(false, new CellMetaData(grayBackground)),
         new Cell('some boolean', new CellMetaData(undefined, { valueType: CellValueType.Boolean }))),
-        new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
+      new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
         new Cell(new Date(2000, 1, 2), new CellMetaData(grayBackground)),
         new Cell('артемовская ТЭЦ', new CellMetaData(grayBackground)),
         new Cell(4.4, new CellMetaData(grayBackground)),
@@ -170,7 +172,7 @@ export class GridMetaDataGeneratorService {
 
         new Cell(false, new CellMetaData(grayBackground)),
         new Cell('some boolean', new CellMetaData(undefined, { valueType: CellValueType.Boolean }))),
-        new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
+      new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
         new Cell(new Date(2000, 1, 2), new CellMetaData(grayBackground)),
         new Cell('артемовская ТЭЦ', new CellMetaData(grayBackground)),
         new Cell(4.4, new CellMetaData(grayBackground)),
@@ -189,7 +191,7 @@ export class GridMetaDataGeneratorService {
 
         new Cell(false, new CellMetaData(grayBackground)),
         new Cell('some boolean', new CellMetaData(undefined, { valueType: CellValueType.Boolean }))),
-        new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
+      new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
         new Cell(new Date(2000, 1, 2), new CellMetaData(grayBackground)),
         new Cell('артемовская ТЭЦ', new CellMetaData(grayBackground)),
         new Cell(4.4, new CellMetaData(grayBackground)),
@@ -208,7 +210,7 @@ export class GridMetaDataGeneratorService {
 
         new Cell(false, new CellMetaData(grayBackground)),
         new Cell('some boolean', new CellMetaData(undefined, { valueType: CellValueType.Boolean }))),
-        new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
+      new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
         new Cell(new Date(2000, 1, 2), new CellMetaData(grayBackground)),
         new Cell('артемовская ТЭЦ', new CellMetaData(grayBackground)),
         new Cell(4.4, new CellMetaData(grayBackground)),
@@ -227,7 +229,7 @@ export class GridMetaDataGeneratorService {
 
         new Cell(false, new CellMetaData(grayBackground)),
         new Cell('some boolean', new CellMetaData(undefined, { valueType: CellValueType.Boolean }))),
-        new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
+      new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
         new Cell(new Date(2000, 1, 2), new CellMetaData(grayBackground)),
         new Cell('артемовская ТЭЦ', new CellMetaData(grayBackground)),
         new Cell(4.4, new CellMetaData(grayBackground)),
@@ -246,7 +248,7 @@ export class GridMetaDataGeneratorService {
 
         new Cell(false, new CellMetaData(grayBackground)),
         new Cell('some boolean', new CellMetaData(undefined, { valueType: CellValueType.Boolean }))),
-        new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
+      new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
         new Cell(new Date(2000, 1, 2), new CellMetaData(grayBackground)),
         new Cell('артемовская ТЭЦ', new CellMetaData(grayBackground)),
         new Cell(4.4, new CellMetaData(grayBackground)),
@@ -265,7 +267,7 @@ export class GridMetaDataGeneratorService {
 
         new Cell(false, new CellMetaData(grayBackground)),
         new Cell('some boolean', new CellMetaData(undefined, { valueType: CellValueType.Boolean }))),
-        new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
+      new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
         new Cell(new Date(2000, 1, 2), new CellMetaData(grayBackground)),
         new Cell('артемовская ТЭЦ', new CellMetaData(grayBackground)),
         new Cell(4.4, new CellMetaData(grayBackground)),
@@ -284,7 +286,7 @@ export class GridMetaDataGeneratorService {
 
         new Cell(false, new CellMetaData(grayBackground)),
         new Cell('some boolean', new CellMetaData(undefined, { valueType: CellValueType.Boolean }))),
-        new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
+      new Indicator(new Cell('Меро4', new CellMetaData(grayBackground)),
         new Cell(new Date(2000, 1, 2), new CellMetaData(grayBackground)),
         new Cell('артемовская ТЭЦ', new CellMetaData(grayBackground)),
         new Cell(4.4, new CellMetaData(grayBackground)),
@@ -329,11 +331,11 @@ export class GridMetaDataGeneratorService {
 
       const bandLevel1 = (() => {
         const res = new DictionaryString<ColumnConfig>();
-        res.created = new ColumnConfig('created', [], true, true, 'created', 'Дата создания', 100,
+        res.created = new ColumnConfig('created', [], false, true, 'created', 'Дата создания', 100,
           undefined, undefined, 2, 1, false, CellValueType.DateTime, true, true);
-        res.friendlyname = new ColumnConfig('friendlyname', [], true, true, 'friendlyname', 'Наименование', 100,
+        res.friendlyname = new ColumnConfig('friendlyname', [], false, true, 'friendlyname', 'Наименование', 100,
           undefined, undefined, 2, 2, false, CellValueType.String, true, true);
-        res.dzo = new ColumnConfig('dzo', [], true, true, 'dzo', 'ДЗО', 100,
+        res.dzo = new ColumnConfig('dzo', [], false, true, 'dzo', 'ДЗО', 100,
           undefined, undefined, 2, 3, false, CellValueType.String, true, true);
         (() => {
           res.type6_plan = new ColumnConfig('type6_plan', [], false, true,
@@ -371,7 +373,7 @@ export class GridMetaDataGeneratorService {
         const res = new DictionaryString<ColumnConfig>();
         res.activity = new ColumnConfig(undefined,
           [bandLevel1.friendlyname, bandLevel1.dzo, bandLevel1.created],
-          true, true, 'activity', 'Мероприятие', undefined, undefined, 3, 1, 999, false, undefined, false);
+          false, true, 'activity', 'Мероприятие', undefined, undefined, 4, 1, 999, false, undefined, false);
         res.type6 = new ColumnConfig(undefined, [
           bandLevel1.type6_plan,
           bandLevel1.type6_fact,
@@ -386,13 +388,13 @@ export class GridMetaDataGeneratorService {
           bandLevel1.type8_plan,
           bandLevel1.type8_fact,
           bandLevel1.type8_deviation_band
-        ], false, true, 'type8', 'Типовой 8', undefined, undefined, 4);
+        ], false, true, 'type8', 'Типовой 8', undefined, undefined, 3);
         res.summary = new ColumnConfig('summary', [], false, true, 'summary',
-          'Сводка 8', 100, undefined, 1, 3, 16, false, undefined, false, true);
+          'Сводка 8', 100, undefined, 1, 3, 16, true, undefined, false, true);
         res.isDeleted = new ColumnConfig('isDeleted', [], false, true, 'isDeleted',
-          'Удален', undefined, undefined, 1, 3, 17, false, CellValueType.Boolean, true, true);
+          'Удален', 200, undefined, 1, 3, 17, true, CellValueType.Boolean, true, true);
         res.customEdit = new ColumnConfig('customEdit', [], false, true, 'customEdit',
-          'Различное редактирование ячейки', undefined, undefined, 1, 3, 18, false, CellValueType.Boolean, true, true);
+          'Различное редактирование ячейки', 200, undefined, 1, 3, 18, true, CellValueType.Boolean, true, true);
         return res;
       })();
       result[0] = bandLevel0;
@@ -401,7 +403,14 @@ export class GridMetaDataGeneratorService {
 
       return result;
     })();
-    const gridMetaData = new GridMetaData('base', columnsLevelsDictionary);
+    const gridMetaData = new GridMetaData('base', columnsLevelsDictionary, this.getFooters());
     return gridMetaData;
+  }
+
+  private getFooters() {
+    const footer = (() => {
+      return new FooterRow('Total', 'totalValue');
+    })();
+    return [footer];
   }
 }

@@ -16,44 +16,61 @@ export class MatTableDataSourceWithCustomSort<T> extends MatTableDataSource<T> {
                     return row[systemname].value;
             }
         }
-    };
+    }
 
     sortData = (data: any[], sort: MatSort) => {
         const active = sort.active;
         const direction = sort.direction;
-        if (active || direction) {
-            const groups = data.filter(x => x.groupName) as GroupRow[];
-            const sortCompare = this.sortCompareFn(active, direction);
-            if (groups) {
-                let result = [];
-                groups.forEach(group => {
-                    const temp = data.filter(row => {
-                        if (!row[group.groupingProperty]) { return false; }
-                        return row[group.groupingProperty].value === group.groupingValue;
-                    });
-                    const groupedResult = temp.sort(sortCompare);
-                    groupedResult.unshift(group);
-                    result = [...result, ...groupedResult];
-                });
-                return result;
-            }
-            return data.sort(sortCompare);
+
+        const groups = data.filter(x => x.groupName) as GroupRow[];
+        if (active && direction) {
+            const result = this.sortBy(groups, data, active, direction);
+            return result;
         } else {
-            const groups = data.filter(x => x.groupName) as GroupRow[];
-            if (groups) {
-                let result = [];
-                groups.forEach(group => {
-                    const temp = data.filter(row => {
-                        if (!row[group.groupingProperty]) { return false; }
-                        return row[group.groupingProperty].value === group.groupingValue;
-                    });
-                    temp.unshift(group);
-                    result = [...result, ...temp];
-                });
-                return result;
-            }
-            return data;
+            const result = this.defaultSorting(groups, data);
+            return result;
         }
+    }
+
+    private sortBy(groups: GroupRow[], data: any[], active: string, direction: SortDirection) {
+        const sortCompare = this.sortCompareFn(active, direction);
+        if (groups) {
+            let result = [];
+            groups.forEach(group => {
+                const temp = data.filter(row => {
+                    if (!row[group.groupingProperty]) { return false; }
+                    return row[group.groupingProperty].value === group.groupingValue;
+                });
+                const groupedResult = temp.sort(sortCompare);
+                groupedResult.unshift(group);
+                result = [...result, ...groupedResult];
+            });
+            return result;
+        }
+        return data.sort(sortCompare);
+    }
+
+    /**
+     * сортировка по умолчанию
+     *
+     * @private
+     * @param {GroupRow[]} groups
+     * @param {any[]} data
+     * @returns
+     * @memberof MatTableDataSourceWithCustomSort
+     */
+    private defaultSorting(groups: GroupRow[], data: any[]) {
+        if (!groups || !data) { return data; }
+        let result = [];
+        groups.forEach(group => {
+            const temp = data.filter(row => {
+                if (!row[group.groupingProperty]) { return false; }
+                return row[group.groupingProperty].value === group.groupingValue;
+            });
+            temp.unshift(group);
+            result = [...result, ...temp];
+        });
+        return result;
     }
 
     filterPredicate = (data: any, filter: string) => {

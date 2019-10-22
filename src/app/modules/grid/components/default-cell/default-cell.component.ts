@@ -19,7 +19,7 @@ export class DefaultCellComponent implements OnInit, OnDestroy {
   @Output() updateCell = new EventEmitter<EditedCell>();
   @ViewChild('editComponent', { read: ViewContainerRef }) vcRef;
 
-  private $component = new BehaviorSubject<ComponentRef<CellBase>>(undefined);
+  $component = new BehaviorSubject<ComponentRef<CellBase>>(undefined);
 
   constructor(private resolver: ComponentFactoryResolver, private cellTemplatesService: CellTemplatesService) { }
 

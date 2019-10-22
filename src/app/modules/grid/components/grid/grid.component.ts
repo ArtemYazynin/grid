@@ -1,10 +1,11 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild, HostBinding } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatMenuTrigger } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'node_modules/rxjs';
 import { flatMap, takeUntil } from 'rxjs/operators';
 import { Cell } from '../../models/cell.model';
+import { ColumnConfig } from '../../models/column-config.model';
 import { ColumnsSelector } from '../../models/columns-selector.model';
 import { DictionaryString } from '../../models/dictionary.model';
 import { GridMetaData } from '../../models/grid-meta-data.model';
@@ -14,7 +15,6 @@ import { CssInjectorService } from '../../services/css-injector.service';
 import { GridService } from '../../services/grid/grid.service';
 import { RowSelectionService } from '../../services/row-selection/row-selection.service';
 import { ColumnsConfigComponent } from '../columns-selector/columns-selector.component';
-import { ColumnConfig } from './../../models/column-config.model';
 
 @Component({
   selector: 'app-grid',
@@ -136,7 +136,8 @@ export class GridComponent implements OnInit, OnDestroy {
         this.gridService.changeVisibility(this.$gridMetaData.value, result.hiddenColumns, false);
         this.gridService.changeVisibility(this.$gridMetaData.value, result.displayedColumns, true);
         this.gridService.sortColumns(this.$gridMetaData.value);
-        this.$gridMetaData.next(new GridMetaData(this.$gridMetaData.value.id, this.$gridMetaData.value.$columnsMap.value));
+        this.$gridMetaData.next(new GridMetaData(this.$gridMetaData.value.id, this.$gridMetaData.value.$columnsMap.value,
+          this.$gridMetaData.value.$gridFooterMetaData.value.$footerRows.value));
       });
   }
 }
